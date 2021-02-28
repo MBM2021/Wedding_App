@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "123167388052",
+    "project_id": "weddingapp-be318",
+    "storage_bucket": "weddingapp-be318.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123167388052:android:a5547459ee703a2b931f81",
+        "android_client_info": {
+          "package_name": "com.moomen.graduationproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123167388052-muptappgitf377s2vdbn9drrfagab2hp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVY4f4RWPwL4m7iRSrCNufNX885rquyXY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123167388052-muptappgitf377s2vdbn9drrfagab2hp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
