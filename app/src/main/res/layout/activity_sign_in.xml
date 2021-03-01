@@ -134,6 +134,7 @@
                 android:text="@string/forgot_passwordd"
                 android:textAllCaps="false"
                 android:textColor="@color/teal_700"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
@@ -202,6 +203,7 @@
                     android:layout_height="wrap_content"
                     android:onClick="registerButtonOnClick"
                     android:textColor="@color/teal_700"
+                    android:textStyle="bold"
                     android:text="@string/register" />
             </LinearLayout>
 
