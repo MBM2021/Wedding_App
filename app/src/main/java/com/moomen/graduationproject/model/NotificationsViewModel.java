@@ -1,4 +1,4 @@
-package com.moomen.graduationproject.ui.notifications;
+package com.moomen.graduationproject.model;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
