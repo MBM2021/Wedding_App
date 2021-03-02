@@ -19,7 +19,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.moomen.graduationproject.R;
+import com.moomen.graduationproject.model.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -32,7 +34,11 @@ public class RegisterActivity extends AppCompatActivity {
     private String userName;
     private String userEmail;
     private String userPassword;
+    private String userType = "user";
 
+    private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,17 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         checkBoxType = findViewById(R.id.checkBox_type);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+    }
+
+    public void checkBoxTypeOnClick(View view) {
+        if (checkBoxType.isChecked()) {
+            userType = "company";
+        } else {
+            userType = "user";
+        }
     }
 
     public void signInButtonOnClick(View view) {
@@ -61,65 +78,48 @@ public class RegisterActivity extends AppCompatActivity {
         checkEditText(userEmail, editTextEmail, "Email");
         checkEditText(userPassword, editTextPassword, "Password");
         if (isValid) {
-            //registerNewUserByEmailAndPassword();
+            registerNewUserByEmailAndPassword();
             Toast.makeText(getApplicationContext(), "isValid" + isValid, Toast.LENGTH_SHORT).show();
         }
 
     }
 
-   /* private void registerNewUserByEmailAndPassword() {
+    private void registerNewUserByEmailAndPassword() {
         progressBar.setVisibility(View.VISIBLE);
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        firebaseAuth.createUserWithEmailAndPassword(userEmail, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     addNewUserOnDbFirebase();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Failed to register! Try again!", Toast.LENGTH_SHORT).show();
                 }
-                *//* else {
-                    Toast.makeText(getContext(), "Failed to register! Try again!", Toast.LENGTH_SHORT).show();
-                }*//*
                 progressBar.setVisibility(View.GONE);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void addNewUserOnDbFirebase() {
-        User user = new User(firstName, lastName, email, dateOfBirth, address, phone, gender, userType,dateOfCreate,image,status,aboutCompany);
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        // save on cluode
+        firebaseUser = firebaseAuth.getCurrentUser();
+        User user = new User(userName, userEmail, "", "", "", "", userType, "", "", true, "");
+        // save on cloudFireStore
         DocumentReference documentReference = firebaseFirestore.collection("Users")
                 .document(firebaseUser.getUid());
         documentReference.set(user);
         verifyEmail();
-        //save on reayltime database
-        FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    verifyEmail();
-                    //Toast.makeText(getContext(), "Registered Successfully!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Failed to register! Try again!", Toast.LENGTH_SHORT).show();
-                }
-                progressBar.setVisibility(View.GONE);
-
-            }
-        });
     }
 
     private void verifyEmail() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         assert firebaseUser != null;
         firebaseUser.sendEmailVerification();
-        Toast.makeText(getContext(), "Registered Successfully!\nCheck your email to verify your account!", Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), "Registered Successfully!\nCheck your email to verify your account!", Toast.LENGTH_LONG).show();
     }
-*/
 
     private boolean isValid = true;
 

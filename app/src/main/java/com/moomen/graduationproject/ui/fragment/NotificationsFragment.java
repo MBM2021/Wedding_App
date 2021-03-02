@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.moomen.graduationproject.R;
-import com.moomen.graduationproject.model.NotificationsViewModel;
+import com.moomen.graduationproject.viewModel.NotificationsViewModel;
 
 public class NotificationsFragment extends Fragment {
 

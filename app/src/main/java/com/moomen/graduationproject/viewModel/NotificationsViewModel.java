@@ -1,4 +1,4 @@
-package com.moomen.graduationproject.model;
+package com.moomen.graduationproject.viewModel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

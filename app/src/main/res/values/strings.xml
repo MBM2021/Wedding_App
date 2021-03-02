@@ -17,4 +17,5 @@
     <string name="enter_your_email">Enter your Email</string>
     <string name="reset">Reset</string>
     <string name="reset_password">Reset Password</string>
+    <string name="this_account_has_been_blocked">This account has been blocked</string>
 </resources>

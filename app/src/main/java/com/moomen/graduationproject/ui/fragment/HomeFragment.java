@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.moomen.graduationproject.R;
-import com.moomen.graduationproject.model.HomeViewModel;
+import com.moomen.graduationproject.viewModel.HomeViewModel;
 
 public class HomeFragment extends Fragment {
 

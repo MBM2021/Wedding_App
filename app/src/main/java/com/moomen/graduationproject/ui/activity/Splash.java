@@ -6,17 +6,29 @@ import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.moomen.graduationproject.R;
 
 public class Splash extends AppCompatActivity {
+    private ProgressBar progressBar;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        progressBar = findViewById(R.id.progressBar);
+
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         View decorViewFull = getWindow().getDecorView();
@@ -32,8 +44,6 @@ public class Splash extends AppCompatActivity {
                 finish();
             }
         }, 1500);
-        {
-        }
     }
 
 }
