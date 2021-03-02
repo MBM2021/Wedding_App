@@ -7,12 +7,27 @@
     tools:context=".ui.activity.SignInActivity">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_sign_in" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -31,14 +46,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/editTextText_email"
+                    app:layout_constraintBottom_toBottomOf="@+id/editText_user_email"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/editTextText_email"
+                    app:layout_constraintTop_toTopOf="@+id/editText_user_email"
                     app:srcCompat="@drawable/ic_baseline_email_24"
                     app:tint="@color/purple_500" />
 
                 <EditText
-                    android:id="@+id/editTextText_email"
+                    android:id="@+id/editText_user_email"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="8dp"
@@ -46,7 +61,7 @@
                     android:background="@drawable/bg_button_2"
                     android:ems="10"
                     android:hint="@string/email"
-                    android:inputType="textPersonName"
+                    android:inputType="textEmailAddress"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -71,7 +86,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
                 <EditText
-                    android:id="@+id/editText_password"
+                    android:id="@+id/editText_user_password"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="8dp"
@@ -92,15 +107,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/editText_password"
+                    app:layout_constraintBottom_toBottomOf="@+id/editText_user_password"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/editText_password"
+                    app:layout_constraintTop_toTopOf="@+id/editText_user_password"
                     app:srcCompat="@drawable/ic_baseline_lock_24"
                     app:tint="@color/purple_500" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/button_sign_in"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
@@ -109,7 +124,7 @@
                 android:text="@string/sign_in"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+                app:layout_constraintTop_toBottomOf="@+id/button_forgot_password" />
 
 
             <ImageView
@@ -125,12 +140,13 @@
                 app:srcCompat="@drawable/logo" />
 
             <Button
-                android:id="@+id/textView4"
+                android:id="@+id/button_forgot_password"
                 style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
+                android:onClick="forgotPasswordOnClick"
                 android:text="@string/forgot_passwordd"
                 android:textAllCaps="false"
                 android:textColor="@color/teal_700"
@@ -149,31 +165,31 @@
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button">
+                app:layout_constraintTop_toBottomOf="@+id/progressBar">
 
                 <ImageView
-                    android:id="@+id/imageView5"
+                    android:id="@+id/imageView_google"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     app:srcCompat="@drawable/google" />
 
                 <ImageView
-                    android:id="@+id/imageView6"
+                    android:id="@+id/imageView_facebook"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     app:srcCompat="@drawable/facebook" />
 
                 <ImageView
-                    android:id="@+id/imageView7"
+                    android:id="@+id/imageView_twitter"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
                     app:srcCompat="@drawable/twitter" />
 
                 <ImageView
-                    android:id="@+id/imageView8"
+                    android:id="@+id/imageView_instagram"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_margin="8dp"
@@ -197,16 +213,17 @@
                     android:text="@string/no_account" />
 
                 <Button
-                    android:id="@+id/button2"
+                    android:id="@+id/button_register"
                     style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="registerButtonOnClick"
+                    android:text="@string/register"
                     android:textColor="@color/teal_700"
-                    android:textStyle="bold"
-                    android:text="@string/register" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

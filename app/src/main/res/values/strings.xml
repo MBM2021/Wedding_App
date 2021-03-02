@@ -11,4 +11,10 @@
     <string name="register">Register</string>
     <string name="no_account">No Account?</string>
     <string name="forgot_passwordd">Forgot Password!</string>
+    <string name="have_account">Have account?</string>
+    <string name="register_as_company">Register as Company</string>
+    <string name="name">Name</string>
+    <string name="enter_your_email">Enter your Email</string>
+    <string name="reset">Reset</string>
+    <string name="reset_password">Reset Password</string>
 </resources>
