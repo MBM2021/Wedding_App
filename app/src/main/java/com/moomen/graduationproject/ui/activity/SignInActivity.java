@@ -36,6 +36,7 @@ public class SignInActivity extends AppCompatActivity {
     private EditText editTextEmail;
     private EditText editTextPassword;
     private ProgressBar progressBar;
+    private ProgressBar progressBar2;
 
     private String userEmail;
     private String userPassword;
@@ -147,11 +148,11 @@ public class SignInActivity extends AppCompatActivity {
                                 //getActivity().finish();
                                 progressBar.setVisibility(View.GONE);
                             }
-                        }/* else {
+                        } else {
                             startActivity(new Intent(getApplicationContext(), UserBlocked.class));
                             //getActivity().finish();
                             progressBar.setVisibility(View.GONE);
-                        }*/
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
