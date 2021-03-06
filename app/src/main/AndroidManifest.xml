@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduationProject">
+        <activity android:name=".ui.activity.MainActivityAdmin"></activity>
+        <activity android:name=".ui.activity.MainActivityCompany" />
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.SignInActivity" />
         <activity android:name=".ui.activity.Splash">
@@ -19,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.ActivityIntro" />
+        <activity android:name=".ui.activity.UserBlocked" />
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name" />

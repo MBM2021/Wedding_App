@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navigation_story"
+        android:icon="@drawable/ic_baseline_local_fire_department_24"
+        android:title="@string/story" />
+
+    <item
+        android:id="@+id/navigation_chat"
+        android:icon="@drawable/ic_baseline_chat_24"
+        android:title="@string/chat" />
+    <item
+        android:id="@+id/navigation_activity"
+        android:icon="@drawable/ic_baseline_history_toggle_off_24"
+        android:title="@string/my_activity" />
+    <item
+        android:id="@+id/navigation_account"
+        android:icon="@drawable/ic_baseline_account_circle_24"
+        android:title="@string/profile" />
+
+</menu>

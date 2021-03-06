@@ -18,4 +18,11 @@
     <string name="reset">Reset</string>
     <string name="reset_password">Reset Password</string>
     <string name="this_account_has_been_blocked">This account has been blocked</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="chat">Chat</string>
+    <string name="story">Story</string>
+    <string name="my_activity">MyActivity</string>
+    <string name="profile">Profile</string>
+    <string name="console">Console</string>
 </resources>

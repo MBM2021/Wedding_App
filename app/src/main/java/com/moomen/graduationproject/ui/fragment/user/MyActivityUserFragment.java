@@ -1,4 +1,4 @@
-package com.moomen.graduationproject.ui.fragment;
+package com.moomen.graduationproject.ui.fragment.user;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,19 +13,19 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.moomen.graduationproject.R;
-import com.moomen.graduationproject.viewModel.DashboardViewModel;
+import com.moomen.graduationproject.viewModel.NotificationsViewModel;
 
-public class DashboardFragment extends Fragment {
+public class MyActivityUserFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private NotificationsViewModel notificationsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        notificationsViewModel =
+                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_my_activity_user, container, false);
+        final TextView textView = root.findViewById(R.id.text_notifications);
+        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

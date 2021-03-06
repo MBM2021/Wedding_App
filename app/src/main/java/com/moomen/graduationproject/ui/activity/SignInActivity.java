@@ -16,8 +16,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,7 +38,7 @@ public class SignInActivity extends AppCompatActivity {
     private EditText editTextEmail;
     private EditText editTextPassword;
     private ProgressBar progressBar;
-    private ProgressBar progressBar2;
+    private ProgressBar progressBarReset;
 
     private String userEmail;
     private String userPassword;
@@ -69,19 +71,19 @@ public class SignInActivity extends AppCompatActivity {
         Button buttonReset = view.findViewById(R.id.button_reset);
         ImageView imageViewBack = view.findViewById(R.id.imageView_back);
         EditText editTextEmail = view.findViewById(R.id.editText_user_email);
-        ProgressBar progressBar = view.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.GONE);
+        progressBarReset = view.findViewById(R.id.progressBar);
+        progressBarReset.setVisibility(View.GONE);
         buttonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
+                progressBarReset.setVisibility(View.VISIBLE);
                 resetEmail = editTextEmail.getText().toString().trim();
                 if (resetEmail.isEmpty()) {
                     editTextEmail.setError("The Email is required to reset password!");
                     editTextEmail.requestFocus();
-                    progressBar.setVisibility(View.GONE);
+                    progressBarReset.setVisibility(View.GONE);
                 } else {
-                    resetPassword();
+                    resetPassword(resetEmail);
                 }
 
             }
@@ -97,7 +99,26 @@ public class SignInActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-    private void resetPassword() {
+    private void resetPassword(String email) {
+        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful())
+                    Toast.makeText(getApplicationContext(), "Check your email to reset your Password!", Toast.LENGTH_SHORT).show();
+
+               /* if (task.isSuccessful())
+                    Toast.makeText(getApplicationContext(), "Check your email to reset your Password!", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getApplicationContext(), "Try again! something is wrong!", Toast.LENGTH_SHORT).show();*/
+                progressBarReset.setVisibility(View.GONE);
+                bottomSheetDialog.dismiss();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void registerButtonOnClick(View view) {
@@ -183,10 +204,9 @@ public class SignInActivity extends AppCompatActivity {
                     if (userType.equals("user"))
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     else if (userType.equals("company"))
-                        startActivity(new Intent(getApplicationContext(), UserBlocked.class));
-                    /*else if (userType.equals("admin"))
+                        startActivity(new Intent(getApplicationContext(), MainActivityCompany.class));
+                    else if (userType.equals("admin"))
                         startActivity(new Intent(getApplicationContext(), MainActivityAdmin.class));
-                    getActivity().finish();*/
                     finish();
                 }
             }

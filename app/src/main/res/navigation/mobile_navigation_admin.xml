@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_console_admin">
+
+    <fragment
+        android:id="@+id/navigation_console_admin"
+        android:name="com.moomen.graduationproject.ui.fragment.admin.ConsoleAdminFragment"
+        android:label="@string/console"
+        tools:layout="@layout/fragment_console_admin" />
+
+    <fragment
+        android:id="@+id/navigation_chat_admin"
+        android:name="com.moomen.graduationproject.ui.fragment.admin.ChatAdminFragment"
+        android:label="@string/chat"
+        tools:layout="@layout/fragment_chat_admin" />
+
+    <fragment
+        android:id="@+id/navigation_notification_admin"
+        android:name="com.moomen.graduationproject.ui.fragment.admin.NotificationAdminFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notification_admin" />
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.moomen.graduationproject.ui.fragment.AccountFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_account" />
+</navigation>
