@@ -15,7 +15,7 @@
         tools:src="@drawable/credit" />
 
     <TextView
-        android:id="@+id/textView_category_item"
+        android:id="@+id/textView_category_name_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"

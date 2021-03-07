@@ -25,4 +25,11 @@
     <string name="my_activity">MyActivity</string>
     <string name="profile">Profile</string>
     <string name="console">Console</string>
+    <string name="create_admin">Create Admin</string>
+    <string name="update_ads">Update Ads</string>
+    <string name="create_ads">Create Ads</string>
+    <string name="create_category">Create Category</string>
+    <string name="create">Create</string>
+    <string name="category_name">Category name</string>
+    <string name="add_category">Add Category</string>
 </resources>
