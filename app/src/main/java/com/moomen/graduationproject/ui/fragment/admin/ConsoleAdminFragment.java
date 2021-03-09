@@ -36,20 +36,22 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.moomen.graduationproject.R;
+import com.moomen.graduationproject.adapter.AdsAdapter;
 import com.moomen.graduationproject.adapter.CategoryAdapter;
+import com.moomen.graduationproject.model.Ads;
 import com.moomen.graduationproject.model.Category;
 import com.moomen.graduationproject.ui.activity.SignInActivity;
 
 public class ConsoleAdminFragment extends Fragment {
 
 
-    private ImageButton buttonCreateCategory;
-    private String categoryImageUrl;
+    private ImageButton buttonCreateCategory,buttonCreateAds;
+    private String categoryImageUrl,AdsImageUrl;
     private String categoryName;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private StorageReference storageReference;
-    private RecyclerView recyclerViewCategory;
+    private RecyclerView recyclerViewCategory,recyclerAds;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +71,17 @@ public class ConsoleAdminFragment extends Fragment {
 
         recyclerViewCategory = view.findViewById(R.id.recyclerView_category);
         buttonCreateCategory = view.findViewById(R.id.button_admin_create_category);
+        recyclerAds = view.findViewById(R.id.recyclerView_ads);
+        buttonCreateAds = view.findViewById(R.id.button_admin_create_ads);
+
+        buttonCreateAds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AdsImageUrl = "https://i.ibb.co/4V5tZ9K/gift.webp";
+                Ads ads = new Ads(AdsImageUrl);
+                postAdsOnFireBase(ads);
+            }
+        });
         buttonCreateCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,6 +89,7 @@ public class ConsoleAdminFragment extends Fragment {
             }
         });
         getAllCategory();
+        getAllAds();
         /*buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +117,24 @@ public class ConsoleAdminFragment extends Fragment {
                 popupMenu.show();
             }
         });*/
+    }
+
+    private void postAdsOnFireBase(Ads ads) {
+        firebaseFirestore.collection("Ads").add(ads).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentReference> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getContext(), "Published", Toast.LENGTH_SHORT).show();
+
+                    //getAllCategory();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "Failed to publish, try again!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private BottomSheetDialog bottomSheetDialog;
@@ -177,10 +209,10 @@ public class ConsoleAdminFragment extends Fragment {
         FirestoreRecyclerOptions<Category> options = new FirestoreRecyclerOptions.Builder<Category>()
                 .setQuery(query, Category.class)
                 .build();
-        fillRecycleAdapter(options);
+        fillCategoryRecycleAdapter(options);
     }
 
-    private void fillRecycleAdapter(FirestoreRecyclerOptions<Category> options) {
+    private void fillCategoryRecycleAdapter(FirestoreRecyclerOptions<Category> options) {
         CategoryAdapter categoryAdapter = new CategoryAdapter(options);
 
        /* newsAdapter.onUserNameSetOnClickListener(new NewsAdapter.OnUserNameClickListener() {
@@ -197,5 +229,33 @@ public class ConsoleAdminFragment extends Fragment {
         recyclerViewCategory.setAdapter(categoryAdapter);
         //recyclerViewCategory.setHasFixedSize(true);
         categoryAdapter.startListening();
+    }
+    private void getAllAds() {
+        Query query = FirebaseFirestore.getInstance().collection("Ads");
+        /*query.whereEqualTo("visibility", true)
+                .whereEqualTo("newsStatus", true)
+                .orderBy("date", Query.Direction.DESCENDING);*/
+        FirestoreRecyclerOptions<Ads> options = new FirestoreRecyclerOptions.Builder<Ads>()
+                .setQuery(query, Ads.class)
+                .build();
+        fillAdsRecycleAdapter(options);
+    }
+    private void fillAdsRecycleAdapter(FirestoreRecyclerOptions<Ads> options) {
+        AdsAdapter adsAdapter = new AdsAdapter(options);
+
+       /* newsAdapter.onUserNameSetOnClickListener(new NewsAdapter.OnUserNameClickListener() {
+            @Override
+            public void onUserNameClick(String userID, int position) {
+                Intent intent = new Intent(getContext(), OpenUserProfile.class);
+                intent.putExtra(USER_ID, userID);
+                startActivity(intent);
+            }
+        });*/
+
+        adsAdapter.setContext(getContext());
+        recyclerAds.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerAds.setAdapter(adsAdapter);
+        //recyclerViewCategory.setHasFixedSize(true);
+        adsAdapter.startListening();
     }
 }

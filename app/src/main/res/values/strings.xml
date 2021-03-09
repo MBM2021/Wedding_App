@@ -31,5 +31,7 @@
     <string name="create_category">Create Category</string>
     <string name="create">Create</string>
     <string name="category_name">Category name</string>
+    <string name="add_ads">Add Ads</string>
+    <string name="all_ads">All Ads</string>
     <string name="add_category">Add Category</string>
 </resources>
