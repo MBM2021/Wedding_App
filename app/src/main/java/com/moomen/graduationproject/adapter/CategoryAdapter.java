@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.model.Category;
@@ -22,7 +21,6 @@ import com.squareup.picasso.Picasso;
 public class CategoryAdapter extends FirestoreRecyclerAdapter<Category, CategoryAdapter.ViewHolder> {
 
     private OnItemClickListener listener;
-
 
     public CategoryAdapter(@NonNull FirestoreRecyclerOptions<Category> options) {
         super(options);
@@ -35,7 +33,6 @@ public class CategoryAdapter extends FirestoreRecyclerAdapter<Category, Category
                 .load(model.getImage())
                 .into(holder.categoryImage);
         holder.categoryName.setText(model.getName());
-
     }
 
     @NonNull
@@ -50,37 +47,50 @@ public class CategoryAdapter extends FirestoreRecyclerAdapter<Category, Category
 
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int position, int id);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView categoryImage;
         TextView categoryName;
+        ImageView edit;
+        ImageView delete;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             categoryImage = itemView.findViewById(R.id.imageView_category_item);
             categoryName = itemView.findViewById(R.id.textView_category_name_item);
+            edit = itemView.findViewById(R.id.imageView_edit);
+            delete = itemView.findViewById(R.id.imageView_delete);
 
-            /*constraintLayoutCategoryItem.setOnClickListener(new View.OnClickListener() {
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                        DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
+                        listener.onItemClick(documentSnapshot, getAdapterPosition(), edit.getId());
+                    }
+                }
+            });
+            delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
                     if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
                         DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
-                        listener.onItemClick(documentSnapshot, getAdapterPosition());
+                        listener.onItemClick(documentSnapshot, getAdapterPosition(), delete.getId());
                     }
                 }
             });
-*/
+
         }
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(DocumentSnapshot documentSnapshot, int position);
-    }
 
     public void onItemSetOnClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
-
 
 }

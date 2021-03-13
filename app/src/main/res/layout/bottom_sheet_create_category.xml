@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -78,10 +77,10 @@
         android:layout_height="100dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/upload"
-        app:riv_corner_radius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView"
+        app:riv_corner_radius="16dp" />
 
     <EditText
         android:id="@+id/editText_category_name"
@@ -107,4 +106,16 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView_category_image"
         app:layout_constraintStart_toStartOf="@+id/imageView_category_image"
         app:layout_constraintTop_toBottomOf="@+id/imageView_category_image" />
+
+    <ImageView
+        android:id="@+id/imageView_edit_image"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_circle_button_white"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_category_image"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_category_image"
+        app:srcCompat="@drawable/ic_baseline_edit_24"
+        app:tint="@color/purple_500" />
 </androidx.constraintlayout.widget.ConstraintLayout>
