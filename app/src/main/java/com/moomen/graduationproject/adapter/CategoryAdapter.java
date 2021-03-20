@@ -18,7 +18,7 @@ import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.model.Category;
 import com.squareup.picasso.Picasso;
 
-public class CategoryAdapter extends FirestoreRecyclerAdapter<Category, CategoryAdapter.ViewHolder> {
+public class CategoryAdapter extends FirestoreRecyclerAdapter<Category, CategoryAdapter.ViewHolder> {98
 
     private OnItemClickListener listener;
 
