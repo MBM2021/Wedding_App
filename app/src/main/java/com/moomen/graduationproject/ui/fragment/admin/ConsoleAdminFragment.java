@@ -14,9 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -61,15 +62,16 @@ public class ConsoleAdminFragment extends Fragment {
 
 
     private static final int MAX_LENGTH = 100;
-    Button buttonCreate;
+    private Button buttonCreate;
     private String categoryName;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private StorageReference storageReference;
-    ImageView imageViewBack;
-    ImageView editCategoryImage;
-    EditText editTextCategoryName;
-    private ImageButton buttonCreateCategory, buttonCreateAds;
+    private ImageView imageViewBack;
+    private ImageView editCategoryImage;
+    private ImageView editAdsImage;
+    private EditText editTextCategoryName;
+    private LinearLayout linearLayoutAddCategory, linearLayoutAddAds;
     private String categoryImageUrl, AdsImageUrl;
     private RecyclerView recyclerViewCategory, recyclerAds;
     private String imageName;
@@ -85,14 +87,29 @@ public class ConsoleAdminFragment extends Fragment {
     }
 
     private String downloadUri;
+    private TextView textViewTitleBottomSheet;
 
-    private void postAdsOnFireBase(Ads ads) {
+    private BottomSheetDialog bottomSheetDialog;
+    private ProgressBar progressBarBottomSheet;
+    private ImageView imageViewItem, imageViewAds;
+    private boolean isAdsEdit = false;
+    private String adsId;
+    private boolean isCategory = false;
+
+    private void createAdminBottomSheet() {
+    }
+
+    private Uri imageUri = null;
+
+    private void postAdsOnFireBase() {
+        Ads ads = new Ads(downloadUri);
         firebaseFirestore.collection("Ads").add(ads).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(getContext(), "Published", Toast.LENGTH_SHORT).show();
-
+                    bottomSheetDialog.dismiss();
+                    progressBarBottomSheet.setVisibility(View.GONE);
                     //getAllCategory();
                 }
             }
@@ -104,21 +121,97 @@ public class ConsoleAdminFragment extends Fragment {
         });
     }
 
-    private BottomSheetDialog bottomSheetDialog;
-    private ProgressBar progressBarBottomSheet;
-
-    private void createAdsBottomSheet() {
-
-    }
-
-    private void createAdminBottomSheet() {
-    }
-
-    private Uri imageUri = null;
-    private ImageView imageViewCategory;
     private Intent intent;
     private boolean isCategoryEdit = false;
+
+    private void createAdsBottomSheet() {
+        bottomSheetDialog = new BottomSheetDialog(getContext());
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_create_ads, null);
+        buttonCreate = view.findViewById(R.id.button_create);
+        imageViewBack = view.findViewById(R.id.imageView_back);
+        editAdsImage = view.findViewById(R.id.imageView_edit_image);
+        progressBarBottomSheet = view.findViewById(R.id.progressBar);
+        progressBarBottomSheet.setVisibility(View.GONE);
+        imageViewItem = view.findViewById(R.id.imageView_ads);
+        if (isAdsEdit) {
+            editAdsImage.setVisibility(View.VISIBLE);
+        } else
+            editAdsImage.setVisibility(View.GONE);
+        imageUri = null;
+        imageName = "";
+        downloadUri = "";
+        imageViewItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cropImage();
+            }
+        });
+
+        buttonCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postImageAdsOnFireBase();
+            }
+        });
+        imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomSheetDialog.dismiss();
+            }
+        });
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
+    }
+
     private String categoryId;
+
+    private void postImageAdsOnFireBase() {
+        if (imageUri != null) {
+            progressBarBottomSheet.setVisibility(View.VISIBLE);
+            compressAndNameImage();
+            ByteArrayOutputStream byteArrayInputStream = new ByteArrayOutputStream();
+            compressor.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayInputStream);
+            byte[] thumpData = byteArrayInputStream.toByteArray();
+            StorageReference filePath = storageReference.child("Ads_Image/").child(imageName);
+            UploadTask uploadTask = filePath.putBytes(thumpData);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+
+                            return filePath.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                downloadUri = task.getResult().toString();
+                                if (!isAdsEdit) {
+                                    postAdsOnFireBase();
+                                } else
+                                    updateAdsOnFirebase();
+                            }
+                        }
+
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+                }
+            });
+        } else if ((downloadUri != null || !downloadUri.isEmpty()) && isAdsEdit) {
+            updateAdsOnFirebase();
+        } else {
+            Toast.makeText(getContext(), "The Ads image is required!", Toast.LENGTH_LONG).show();
+        }
+    }
 
     //Name image
     public static String random() {
@@ -133,6 +226,19 @@ public class ConsoleAdminFragment extends Fragment {
         return randomStringBuilder.toString();
     }
 
+    private void updateAdsOnFirebase() {
+        //if (adsId!=null){
+        firebaseFirestore.collection("Ads").document(adsId).update("image", downloadUri)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        bottomSheetDialog.dismiss();
+                        isAdsEdit = false;
+                    }
+                });
+        //}
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -143,21 +249,21 @@ public class ConsoleAdminFragment extends Fragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         recyclerViewCategory = view.findViewById(R.id.recyclerView_category);
-        buttonCreateCategory = view.findViewById(R.id.button_admin_create_category);
         recyclerAds = view.findViewById(R.id.recyclerView_ads);
-        buttonCreateAds = view.findViewById(R.id.button_admin_create_ads);
+        linearLayoutAddCategory = view.findViewById(R.id.linearLayout_add_category);
+        linearLayoutAddAds = view.findViewById(R.id.linearLayout_add_ads);
 
-        buttonCreateAds.setOnClickListener(new View.OnClickListener() {
+        linearLayoutAddAds.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AdsImageUrl = "https://i.ibb.co/4V5tZ9K/gift.webp";
-                Ads ads = new Ads(AdsImageUrl);
-                postAdsOnFireBase(ads);
+                isCategory = false;
+                createAdsBottomSheet();
             }
         });
-        buttonCreateCategory.setOnClickListener(new View.OnClickListener() {
+        linearLayoutAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isCategory = true;
                 createCategoryBottomSheet();
             }
         });
@@ -200,7 +306,7 @@ public class ConsoleAdminFragment extends Fragment {
         editCategoryImage = view.findViewById(R.id.imageView_edit_image);
         progressBarBottomSheet = view.findViewById(R.id.progressBar);
         progressBarBottomSheet.setVisibility(View.GONE);
-        imageViewCategory = view.findViewById(R.id.imageView_category_image);
+        imageViewItem = view.findViewById(R.id.imageView_category_image);
         editTextCategoryName = view.findViewById(R.id.editText_category_name);
         if (isCategoryEdit) {
             editCategoryImage.setVisibility(View.VISIBLE);
@@ -210,21 +316,10 @@ public class ConsoleAdminFragment extends Fragment {
         imageName = "";
         downloadUri = "";
 
-        imageViewCategory.setOnClickListener(new View.OnClickListener() {
+        imageViewItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions((Activity) getContext(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-
-                    } else {
-                        CropImage.activity()
-                                .setGuidelines(CropImageView.Guidelines.ON)
-                                //.setMinCropResultSize(512,512)
-                                .setAspectRatio(2, 2)
-                                .start(getContext(), ConsoleAdminFragment.this);
-                    }
-                }
+                cropImage();
             }
         });
         buttonCreate.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +344,28 @@ public class ConsoleAdminFragment extends Fragment {
         bottomSheetDialog.show();
     }
 
+    private void cropImage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((Activity) getContext(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
+            } else {
+                if (isCategory)
+                    CropImage.activity()
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            //.setMinCropResultSize(512,512)
+                            .setAspectRatio(2, 2)
+                            .start(getContext(), ConsoleAdminFragment.this);
+                else
+                    CropImage.activity()
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            //.setMinCropResultSize(512,512)
+                            .setAspectRatio(4, 2)
+                            .start(getContext(), ConsoleAdminFragment.this);
+            }
+        }
+    }
+
     private void getAllCategory() {
         Query query = FirebaseFirestore.getInstance().collection("Category");
         /*query.whereEqualTo("visibility", true)
@@ -260,20 +377,25 @@ public class ConsoleAdminFragment extends Fragment {
         fillCategoryRecycleAdapter(options);
     }
 
+    private void compressAndNameImage() {
+        imageName = random() + ".jpg";
+        File imageFile = new File(imageUri.getPath());
+        try {
+            compressor = new Compressor(getContext())
+                    .setMaxHeight(240)
+                    .setMaxWidth(360)
+                    .setQuality(5)
+                    .compressToBitmap(imageFile);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
     private void postCategoryOnFireBase() {
         if (imageUri != null) {
             progressBarBottomSheet.setVisibility(View.VISIBLE);
-            imageName = random() + ".jpg";
-            File imageFile = new File(imageUri.getPath());
-            try {
-                compressor = new Compressor(getContext())
-                        .setMaxHeight(240)
-                        .setMaxWidth(360)
-                        .setQuality(5)
-                        .compressToBitmap(imageFile);
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            compressAndNameImage();
             ByteArrayOutputStream byteArrayInputStream = new ByteArrayOutputStream();
             compressor.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayInputStream);
             byte[] thumpData = byteArrayInputStream.toByteArray();
@@ -309,7 +431,7 @@ public class ConsoleAdminFragment extends Fragment {
                 public void onFailure(@NonNull Exception e) {
                 }
             });
-        } else if (downloadUri != null || !downloadUri.isEmpty()) {
+        } else if ((downloadUri != null || !downloadUri.isEmpty()) && isCategoryEdit) {
             updateCategoryOnFirebase();
         } else {
             Toast.makeText(getContext(), "The category image is required!", Toast.LENGTH_LONG).show();
@@ -350,6 +472,7 @@ public class ConsoleAdminFragment extends Fragment {
 
     private void fillCategoryRecycleAdapter(FirestoreRecyclerOptions<Category> options) {
         CategoryAdapter categoryAdapter = new CategoryAdapter(options);
+        isCategoryEdit = false;
         categoryAdapter.onItemSetOnClickListener(new CategoryAdapter.OnItemClickListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
@@ -387,11 +510,47 @@ public class ConsoleAdminFragment extends Fragment {
 
     private void fillAdsRecycleAdapter(FirestoreRecyclerOptions<Ads> options) {
         AdsAdapter adsAdapter = new AdsAdapter(options);
+        isAdsEdit = false;
+        adsAdapter.onItemSetOnClickListener(new AdsAdapter.OnItemClickListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position, int id) {
+                adsId = documentSnapshot.getId();
+                switch (id) {
+                    case R.id.imageView_edit:
+                        isAdsEdit = true;
+                        getThisAds();
+                        break;
+                    case R.id.imageView_delete:
+                        firebaseFirestore.collection("Ads").document(adsId).delete();
+                        break;
+                }
+            }
+        });
         adsAdapter.setContext(getContext());
         recyclerAds.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         recyclerAds.setAdapter(adsAdapter);
         //recyclerViewCategory.setHasFixedSize(true);
         adsAdapter.startListening();
+    }
+
+    private void getThisAds() {
+        firebaseFirestore.collection("Ads").document(adsId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                Ads ads = task.getResult().toObject(Ads.class);
+                createAdsBottomSheet();
+                Picasso.get().load(ads.getImage()).into(imageViewItem);
+                buttonCreate.setText("Edit");
+                downloadUri = ads.getImage();
+                buttonCreate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        postImageAdsOnFireBase();
+                    }
+                });
+            }
+        });
     }
 
     private void getThisCategory() {
@@ -400,7 +559,7 @@ public class ConsoleAdminFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Category category = task.getResult().toObject(Category.class);
                 createCategoryBottomSheet();
-                Picasso.get().load(category.getImage()).into(imageViewCategory);
+                Picasso.get().load(category.getImage()).into(imageViewItem);
                 editTextCategoryName.setText(category.getName());
                 //Here buttonCreate is button edit not create
                 buttonCreate.setText("Edit");
@@ -423,7 +582,7 @@ public class ConsoleAdminFragment extends Fragment {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == getActivity().RESULT_OK) {
                 imageUri = result.getUri();
-                imageViewCategory.setImageURI(imageUri);
+                imageViewItem.setImageURI(imageUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
