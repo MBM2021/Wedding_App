@@ -34,4 +34,11 @@
     <string name="add_ads">Add Ads</string>
     <string name="all_ads">All Ads</string>
     <string name="add_category">Add Category</string>
+    <string name="add_your_hall">Add your Hall</string>
+    <string name="hall_name">Hall name</string>
+    <string name="owner_name">Owner name</string>
+    <string name="phone_number">Phone number</string>
+    <string name="details">Details</string>
+    <string name="location">Location</string>
+    <string name="add_image_hall">Add Image Hall</string>
 </resources>

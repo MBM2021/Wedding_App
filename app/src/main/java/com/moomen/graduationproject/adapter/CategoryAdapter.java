@@ -22,6 +22,12 @@ public class CategoryAdapter extends FirestoreRecyclerAdapter<Category, Category
 
     private OnItemClickListener listener;
 
+    private boolean isAdmin = true;
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
     public CategoryAdapter(@NonNull FirestoreRecyclerOptions<Category> options) {
         super(options);
     }
@@ -33,6 +39,10 @@ public class CategoryAdapter extends FirestoreRecyclerAdapter<Category, Category
                 .load(model.getImage())
                 .into(holder.categoryImage);
         holder.categoryName.setText(model.getName());
+        if (!isAdmin) {
+            holder.edit.setVisibility(View.GONE);
+            holder.delete.setVisibility(View.GONE);
+        }
     }
 
     @NonNull
@@ -59,11 +69,20 @@ public class CategoryAdapter extends FirestoreRecyclerAdapter<Category, Category
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
             categoryImage = itemView.findViewById(R.id.imageView_category_item);
             categoryName = itemView.findViewById(R.id.textView_category_name_item);
             edit = itemView.findViewById(R.id.imageView_edit);
             delete = itemView.findViewById(R.id.imageView_delete);
+
+            categoryImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                        DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
+                        listener.onItemClick(documentSnapshot, getAdapterPosition(), categoryImage.getId());
+                    }
+                }
+            });
 
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override

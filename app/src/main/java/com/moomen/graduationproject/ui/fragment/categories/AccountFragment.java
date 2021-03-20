@@ -1,4 +1,4 @@
-package com.moomen.graduationproject.ui.fragment;
+package com.moomen.graduationproject.ui.fragment.categories;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
