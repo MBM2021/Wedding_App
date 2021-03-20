@@ -72,7 +72,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
@@ -85,14 +85,15 @@
         app:layout_constraintTop_toBottomOf="@+id/cardView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/imageView_ads"
-                android:layout_width="@dimen/_300sdp"
-                android:layout_height="@dimen/_170sdp"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_200sdp"
                 android:src="@drawable/upload"
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
