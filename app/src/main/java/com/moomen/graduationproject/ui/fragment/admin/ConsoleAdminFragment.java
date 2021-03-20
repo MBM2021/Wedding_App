@@ -235,7 +235,7 @@ public class ConsoleAdminFragment extends Fragment {
                     Toast.makeText(getContext(), "The category name is required!", Toast.LENGTH_LONG).show();
                     return;
                 }
-                postImageCategoryInFireStorage();
+                postCategoryOnFireBase();
 
             }
         });
@@ -260,7 +260,7 @@ public class ConsoleAdminFragment extends Fragment {
         fillCategoryRecycleAdapter(options);
     }
 
-    private void postImageCategoryInFireStorage() {
+    private void postCategoryOnFireBase() {
         if (imageUri != null) {
             progressBarBottomSheet.setVisibility(View.VISIBLE);
             imageName = random() + ".jpg";
@@ -277,7 +277,7 @@ public class ConsoleAdminFragment extends Fragment {
             ByteArrayOutputStream byteArrayInputStream = new ByteArrayOutputStream();
             compressor.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayInputStream);
             byte[] thumpData = byteArrayInputStream.toByteArray();
-            StorageReference filePath = storageReference.child("category_image/").child(imageName);
+            StorageReference filePath = storageReference.child("category_image").child(imageName);
             UploadTask uploadTask = filePath.putBytes(thumpData);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -350,7 +350,6 @@ public class ConsoleAdminFragment extends Fragment {
 
     private void fillCategoryRecycleAdapter(FirestoreRecyclerOptions<Category> options) {
         CategoryAdapter categoryAdapter = new CategoryAdapter(options);
-        categoryAdapter.setAdmin(true);
         categoryAdapter.onItemSetOnClickListener(new CategoryAdapter.OnItemClickListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
@@ -409,7 +408,7 @@ public class ConsoleAdminFragment extends Fragment {
                 buttonCreate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        postImageCategoryInFireStorage();
+                        postCategoryOnFireBase();
                     }
                 });
             }
