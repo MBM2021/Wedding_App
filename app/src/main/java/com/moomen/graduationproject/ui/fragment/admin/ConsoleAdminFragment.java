@@ -121,7 +121,6 @@ public class ConsoleAdminFragment extends Fragment {
         });
     }
 
-    private Intent intent;
     private boolean isCategoryEdit = false;
 
     private void createAdsBottomSheet() {
@@ -345,7 +344,7 @@ public class ConsoleAdminFragment extends Fragment {
     }
 
     private void cropImage() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions((Activity) getContext(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 

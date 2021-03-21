@@ -19,7 +19,7 @@ import com.google.firebase.firestore.Query;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.CategoryAdapter;
 import com.moomen.graduationproject.model.Category;
-import com.moomen.graduationproject.ui.fragment.HallsFragment;
+import com.moomen.graduationproject.ui.fragment.categories.HallsFragment;
 import com.moomen.graduationproject.ui.fragment.user.StoryUserFragment;
 
 public class ConsoleCompanyFragment extends Fragment {

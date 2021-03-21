@@ -41,4 +41,12 @@
     <string name="details">Details</string>
     <string name="location">Location</string>
     <string name="add_image_hall">Add Image Hall</string>
+    <string name="add_service">Add Service</string>
+    <string name="create_service">Create Service</string>
+
+    <!--Spinner City-->
+    <string-array name="city">
+        <item>Gaza</item>
+        <item>Gaza2</item>
+    </string-array>
 </resources>
