@@ -28,15 +28,24 @@ public class Notification implements Serializable {
     }
 
     public Notification(String userImage, String title, String description, String shortDescription
-            , String date, String notificationUid, boolean status, boolean seen) {
+            , String date, String notificationUid, String notificationType, boolean status, boolean seen) {
         this.userImage = userImage;
         this.title = title;
         this.description = description;
         this.shortDescription = shortDescription;
         this.date = date;
         this.notificationUid = notificationUid;
+        this.notificationType = notificationType;
         this.status = status;
         this.seen = seen;
+    }
+
+    public String getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(String notificationType) {
+        this.notificationType = notificationType;
     }
 
     public boolean isStatus() {

@@ -1,8 +1,5 @@
 package com.moomen.graduationproject.ui.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -11,6 +8,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -106,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void addNewUserOnDbFirebase() {
         firebaseUser = firebaseAuth.getCurrentUser();
-        User user = new User(userName, userEmail, "", "", "", "", userType, "", "", true, "");
+        User user = new User(userName, userEmail, "", "", "", "", userType, "", "https://i.ibb.co/W0hVGcJ/accont.png", true, "");
         // save on cloudFireStore
         DocumentReference documentReference = firebaseFirestore.collection("Users")
                 .document(firebaseUser.getUid());

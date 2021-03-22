@@ -142,7 +142,7 @@ public class HallsFragment extends Fragment {
 
     private void createNotification() {
         String date = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
-        Notification notification = new Notification(userImage, userName, "Add new Hall Service", hallName, date, hallUid, false, false);
+        Notification notification = new Notification(userImage, userName, "Add new Hall Service", hallName, date, hallUid, "service", false, false);
         firebaseFirestore.collection("Notifications").add(notification);
     }
 
