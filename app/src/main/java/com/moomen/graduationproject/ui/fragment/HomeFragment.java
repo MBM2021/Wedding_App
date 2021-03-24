@@ -1,12 +1,16 @@
 package com.moomen.graduationproject.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,12 +35,15 @@ import com.moomen.graduationproject.model.Category;
 import com.moomen.graduationproject.viewModel.HomeViewModel;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeFragment extends Fragment {
 
     private AdsPagerAdapter adsPagerAdapter;
     private ViewPager viewPager;
-    private ArrayList<Ads> adsArrayList;
+    private ArrayList<Ads> adsArrayList = new ArrayList<>();
+    private Timer timer ;
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
@@ -44,6 +51,10 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private RecyclerView categoryRecyclerView;
+
+    private int current_position = 0 ;
+    private LinearLayout linearLayout_dot;
+    private int custum_position = 0 ;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -55,6 +66,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         categoryRecyclerView = view.findViewById(R.id.recyclerView);
+        linearLayout_dot = view.findViewById(R.id.dot_ads);
         super.onViewCreated(view, savedInstanceState);
         firebaseAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -62,6 +74,29 @@ public class HomeFragment extends Fragment {
         viewPager = view.findViewById(R.id.viewPager_ads);
         getAllCategory();
         getAllAds();
+        createSlideshow();
+        prepareDots(custum_position++);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                if (custum_position > 4)
+                    custum_position = 0;
+                prepareDots(custum_position++);
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 
@@ -102,11 +137,57 @@ public class HomeFragment extends Fragment {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Ads ads = document.toObject(Ads.class);
                         adsArrayList.add(ads);
+
                     }
                     adsPagerAdapter = new AdsPagerAdapter(getContext(), adsArrayList);
                     viewPager.setAdapter(adsPagerAdapter);
                 }
             }
         });
+
+    }
+
+    private void createSlideshow(){
+
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                if (current_position == Integer.MAX_VALUE)
+                    current_position = 0 ;
+                viewPager.setCurrentItem(current_position++ , true);
+            }
+        };
+
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+              handler.post(runnable);
+            }
+        },250,2500);
+    }
+
+    private void prepareDots(int SlidePosition ){
+
+        if (linearLayout_dot.getChildCount()>0)
+            linearLayout_dot.removeAllViews();
+        ImageView dots[] = new ImageView[5];
+
+        for (int i =0 ; i<5 ; i++){
+            dots[i] = new ImageView(getContext());
+            if (i== SlidePosition)
+                dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.active_dot));
+            else
+                dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.inactive_dot));
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(4,0,4,0);
+            linearLayout_dot.addView(dots[i],layoutParams);
+
+
+        }
     }
 }
