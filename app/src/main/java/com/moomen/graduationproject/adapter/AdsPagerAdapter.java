@@ -24,6 +24,9 @@ public class AdsPagerAdapter extends PagerAdapter {
     //Auto Image Slider with ViewPager
     private OnAdsClickListener mOnAdsClickListener;
 
+    private int custum_position = 0;
+
+
     public AdsPagerAdapter(Context context, ArrayList<Ads> pagesArrayList) {
         this.context = context;
         this.pagesArrayList = pagesArrayList;
@@ -32,10 +35,15 @@ public class AdsPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
+
+        if (custum_position >pagesArrayList.size()-1){
+            custum_position = 0;
+        }
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
         @SuppressLint("InflateParams") View slidLayout = inflater.inflate(R.layout.ads_item, null);
-        Ads currentAds = pagesArrayList.get(position);
+        Ads currentAds = pagesArrayList.get(custum_position);
+        custum_position++;
         ImageView imageAds = slidLayout.findViewById(R.id.imageView_ads);
         ImageView edit = slidLayout.findViewById(R.id.imageView_edit);
         edit.setVisibility(View.GONE);
@@ -48,7 +56,7 @@ public class AdsPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return pagesArrayList.size();
+        return Integer.MAX_VALUE;
     }
 
     @Override
