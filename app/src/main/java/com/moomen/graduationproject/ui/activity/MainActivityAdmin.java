@@ -9,9 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,35 +16,35 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.type.Color;
 import com.moomen.graduationproject.R;
-import com.moomen.graduationproject.ui.fragment.HomeFragment;
 import com.moomen.graduationproject.ui.fragment.admin.ChatAdminFragment;
 import com.moomen.graduationproject.ui.fragment.admin.ConsoleAdminFragment;
 import com.moomen.graduationproject.ui.fragment.admin.NotificationAdminFragment;
 import com.moomen.graduationproject.ui.fragment.categories.AccountFragment;
-import com.moomen.graduationproject.ui.fragment.categories.HallsFragment;
 
 public class MainActivityAdmin extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private TextView textView;
     private Fragment fragment;
     private BadgeDrawable badgeNotification;
+    private FragmentTransaction fragmentTransaction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_admin);
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupWithNavController(navView, navController);
+        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        //NavigationUI.setupWithNavController(navView, navController);
         firebaseFirestore = FirebaseFirestore.getInstance();
 
+       /* FragmentManager fragmentManager = getSupportFragmentManager();
 
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.nav_host_fragment, fragment).addToBackStack(null).commit();
+*/
         fragment = new ConsoleAdminFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.nav_host_fragment, fragment, "")
-                .addToBackStack(null).commit();
-
+        setFragment(fragment);
         getAllNotification();
 
         badgeNotification = navView.getOrCreateBadge(R.id.navigation_notification_admin);
@@ -59,8 +56,7 @@ public class MainActivityAdmin extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                FragmentTransaction fragmentTransaction =getSupportFragmentManager().beginTransaction();
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.navigation_console_admin:
                         fragment = new ConsoleAdminFragment();
                         break;
@@ -76,7 +72,7 @@ public class MainActivityAdmin extends AppCompatActivity {
                         badgeNotification.clearNumber();
                         break;
                 }
-                fragmentTransaction.replace(R.id.nav_host_fragment, fragment).addToBackStack(null).commit();
+                setFragment(fragment);
                 return true;
             }
         });
@@ -89,13 +85,12 @@ public class MainActivityAdmin extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 int size = task.getResult().size();
                 //textView.setText(size + "");
-                if (size>0) {
+                if (size > 0) {
                     badgeNotification.setVisible(true);
                     badgeNotification.setNumber(size);
-                }
-                else
+                } else
                     badgeNotification.setVisible(false);
-                //refreshNotification();
+                refreshNotification();
             }
         });
 
@@ -112,16 +107,10 @@ public class MainActivityAdmin extends AppCompatActivity {
         handler.postDelayed(runnable, 500);
     }
 
-    @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        getAllNotification();
+    private void setFragment(Fragment fragment) {
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment, fragment).commit();
     }
 
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        getAllNotification();
-    }
 }

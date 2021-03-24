@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
     private AdsPagerAdapter adsPagerAdapter;
     private ViewPager viewPager;
     private ArrayList<Ads> adsArrayList = new ArrayList<>();
-    private Timer timer ;
+    ArrayList<ImageView> dots;
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
@@ -51,10 +51,10 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private RecyclerView categoryRecyclerView;
-
-    private int current_position = 0 ;
+    private Timer timer;
     private LinearLayout linearLayout_dot;
-    private int custum_position = 0 ;
+    private int current_position = 0;
+    private int custum_position = 0;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -72,11 +72,11 @@ public class HomeFragment extends Fragment {
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
         viewPager = view.findViewById(R.id.viewPager_ads);
+        dots = new ArrayList<>();
         getAllCategory();
         getAllAds();
         createSlideshow();
         prepareDots(custum_position++);
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
 
-                if (custum_position > 4)
+                if (custum_position > adsArrayList.size())
                     custum_position = 0;
                 prepareDots(custum_position++);
 
@@ -147,7 +147,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void createSlideshow(){
+    private void createSlideshow() {
 
         final Handler handler = new Handler();
         final Runnable runnable = new Runnable() {
@@ -155,8 +155,8 @@ public class HomeFragment extends Fragment {
             public void run() {
 
                 if (current_position == Integer.MAX_VALUE)
-                    current_position = 0 ;
-                viewPager.setCurrentItem(current_position++ , true);
+                    current_position = 0;
+                viewPager.setCurrentItem(current_position++, true);
             }
         };
 
@@ -164,28 +164,39 @@ public class HomeFragment extends Fragment {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-              handler.post(runnable);
+                handler.post(runnable);
             }
-        },250,2500);
+        }, 250, 2500);
     }
 
-    private void prepareDots(int SlidePosition ){
+    private void prepareDots(int SlidePosition) {
 
-        if (linearLayout_dot.getChildCount()>0)
+        if (linearLayout_dot.getChildCount() > 0)
             linearLayout_dot.removeAllViews();
-        ImageView dots[] = new ImageView[5];
+        //ImageView dots[] = new ImageView[5];
+        dots.clear();
+        ImageView imageView;
+        for (int i = 0; i < adsArrayList.size(); i++) {
+            imageView = new ImageView(getContext());
+            dots.add(imageView);
+        }
+        for (int i = 0; i < dots.size(); i++) {
+            //dots.add(new ImageView(getContext()));
+            //dots[i] = new ImageView(getContext());
+            imageView = new ImageView(getContext());
 
-        for (int i =0 ; i<5 ; i++){
-            dots[i] = new ImageView(getContext());
-            if (i== SlidePosition)
-                dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.active_dot));
+            if (i == SlidePosition)
+                imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
             else
-                dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.inactive_dot));
+                // dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.inactive_dot));
+                imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.inactive_dot));
+
+            dots.set(i, imageView);
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(4,0,4,0);
-            linearLayout_dot.addView(dots[i],layoutParams);
+            layoutParams.setMargins(4, 0, 4, 0);
+            linearLayout_dot.addView(dots.get(i), layoutParams);
 
 
         }
