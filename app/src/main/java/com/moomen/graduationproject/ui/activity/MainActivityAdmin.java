@@ -2,25 +2,37 @@ package com.moomen.graduationproject.ui.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.type.Color;
 import com.moomen.graduationproject.R;
+import com.moomen.graduationproject.ui.fragment.HomeFragment;
+import com.moomen.graduationproject.ui.fragment.admin.ChatAdminFragment;
+import com.moomen.graduationproject.ui.fragment.admin.ConsoleAdminFragment;
+import com.moomen.graduationproject.ui.fragment.admin.NotificationAdminFragment;
+import com.moomen.graduationproject.ui.fragment.categories.AccountFragment;
+import com.moomen.graduationproject.ui.fragment.categories.HallsFragment;
 
 public class MainActivityAdmin extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private TextView textView;
-
+    private Fragment fragment;
+    private BadgeDrawable badgeNotification;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,20 +41,64 @@ public class MainActivityAdmin extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
         firebaseFirestore = FirebaseFirestore.getInstance();
-        textView = findViewById(R.id.textView_count_notification);
+
+
+        fragment = new ConsoleAdminFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.nav_host_fragment, fragment, "")
+                .addToBackStack(null).commit();
+
         getAllNotification();
 
+        badgeNotification = navView.getOrCreateBadge(R.id.navigation_notification_admin);
+        badgeNotification.setBackgroundColor(getResources().getColor(R.color.purple_500));
+        badgeNotification.setBadgeTextColor(getResources().getColor(R.color.white));
+        //badgeNotification.setNumber(100000);
+        //badgeNotification.setVisible(true);
+
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentTransaction fragmentTransaction =getSupportFragmentManager().beginTransaction();
+                switch (item.getItemId()){
+                    case R.id.navigation_console_admin:
+                        fragment = new ConsoleAdminFragment();
+                        break;
+                    case R.id.navigation_chat_admin:
+                        fragment = new ChatAdminFragment();
+                        break;
+                    case R.id.navigation_profile:
+                        fragment = new AccountFragment();
+                        break;
+                    case R.id.navigation_notification_admin:
+                        fragment = new NotificationAdminFragment();
+                        BadgeDrawable badgeNotification = navView.getBadge(R.id.navigation_notification_admin);
+                        badgeNotification.clearNumber();
+                        break;
+                }
+                fragmentTransaction.replace(R.id.nav_host_fragment, fragment).addToBackStack(null).commit();
+                return true;
+            }
+        });
     }
+
 
     private void getAllNotification() {
         firebaseFirestore.collection("Notifications").whereEqualTo("seen", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 int size = task.getResult().size();
-                textView.setText(size + "");
-                refreshNotification();
+                //textView.setText(size + "");
+                if (size>0) {
+                    badgeNotification.setVisible(true);
+                    badgeNotification.setNumber(size);
+                }
+                else
+                    badgeNotification.setVisible(false);
+                //refreshNotification();
             }
         });
+
     }
 
     private void refreshNotification() {
