@@ -15,8 +15,12 @@ public class Notification implements Serializable {
     String shortDescription;
     @SerializedName("date")
     String date;
-    @SerializedName("notificationUid")
-    String notificationUid;
+    @SerializedName("serviceUid")
+    String serviceUid;
+    @SerializedName("hallUid")
+    String hallUid;
+    @SerializedName("userUid")
+    String userUid;
     @SerializedName("notificationType")
     String notificationType;
     @SerializedName("status")
@@ -24,20 +28,48 @@ public class Notification implements Serializable {
     @SerializedName("seen")
     boolean seen;
 
+
     public Notification() {
     }
 
     public Notification(String userImage, String title, String description, String shortDescription
-            , String date, String notificationUid, String notificationType, boolean status, boolean seen) {
+            , String date, String serviceUid, String hallUid, String userUid, String notificationType
+            , boolean status, boolean seen) {
         this.userImage = userImage;
         this.title = title;
         this.description = description;
         this.shortDescription = shortDescription;
         this.date = date;
-        this.notificationUid = notificationUid;
+        this.serviceUid = serviceUid;
+        this.hallUid = hallUid;
+        this.userUid = userUid;
         this.notificationType = notificationType;
         this.status = status;
         this.seen = seen;
+    }
+
+    public String getHallUid() {
+        return hallUid;
+    }
+
+    public void setHallUid(String hallUid) {
+        this.hallUid = hallUid;
+    }
+
+    public String getServiceUid() {
+        return serviceUid;
+    }
+
+    public void setServiceUid(String serviceUid) {
+        this.serviceUid = serviceUid;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 
     public String getNotificationType() {
@@ -102,13 +134,5 @@ public class Notification implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getNotificationUid() {
-        return notificationUid;
-    }
-
-    public void setNotificationUid(String notificationUid) {
-        this.notificationUid = notificationUid;
     }
 }

@@ -21,10 +21,13 @@ import com.google.firebase.firestore.Query;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.NotificationAdapter;
 import com.moomen.graduationproject.model.Notification;
-import com.moomen.graduationproject.ui.activity.UserBlocked;
+import com.moomen.graduationproject.ui.activity.ViewServiceActivity;
 
 public class NotificationAdminFragment extends Fragment {
 
+    public static final String SERVICE_ID = "SERVICE_ID";
+    public static final String HALL_ID = "HALL_ID";
+    public static final String USER_ID = "USER_ID";
     private RecyclerView recyclerView;
     private FirebaseFirestore firebaseFirestore;
 
@@ -53,11 +56,19 @@ public class NotificationAdminFragment extends Fragment {
         fillCategoryRecycleAdapter(options);
     }
 
+    private String userId;
+    private String serviceId;
+    private String hallId;
+
     private void fillCategoryRecycleAdapter(FirestoreRecyclerOptions<Notification> options) {
         NotificationAdapter notificationAdapter = new NotificationAdapter(options);
         notificationAdapter.onItemSetOnClickListener(new NotificationAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Notification notification = documentSnapshot.toObject(Notification.class);
+                userId = notification.getUserUid();
+                serviceId = notification.getServiceUid();
+                hallId = notification.getHallUid();
                 String notificationUid = documentSnapshot.getId();
                 updateStatusValueNotification(notificationUid);
             }
@@ -71,7 +82,11 @@ public class NotificationAdminFragment extends Fragment {
         firebaseFirestore.collection("Notifications").document(notificationUid).update("status", true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                startActivity(new Intent(getContext(), UserBlocked.class));
+                Intent intent = new Intent(getContext(), ViewServiceActivity.class);
+                intent.putExtra(SERVICE_ID, serviceId);
+                intent.putExtra(HALL_ID, hallId);
+                intent.putExtra(USER_ID, userId);
+                startActivity(intent);
             }
         });
     }

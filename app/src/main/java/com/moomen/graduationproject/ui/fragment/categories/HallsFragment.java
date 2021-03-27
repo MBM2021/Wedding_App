@@ -53,6 +53,9 @@ public class HallsFragment extends Fragment {
     private String hallUid;
     private String userImage;
     private String userName;
+    private String date;
+    private String serviceId;
+    private String userId;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -62,41 +65,20 @@ public class HallsFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
-
+        date = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        spinnerCreate(binding.spinnerCity);
         binding.buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createHallService();
             }
         });
-    }
-
-    private void createHallService() {
-        isEmpty = false;
-        hallName = binding.editTextHallName.getText().toString().trim();
-        ownerName = binding.editTextOwnerName.getText().toString().trim();
-        phone = binding.editTextPhone.getText().toString().trim();
-        location = binding.editTextLocation.getText().toString().trim();
-        details = binding.editTextDetail.getText().toString().trim();
-
-        checkEditText(hallName, binding.editTextHallName, "Hall name");
-        checkEditText(ownerName, binding.editTextOwnerName, "Owner name");
-        checkEditText(phone, binding.editTextPhone, "Phone number");
-        checkEditText(location, binding.editTextLocation, "Location");
-        checkEditText(details, binding.editTextDetail, "Detail");
-
-        spinnerCreate(binding.spinnerCity);
-
-        if (!isEmpty) {
-            Service service = new Service(hallImage, city, hallName, ownerName, phone, location, details, false, new ArrayList<>(), "");
-            postHallOnFirebase(service);
-        }
     }
 
     private void spinnerCreate(Spinner spinner) {
@@ -116,19 +98,45 @@ public class HallsFragment extends Fragment {
         });
     }
 
+    private void createHallService() {
+        isEmpty = false;
+        hallName = binding.editTextHallName.getText().toString().trim();
+        ownerName = binding.editTextOwnerName.getText().toString().trim();
+        phone = binding.editTextPhone.getText().toString().trim();
+        location = binding.editTextLocation.getText().toString().trim();
+        details = binding.editTextDetail.getText().toString().trim();
+
+        checkEditText(hallName, binding.editTextHallName, "Hall name");
+        checkEditText(ownerName, binding.editTextOwnerName, "Owner name");
+        checkEditText(phone, binding.editTextPhone, "Phone number");
+        checkEditText(location, binding.editTextLocation, "Location");
+        checkEditText(details, binding.editTextDetail, "Detail");
+
+        if (!isEmpty) {
+            Service service = new Service(hallImage, city, hallName, ownerName, phone, location, details, false, new ArrayList<>(), "Halls", date);
+            postHallOnFirebase(service);
+        }
+    }
+
     private void postHallOnFirebase(Service service) {
-        firebaseFirestore.collection("Services").document().collection("Halls").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+        firebaseFirestore.collection("Services").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
-                hallUid = task.getResult().getId();
-                makeToast(getContext(), "Service created successfully!");
-                getCurrentUserInfo();
+                serviceId = task.getResult().getId();
+                firebaseFirestore.collection("Services").document(serviceId).collection("Halls").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        hallUid = task.getResult().getId();
+                        makeToast(getContext(), "Service created successfully!");
+                        getCurrentUserInfo();
+                    }
+                });
             }
         });
     }
 
     private void getCurrentUserInfo() {
-        String userId = firebaseAuth.getCurrentUser().getUid();
+        userId = firebaseAuth.getCurrentUser().getUid();
         firebaseFirestore.collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -141,8 +149,7 @@ public class HallsFragment extends Fragment {
     }
 
     private void createNotification() {
-        String date = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
-        Notification notification = new Notification(userImage, userName, "Add new Hall Service", hallName, date, hallUid, "service", false, false);
+        Notification notification = new Notification(userImage, userName, "Add new Hall Service", hallName, date, serviceId, hallUid, userId, "service", false, false);
         firebaseFirestore.collection("Notifications").add(notification);
     }
 

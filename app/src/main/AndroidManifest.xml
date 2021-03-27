@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduationProject">
-        <activity android:name=".ui.activity.MainActivityAdmin"></activity>
+        <activity android:name=".ui.activity.ViewServiceActivity"></activity>
+        <activity android:name=".ui.activity.MainActivityAdmin" />
         <activity android:name=".ui.activity.MainActivityCompany" />
         <activity android:name=".ui.activity.RegisterActivity" />
         <activity android:name=".ui.activity.SignInActivity" />
@@ -31,7 +32,6 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:label="@string/app_name" />
-
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />

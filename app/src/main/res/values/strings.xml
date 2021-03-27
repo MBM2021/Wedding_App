@@ -43,6 +43,21 @@
     <string name="add_image_hall">Add Image Hall</string>
     <string name="add_service">Add Service</string>
     <string name="create_service">Create Service</string>
+    <string name="service_type">Service type</string>
+    <string name="service_information">Service Information</string>
+    <string name="company_information">Company Information</string>
+    <string name="address">Address</string>
+    <string name="phone">Phone</string>
+    <string name="type">Type</string>
+    <string name="namee">Name</string>
+    <string name="city">City</string>
+    <string name="contact_phone">Contact Phone</string>
+    <string name="service_image">Service Image</string>
+    <string name="service_status">Service Status</string>
+    <string name="status">Status</string>
+    <string name="created_date">Created date</string>
+    <string name="accepted">Accepted</string>
+    <string name="rejected">Rejected</string>
 
     <!--Spinner City-->
     <string-array name="city">

@@ -56,7 +56,7 @@ public class AdsPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return Integer.MAX_VALUE;
+        return pagesArrayList.size();
     }
 
     @Override

@@ -5,14 +5,13 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -20,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -30,8 +30,10 @@ import com.google.firebase.storage.StorageReference;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.AdsPagerAdapter;
 import com.moomen.graduationproject.adapter.CategoryAdapter;
+import com.moomen.graduationproject.adapter.ServicesAdapter;
 import com.moomen.graduationproject.model.Ads;
 import com.moomen.graduationproject.model.Category;
+import com.moomen.graduationproject.model.Service;
 import com.moomen.graduationproject.viewModel.HomeViewModel;
 
 import java.util.ArrayList;
@@ -43,7 +45,6 @@ public class HomeFragment extends Fragment {
     private AdsPagerAdapter adsPagerAdapter;
     private ViewPager viewPager;
     private ArrayList<Ads> adsArrayList = new ArrayList<>();
-    ArrayList<ImageView> dots;
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
@@ -51,32 +52,66 @@ public class HomeFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private RecyclerView categoryRecyclerView;
+    private RecyclerView servicesRecyclerView;
     private Timer timer;
     private LinearLayout linearLayout_dot;
     private int current_position = 0;
     private int custum_position = 0;
+    private TabLayout tabLayoutIndicator;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        return root;
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        categoryRecyclerView = view.findViewById(R.id.recyclerView);
-        linearLayout_dot = view.findViewById(R.id.dot_ads);
         super.onViewCreated(view, savedInstanceState);
+        categoryRecyclerView = view.findViewById(R.id.recyclerView_category);
+        servicesRecyclerView = view.findViewById(R.id.recyclerView_services);
         firebaseAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
         viewPager = view.findViewById(R.id.viewPager_ads);
-        dots = new ArrayList<>();
+        tabLayoutIndicator = view.findViewById(R.id.indicator_tab_slid_page_id);
         getAllCategory();
         getAllAds();
         createSlideshow();
-        prepareDots(custum_position++);
+        prepareViewPagerAds();
+        getAllServices();
+    }
+
+    private void getAllServices() {//  http://firebfbfs.sdf\Services\ \Halls&&status=true
+        Query query = FirebaseFirestore.getInstance()
+                .collection("Services")
+                .whereEqualTo("status", true);
+        FirestoreRecyclerOptions<Service> options = new FirestoreRecyclerOptions.Builder<Service>()
+                .setQuery(query, Service.class)
+                .build();
+        fillServicesRecycleAdapter(options);
+    }
+
+    private void fillServicesRecycleAdapter(FirestoreRecyclerOptions<Service> options) {
+        ServicesAdapter servicesAdapter = new ServicesAdapter(options);
+
+       /* newsAdapter.onUserNameSetOnClickListener(new NewsAdapter.OnUserNameClickListener() {
+            @Override
+            public void onUserNameClick(String userID, int position) {
+                Intent intent = new Intent(getContext(), OpenUserProfile.class);
+                intent.putExtra(USER_ID, userID);
+                startActivity(intent);
+            }
+        });*/
+
+        servicesAdapter.setContext(getContext());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        servicesRecyclerView.setLayoutManager(gridLayoutManager);
+        servicesRecyclerView.setAdapter(servicesAdapter);
+        servicesAdapter.startListening();
+    }
+
+    private void prepareViewPagerAds() {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -85,10 +120,9 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-
-                if (custum_position > adsArrayList.size())
+                if (custum_position > adsArrayList.size() - 1)
                     custum_position = 0;
-                prepareDots(custum_position++);
+                //prepareDots(custum_position++);
 
             }
 
@@ -99,16 +133,15 @@ public class HomeFragment extends Fragment {
         });
     }
 
-
     private void getAllCategory() {
         Query query = FirebaseFirestore.getInstance().collection("Category");
         FirestoreRecyclerOptions<Category> options = new FirestoreRecyclerOptions.Builder<Category>()
                 .setQuery(query, Category.class)
                 .build();
-        fillRecycleAdapter(options);
+        fillCategoryRecycleAdapter(options);
     }
 
-    private void fillRecycleAdapter(FirestoreRecyclerOptions<Category> options) {
+    private void fillCategoryRecycleAdapter(FirestoreRecyclerOptions<Category> options) {
         CategoryAdapter categoryAdapter = new CategoryAdapter(options);
 
        /* newsAdapter.onUserNameSetOnClickListener(new NewsAdapter.OnUserNameClickListener() {
@@ -141,6 +174,7 @@ public class HomeFragment extends Fragment {
                     }
                     adsPagerAdapter = new AdsPagerAdapter(getContext(), adsArrayList);
                     viewPager.setAdapter(adsPagerAdapter);
+                    tabLayoutIndicator.setupWithViewPager(viewPager, true);
                 }
             }
         });
@@ -154,7 +188,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
 
-                if (current_position == Integer.MAX_VALUE)
+                if (current_position == adsArrayList.size())
                     current_position = 0;
                 viewPager.setCurrentItem(current_position++, true);
             }
@@ -167,38 +201,5 @@ public class HomeFragment extends Fragment {
                 handler.post(runnable);
             }
         }, 250, 2500);
-    }
-
-    private void prepareDots(int SlidePosition) {
-
-        if (linearLayout_dot.getChildCount() > 0)
-            linearLayout_dot.removeAllViews();
-        //ImageView dots[] = new ImageView[5];
-        dots.clear();
-        ImageView imageView;
-        for (int i = 0; i < adsArrayList.size(); i++) {
-            imageView = new ImageView(getContext());
-            dots.add(imageView);
-        }
-        for (int i = 0; i < dots.size(); i++) {
-            //dots.add(new ImageView(getContext()));
-            //dots[i] = new ImageView(getContext());
-            imageView = new ImageView(getContext());
-
-            if (i == SlidePosition)
-                imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.active_dot));
-            else
-                // dots[i].setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.inactive_dot));
-                imageView.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.inactive_dot));
-
-            dots.set(i, imageView);
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(4, 0, 4, 0);
-            linearLayout_dot.addView(dots.get(i), layoutParams);
-
-
-        }
     }
 }

@@ -6,12 +6,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Service implements Serializable {
-    @SerializedName("hallImage")
-    String hallImage;
+    @SerializedName("image")
+    String image;
     @SerializedName("city")
     String city;
-    @SerializedName("hallName")
-    String hallName;
+    @SerializedName("name")
+    String name;
     @SerializedName("ownerName")
     String ownerName;
     @SerializedName("phone")
@@ -24,57 +24,44 @@ public class Service implements Serializable {
     boolean status;
     @SerializedName("tagsArrayList")
     ArrayList<Tags> tagsArrayList;
-    @SerializedName("notificationType")
-    String notificationType;
+    @SerializedName("type")
+    String type;
+    @SerializedName("date")
+    String date;
 
 
     public Service() {
     }
 
-    public Service(String hallImage, String city, String hallName, String ownerName, String phone
-            , String location, String detail, boolean status, ArrayList<Tags> tagsArrayList, String notificationType) {
-        this.hallImage = hallImage;
+    public Service(String image, String city, String name, String ownerName, String phone
+            , String location, String detail, boolean status, ArrayList<Tags> tagsArrayList, String type, String date) {
+        this.image = image;
         this.city = city;
-        this.hallName = hallName;
+        this.name = name;
         this.ownerName = ownerName;
         this.phone = phone;
         this.location = location;
         this.detail = detail;
         this.status = status;
         this.tagsArrayList = tagsArrayList;
-        this.notificationType = notificationType;
+        this.type = type;
+        this.date = date;
     }
 
-    public String getNotification() {
-        return notificationType;
+    public String getDate() {
+        return date;
     }
 
-    public void setNotification(String notificationType) {
-        this.notificationType = notificationType;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public ArrayList<Tags> getTagsArrayList() {
-        return tagsArrayList;
+    public String getImage() {
+        return image;
     }
 
-    public void setTagsArrayList(ArrayList<Tags> tagsArrayList) {
-        this.tagsArrayList = tagsArrayList;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public String getHallImage() {
-        return hallImage;
-    }
-
-    public void setHallImage(String hallImage) {
-        this.hallImage = hallImage;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getCity() {
@@ -85,12 +72,12 @@ public class Service implements Serializable {
         this.city = city;
     }
 
-    public String getHallName() {
-        return hallName;
+    public String getName() {
+        return name;
     }
 
-    public void setHallName(String hallName) {
-        this.hallName = hallName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getOwnerName() {
@@ -123,5 +110,29 @@ public class Service implements Serializable {
 
     public void setDetail(String detail) {
         this.detail = detail;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public ArrayList<Tags> getTagsArrayList() {
+        return tagsArrayList;
+    }
+
+    public void setTagsArrayList(ArrayList<Tags> tagsArrayList) {
+        this.tagsArrayList = tagsArrayList;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
