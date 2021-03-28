@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -58,6 +59,7 @@ public class HomeFragment extends Fragment {
     private int current_position = 0;
     private int custum_position = 0;
     private TabLayout tabLayoutIndicator;
+    private String categoryType = "Services";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -82,9 +84,9 @@ public class HomeFragment extends Fragment {
         getAllServices();
     }
 
-    private void getAllServices() {//  http://firebfbfs.sdf\Services\ \Halls&&status=true
+    private void getAllServices() {
         Query query = FirebaseFirestore.getInstance()
-                .collection("Services")
+                .collection(categoryType)
                 .whereEqualTo("status", true);
         FirestoreRecyclerOptions<Service> options = new FirestoreRecyclerOptions.Builder<Service>()
                 .setQuery(query, Service.class)
@@ -108,6 +110,9 @@ public class HomeFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         servicesRecyclerView.setLayoutManager(gridLayoutManager);
         servicesRecyclerView.setAdapter(servicesAdapter);
+        servicesRecyclerView.setItemViewCacheSize(20);
+        servicesRecyclerView.setDrawingCacheEnabled(true);
+        servicesRecyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         servicesAdapter.startListening();
     }
 
@@ -144,14 +149,16 @@ public class HomeFragment extends Fragment {
     private void fillCategoryRecycleAdapter(FirestoreRecyclerOptions<Category> options) {
         CategoryAdapter categoryAdapter = new CategoryAdapter(options);
 
-       /* newsAdapter.onUserNameSetOnClickListener(new NewsAdapter.OnUserNameClickListener() {
+        categoryAdapter.onItemSetOnClickListener(new CategoryAdapter.OnItemClickListener() {
             @Override
-            public void onUserNameClick(String userID, int position) {
-                Intent intent = new Intent(getContext(), OpenUserProfile.class);
-                intent.putExtra(USER_ID, userID);
-                startActivity(intent);
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position, int id) {
+                Category category = documentSnapshot.toObject(Category.class);
+                categoryType = category.getName();
+                if (categoryType.equals("All"))
+                    categoryType = "Services";
+                getAllServices();
             }
-        });*/
+        });
 
         categoryAdapter.setContext(getContext());
         categoryAdapter.setAdmin(false);

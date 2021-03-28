@@ -123,7 +123,7 @@ public class HallsFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 serviceId = task.getResult().getId();
-                firebaseFirestore.collection("Services").document(serviceId).collection("Halls").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                firebaseFirestore.collection("Halls").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         hallUid = task.getResult().getId();

@@ -49,8 +49,10 @@ public class ViewServiceActivity extends AppCompatActivity {
         bottomNavigationOnClickItem();
     }
 
+    int select = 0;
+
     private void getServiceInfo() {
-        firebaseFirestore.collection("Services").document(serviceId).collection("Halls").document(hallId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        firebaseFirestore.collection("Services").document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Service service = task.getResult().toObject(Service.class);
@@ -96,9 +98,8 @@ public class ViewServiceActivity extends AppCompatActivity {
         binding.linearLayoutAcceptService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseFirestore.collection("Services")
-                        .document(serviceId).collection("Halls")
-                        .document(hallId).update("status", true);
+                firebaseFirestore.collection("Services").document(serviceId).update("status", true);
+                firebaseFirestore.collection("Halls").document(hallId).update("status", true);
                 Toast.makeText(getApplicationContext(), getString(R.string.accepted), Toast.LENGTH_SHORT).show();
                 getServiceInfo();
             }
@@ -106,12 +107,16 @@ public class ViewServiceActivity extends AppCompatActivity {
         binding.linearLayoutCancelService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseFirestore.collection("Services")
-                        .document(serviceId).collection("Halls")
-                        .document(hallId).update("status", false);
+                firebaseFirestore.collection("Services").document(serviceId).update("status", false);
+                firebaseFirestore.collection("Halls").document(hallId).update("status", false);
                 Toast.makeText(getApplicationContext(), getString(R.string.rejected), Toast.LENGTH_SHORT).show();
                 getServiceInfo();
             }
         });
+        pushNotification();
+    }
+
+    private void pushNotification() {
+
     }
 }

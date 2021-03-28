@@ -14,4 +14,5 @@
     <color name="active_dots">#2F74C8</color>
     <color name="inactive_dots">#03070b</color>
     <color name="transport">#00000000</color>
+    <color name="bink">#BA68C8</color>
 </resources>
