@@ -62,6 +62,14 @@
     <!--Spinner City-->
     <string-array name="city">
         <item>Gaza</item>
-        <item>Gaza2</item>
+        <item>Kahanyounis</item>
+        <item>Rafah</item>
+        <item>Dair Al Balah</item>
+        <item>Bait Hanoun</item>
+        <item>Bait Lahya</item>
+        <item>Jabalia</item>
+        <item>Alnosirate</item>
+        <item>Almaghazi</item>
+        <item>Alboriage</item>
     </string-array>
 </resources>

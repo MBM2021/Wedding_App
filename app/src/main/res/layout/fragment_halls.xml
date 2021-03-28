@@ -23,7 +23,7 @@
             <ImageView
                 android:id="@+id/imageView_hall"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="@dimen/_150sdp"
                 android:src="@drawable/upload"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
