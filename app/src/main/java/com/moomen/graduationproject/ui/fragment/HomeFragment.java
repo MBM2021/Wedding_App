@@ -139,7 +139,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getAllCategory() {
-        Query query = FirebaseFirestore.getInstance().collection("Category");
+        Query query = FirebaseFirestore.getInstance().collection("Category").orderBy("name", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<Category> options = new FirestoreRecyclerOptions.Builder<Category>()
                 .setQuery(query, Category.class)
                 .build();
