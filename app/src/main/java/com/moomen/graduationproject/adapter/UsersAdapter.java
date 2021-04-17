@@ -33,13 +33,13 @@ public class UsersAdapter extends FirestoreRecyclerAdapter<User, UsersAdapter.Vi
         Picasso.get()
                 .load(model.getUserImage())
                 .into(holder.userImageView);
-        // holder.userNameTextView.setText(model.getFirstName() + " " + model.getLastName());
+        holder.userNameTextView.setText(model.getName());
         holder.userDateCreateTextView.setText(model.getDateCreate());
         holder.userEmailTextView.setText(model.getEmail());
         holder.userLocationTextView.setText(model.getAddress());
         if (model.isStatus()) {
             holder.userStatusTextView.setText("Active");
-            // holder.userStatusImageView.setImageResource(R.drawable.ic_baseline_visibility_24);
+            holder.userStatusImageView.setImageResource(R.drawable.ic_baseline_remove_red_eye_24);
 
         } else {
             holder.userStatusTextView.setText("Blocked");
@@ -68,14 +68,14 @@ public class UsersAdapter extends FirestoreRecyclerAdapter<User, UsersAdapter.Vi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            /*userImageView = itemView.findViewById(R.id.image_view_account_user_id);
-            userNameTextView = itemView.findViewById(R.id.text_view_user_name_id);
-            userDateCreateTextView = itemView.findViewById(R.id.text_view_date_user_create_id);
-            userEmailTextView = itemView.findViewById(R.id.text_view_user_email_id);
-            userLocationTextView = itemView.findViewById(R.id.text_view_user_location_id);
-            userStatusTextView = itemView.findViewById(R.id.text_view_user_status_id);
-            userStatusImageView = itemView.findViewById(R.id.image_view_user_status_id);
-            constraintLayoutUserItem = itemView.findViewById(R.id.user_item_id);*/
+            userImageView = itemView.findViewById(R.id.imageView_user_users_fragment);
+            userNameTextView = itemView.findViewById(R.id.textView_user_name_users_fragment);
+            userDateCreateTextView = itemView.findViewById(R.id.textView_date_created_users_fragment);
+            userEmailTextView = itemView.findViewById(R.id.textView_user_email_users_fragment);
+            userLocationTextView = itemView.findViewById(R.id.textView_location_users_fragment);
+            userStatusTextView = itemView.findViewById(R.id.textView_user_status_users_fragment);
+            userStatusImageView = itemView.findViewById(R.id.imageView_user_status_users_fragment);
+            constraintLayoutUserItem = itemView.findViewById(R.id.constraintLayout_user_item_id);
             constraintLayoutUserItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

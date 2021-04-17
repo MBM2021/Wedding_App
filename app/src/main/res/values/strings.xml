@@ -58,6 +58,10 @@
     <string name="created_date">Created date</string>
     <string name="accepted">Accepted</string>
     <string name="rejected">Rejected</string>
+    <string name="store">STORE</string>
+    <string name="users">Users</string>
+    <string name="add_dresses_image">Add Dresses Image</string>
+    <string name="dresses_store_name">Dresses Store Name</string>
 
     <!--Spinner City-->
     <string-array name="city">
