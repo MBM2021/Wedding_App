@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.moomen.graduationproject.ui.fragment.categories.AccountFragment"
+        android:name="com.moomen.graduationproject.ui.fragment.AccountFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_account" />
 </navigation>

@@ -96,16 +96,6 @@ public class HomeFragment extends Fragment {
 
     private void fillServicesRecycleAdapter(FirestoreRecyclerOptions<Service> options) {
         ServicesAdapter servicesAdapter = new ServicesAdapter(options);
-
-       /* newsAdapter.onUserNameSetOnClickListener(new NewsAdapter.OnUserNameClickListener() {
-            @Override
-            public void onUserNameClick(String userID, int position) {
-                Intent intent = new Intent(getContext(), OpenUserProfile.class);
-                intent.putExtra(USER_ID, userID);
-                startActivity(intent);
-            }
-        });*/
-
         servicesAdapter.setContext(getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         servicesRecyclerView.setLayoutManager(gridLayoutManager);

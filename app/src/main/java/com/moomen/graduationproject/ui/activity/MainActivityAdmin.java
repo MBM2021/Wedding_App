@@ -17,10 +17,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.moomen.graduationproject.R;
+import com.moomen.graduationproject.ui.fragment.AccountFragment;
 import com.moomen.graduationproject.ui.fragment.admin.ChatAdminFragment;
 import com.moomen.graduationproject.ui.fragment.admin.ConsoleAdminFragment;
 import com.moomen.graduationproject.ui.fragment.admin.NotificationAdminFragment;
-import com.moomen.graduationproject.ui.fragment.categories.AccountFragment;
 
 public class MainActivityAdmin extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
