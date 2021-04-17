@@ -28,6 +28,9 @@ public class NotificationAdminFragment extends Fragment {
     public static final String SERVICE_ID = "SERVICE_ID";
     public static final String HALL_ID = "HALL_ID";
     public static final String USER_ID = "USER_ID";
+    public static final String USER_TYPE = "USER_TYPE";
+    public static final String NOTIFICATION_ID = "NOTIFICATION_ID";
+
     private RecyclerView recyclerView;
     private FirebaseFirestore firebaseFirestore;
 
@@ -79,13 +82,15 @@ public class NotificationAdminFragment extends Fragment {
     }
 
     private void updateStatusValueNotification(String notificationUid) {
-        firebaseFirestore.collection("Notifications").document(notificationUid).update("status", true).addOnCompleteListener(new OnCompleteListener<Void>() {
+        firebaseFirestore.collection("Notifications").document(notificationUid).update("hallUid", hallId).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Intent intent = new Intent(getContext(), ViewServiceActivity.class);
                 intent.putExtra(SERVICE_ID, serviceId);
                 intent.putExtra(HALL_ID, hallId);
                 intent.putExtra(USER_ID, userId);
+                intent.putExtra(USER_TYPE,"admin");
+                intent.putExtra(NOTIFICATION_ID,notificationUid);
                 startActivity(intent);
             }
         });

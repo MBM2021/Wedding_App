@@ -173,6 +173,18 @@
                     app:layout_constraintStart_toEndOf="@+id/imageView9"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <ImageView
+                    android:id="@+id/imageView_edit_company"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_margin="@dimen/_8sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_baseline_edit_24"
+                    app:tint="@color/purple_500"
+                    android:visibility="gone"
+                    />
+
                 <TextView
                     android:id="@+id/textView16"
                     android:layout_width="wrap_content"
@@ -260,7 +272,9 @@
                     android:theme="@style/FontTheme6"
                     app:layout_constraintBottom_toBottomOf="@+id/textView25"
                     app:layout_constraintStart_toEndOf="@+id/textView25"
-                    app:layout_constraintTop_toTopOf="@+id/textView25" />
+                    app:layout_constraintTop_toTopOf="@+id/textView25"
+
+                    />
 
                 <TextView
                     android:id="@+id/textView27"
