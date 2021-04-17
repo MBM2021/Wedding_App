@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduationProject">
+        <activity android:name=".ui.activity.ViewServiceDetailsActivity"></activity>
         <activity android:name=".ui.activity.ViewServicesActivity" />
         <activity android:name=".ui.activity.ViewServiceActivity" />
         <activity android:name=".ui.activity.MainActivityAdmin" />

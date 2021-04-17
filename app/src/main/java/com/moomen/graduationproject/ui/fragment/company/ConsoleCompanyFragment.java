@@ -19,8 +19,8 @@ import com.google.firebase.firestore.Query;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.CategoryAdapter;
 import com.moomen.graduationproject.model.Category;
+import com.moomen.graduationproject.ui.fragment.categories.DressesFragment;
 import com.moomen.graduationproject.ui.fragment.categories.HallsFragment;
-import com.moomen.graduationproject.ui.fragment.user.StoryUserFragment;
 
 public class ConsoleCompanyFragment extends Fragment {
     private RecyclerView categoryRecyclerView;
@@ -63,8 +63,8 @@ public class ConsoleCompanyFragment extends Fragment {
                         case "Halls":
                             fragment = new HallsFragment();
                             break;
-                        case "G":
-                            fragment = new StoryUserFragment();
+                        case "Dresses":
+                            fragment = new DressesFragment();
                             break;
                     }
                 fragmentTransaction.replace(R.id.container_category_fragment, fragment).addToBackStack(null).commit();
