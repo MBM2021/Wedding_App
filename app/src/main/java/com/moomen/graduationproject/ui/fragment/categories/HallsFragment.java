@@ -118,7 +118,7 @@ public class HallsFragment extends Fragment {
         binding.buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createDressService();
+                createHallService();
             }
         });
     }
@@ -138,7 +138,7 @@ public class HallsFragment extends Fragment {
         }
     }
 
-    private void postDressImageOnFireBase() {
+    private void postHallImageOnFireBase() {
         if (imageUri != null) {
             compressAndNameImage();
             ByteArrayOutputStream byteArrayInputStream = new ByteArrayOutputStream();
@@ -212,7 +212,7 @@ public class HallsFragment extends Fragment {
         });
     }
 
-    private void createDressService() {
+    private void createHallService() {
         isEmpty = false;
         hallName = binding.editTextHallName.getText().toString().trim();
         ownerName = binding.editTextOwnerName.getText().toString().trim();
@@ -227,7 +227,7 @@ public class HallsFragment extends Fragment {
         checkEditText(details, binding.editTextDetail, "Detail");
 
         if (!isEmpty) {
-            postDressImageOnFireBase();
+            postHallImageOnFireBase();
         }
     }
 

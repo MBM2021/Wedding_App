@@ -1,6 +1,5 @@
 package com.moomen.graduationproject.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -36,7 +35,6 @@ import com.moomen.graduationproject.adapter.ServicesAdapter;
 import com.moomen.graduationproject.model.Ads;
 import com.moomen.graduationproject.model.Category;
 import com.moomen.graduationproject.model.Service;
-import com.moomen.graduationproject.ui.activity.ViewServiceDetailsActivity;
 import com.moomen.graduationproject.viewModel.HomeViewModel;
 
 import java.util.ArrayList;
@@ -62,9 +60,6 @@ public class HomeFragment extends Fragment {
     private int custum_position = 0;
     private TabLayout tabLayoutIndicator;
     private String categoryType = "Services";
-    public static final String SERVICE_ID = "SERVICE_ID";
-    public static final String CATEGORY_TYPE = "CATEGORY_TYPE";
-    private String serviceId;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -98,18 +93,18 @@ public class HomeFragment extends Fragment {
                 .build();
         fillServicesRecycleAdapter(options);
     }
+
     private void fillServicesRecycleAdapter(FirestoreRecyclerOptions<Service> options) {
         ServicesAdapter servicesAdapter = new ServicesAdapter(options);
-        servicesAdapter.onItemSetOnClickListener(new ServicesAdapter.OnItemClickListener() {
+
+       /* newsAdapter.onUserNameSetOnClickListener(new NewsAdapter.OnUserNameClickListener() {
             @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                serviceId = documentSnapshot.getId();
-                Intent intent = new Intent(getContext(), ViewServiceDetailsActivity.class);
-                intent.putExtra(SERVICE_ID, serviceId);
-                intent.putExtra(CATEGORY_TYPE, categoryType);
+            public void onUserNameClick(String userID, int position) {
+                Intent intent = new Intent(getContext(), OpenUserProfile.class);
+                intent.putExtra(USER_ID, userID);
                 startActivity(intent);
             }
-        });
+        });*/
 
         servicesAdapter.setContext(getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
@@ -214,5 +209,4 @@ public class HomeFragment extends Fragment {
             }
         }, 250, 2500);
     }
-
 }
