@@ -31,6 +31,7 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position, @NonNull Notification model) {
+        //Hi evryone
         Picasso.get().load(model.getUserImage()).into(holder.userImage);
         if (model.getNotificationType().equals("service"))
             holder.notificationTypeImage.setImageResource(R.drawable.ic_baseline_store_24);
