@@ -5,7 +5,8 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home_company">
 
-    <fragment
+
+<fragment
         android:id="@+id/navigation_home_company"
         android:name="com.moomen.graduationproject.ui.fragment.HomeFragment"
         android:label="@string/title_home"
@@ -31,7 +32,7 @@
 
     <fragment
         android:id="@+id/navigation_account_company"
-        android:name="com.moomen.graduationproject.ui.fragment.HomeFragment"
+        android:name="com.moomen.graduationproject.ui.fragment.AccountFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_account" />
 </navigation>

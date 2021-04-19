@@ -54,11 +54,23 @@
     <string name="contact_phone">Contact Phone</string>
     <string name="service_image">Service Image</string>
     <string name="service_status">Service Status</string>
+
+    <string name="store">STORE</string>
+    <string name="users">Users</string>
+    <string name="add_dresses_image">Add Dresses Image</string>
+    <string name="dresses_store_name">Dresses Store Name</string>
+
     <string name="status">Status</string>
     <string name="created_date">Created date</string>
     <string name="accepted">Accepted</string>
     <string name="rejected">Rejected</string>
-
+    <string name="about_us">About us</string>
+    <string name="about_us_content">kk</string>
+    <string name="privacy">Privacy</string>
+    <string name="privacy_content">ll</string>
+    <string name="submit">Submit</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="date_of_birth">Da</string>
     <!--Spinner City-->
     <string-array name="city">
         <item>Gaza</item>

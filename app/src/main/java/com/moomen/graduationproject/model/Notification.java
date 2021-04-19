@@ -27,14 +27,31 @@ public class Notification implements Serializable {
     boolean status;
     @SerializedName("seen")
     boolean seen;
-
+    @SerializedName("user_seen")
+    boolean user_seen;
 
     public Notification() {
     }
 
     public Notification(String userImage, String title, String description, String shortDescription
             , String date, String serviceUid, String hallUid, String userUid, String notificationType
-            , boolean status, boolean seen) {
+            , boolean status, boolean seen , boolean user_seen ) {
+        this.userImage = userImage;
+        this.title = title;
+        this.description = description;
+        this.shortDescription = shortDescription;
+        this.date = date;
+        this.serviceUid = serviceUid;
+        this.hallUid = hallUid;
+        this.userUid = userUid;
+        this.notificationType = notificationType;
+        this.status = status;
+        this.seen = seen;
+        this.user_seen = user_seen ;
+    }
+    public Notification(String userImage, String title, String description, String shortDescription
+            , String date, String serviceUid, String hallUid, String userUid, String notificationType
+            , boolean status, boolean seen ) {
         this.userImage = userImage;
         this.title = title;
         this.description = description;
@@ -94,6 +111,14 @@ public class Notification implements Serializable {
 
     public void setSeen(boolean seen) {
         this.seen = seen;
+    }
+
+    public boolean isUser_seen() {
+        return user_seen;
+    }
+
+    public void setUser_seen(boolean user_seen) {
+        this.user_seen = user_seen;
     }
 
     public String getUserImage() {
