@@ -26,7 +26,7 @@ import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.NotifcationHelper;
 import com.moomen.graduationproject.model.Notification;
 import com.moomen.graduationproject.ui.fragment.HomeFragment;
-import com.moomen.graduationproject.ui.fragment.categories.AccountFragment;
+import com.moomen.graduationproject.ui.fragment.AccountFragment;
 import com.moomen.graduationproject.ui.fragment.company.ChatCompanyFragment;
 import com.moomen.graduationproject.ui.fragment.company.ConsoleCompanyFragment;
 import com.moomen.graduationproject.ui.fragment.company.NotificationCompanyFragment;

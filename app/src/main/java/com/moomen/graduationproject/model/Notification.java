@@ -49,6 +49,21 @@ public class Notification implements Serializable {
         this.seen = seen;
         this.user_seen = user_seen ;
     }
+    public Notification(String userImage, String title, String description, String shortDescription
+            , String date, String serviceUid, String hallUid, String userUid, String notificationType
+            , boolean status, boolean seen ) {
+        this.userImage = userImage;
+        this.title = title;
+        this.description = description;
+        this.shortDescription = shortDescription;
+        this.date = date;
+        this.serviceUid = serviceUid;
+        this.hallUid = hallUid;
+        this.userUid = userUid;
+        this.notificationType = notificationType;
+        this.status = status;
+        this.seen = seen;
+    }
 
     public String getHallUid() {
         return hallUid;
