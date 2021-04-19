@@ -4,6 +4,7 @@
     <item
         android:id="@+id/create_category_item"
         android:title="@string/create_category" />
+
     <item
         android:id="@+id/create_admin_item"
         android:title="@string/create_admin" />
