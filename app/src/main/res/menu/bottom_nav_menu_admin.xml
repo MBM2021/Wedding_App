@@ -5,6 +5,7 @@
         android:id="@+id/navigation_console_admin"
         android:icon="@drawable/ic_baseline_construction_24"
         android:title="@string/console" />
+
     <item
         android:id="@+id/navigation_users_admin"
         android:icon="@drawable/ic_baseline_people_24"

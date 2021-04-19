@@ -40,6 +40,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
         getServiceInfo();
     }
 
+
     private void getServiceInfo() {
         firebaseFirestore.collection(categoryType).document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override

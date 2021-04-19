@@ -5,7 +5,8 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_console_admin">
 
-    <fragment
+
+<fragment
         android:id="@+id/navigation_console_admin"
         android:name="com.moomen.graduationproject.ui.fragment.admin.ConsoleAdminFragment"
         android:label="@string/console"

@@ -26,6 +26,7 @@ public class UsersAdminFragment extends Fragment {
     private RecyclerView usersRecyclerView;
     private String userType = "admin";
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

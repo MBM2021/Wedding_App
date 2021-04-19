@@ -1,11 +1,7 @@
 package com.moomen.graduationproject.ui.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,17 +24,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.databinding.ActivityViewServiceBinding;
-import com.moomen.graduationproject.model.Notification;
 import com.moomen.graduationproject.model.Service;
 import com.moomen.graduationproject.model.User;
 import com.moomen.graduationproject.ui.fragment.admin.NotificationAdminFragment;
-import com.moomen.graduationproject.ui.fragment.categories.HallsFragment;
-import com.moomen.graduationproject.ui.fragment.company.NotificationCompanyFragment;
 import com.squareup.picasso.Picasso;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
-
-import java.util.ArrayList;
 
 public class ViewServiceActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
@@ -56,7 +43,6 @@ public class ViewServiceActivity extends AppCompatActivity {
     private EditText hallName, OwnerName, PhoneNumber, Location,Details;
     private ImageView imageView_update;
     Spinner spinner_city;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

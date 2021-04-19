@@ -5,7 +5,6 @@
         android:id="@+id/navigation_home_company"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
-
     <item
         android:id="@+id/navigation_console_company"
         android:icon="@drawable/ic_baseline_construction_24"
