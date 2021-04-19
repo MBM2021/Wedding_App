@@ -1,24 +1,46 @@
 package com.moomen.graduationproject.ui.activity;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.databinding.ActivityViewServiceBinding;
+import com.moomen.graduationproject.model.Notification;
 import com.moomen.graduationproject.model.Service;
 import com.moomen.graduationproject.model.User;
 import com.moomen.graduationproject.ui.fragment.admin.NotificationAdminFragment;
+import com.moomen.graduationproject.ui.fragment.categories.HallsFragment;
+import com.moomen.graduationproject.ui.fragment.company.NotificationCompanyFragment;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.util.ArrayList;
 
 public class ViewServiceActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
@@ -26,7 +48,15 @@ public class ViewServiceActivity extends AppCompatActivity {
     private String userId;
     private String serviceId;
     private String hallId;
+    private String userType;
+    private String Notification_ID;
+    private String city ="";
+    private BottomSheetDialog bottomSheetDialog;
     private ActivityViewServiceBinding binding;
+    private EditText hallName, OwnerName, PhoneNumber, Location,Details;
+    private ImageView imageView_update;
+    Spinner spinner_city;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +73,23 @@ public class ViewServiceActivity extends AppCompatActivity {
             userId = intent.getStringExtra(NotificationAdminFragment.USER_ID);
             serviceId = intent.getStringExtra(NotificationAdminFragment.SERVICE_ID);
             hallId = intent.getStringExtra(NotificationAdminFragment.HALL_ID);
+            userType = intent.getStringExtra(NotificationAdminFragment.USER_TYPE);
+            Notification_ID = intent.getStringExtra(NotificationAdminFragment.NOTIFICATION_ID);
+        }
+        if (!(userType == null) && userType.equals("company")) {
+            binding.linearLayout2.setVisibility(View.GONE);
+            binding.imageViewEditCompany.setVisibility(View.VISIBLE);
         }
         getServiceInfo();
         getUserInfo();
         bottomNavigationOnClickItem();
+        binding.imageViewEditCompany.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateInfoCompany();
+            }
+        });
+
     }
 
     int select = 0;
@@ -84,6 +127,7 @@ public class ViewServiceActivity extends AppCompatActivity {
                 binding.textViewUserEmailId.setText(user.getEmail());
                 binding.textViewUserPhoneId.setText(user.getPhone());
 
+
             }
         });
     }
@@ -100,6 +144,9 @@ public class ViewServiceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 firebaseFirestore.collection("Services").document(serviceId).update("status", true);
                 firebaseFirestore.collection("Halls").document(hallId).update("status", true);
+                firebaseFirestore.collection("Dresses").document(hallId).update("status", true);
+                firebaseFirestore.collection("Notifications").document(Notification_ID).update("status", true);
+
                 Toast.makeText(getApplicationContext(), getString(R.string.accepted), Toast.LENGTH_SHORT).show();
                 getServiceInfo();
             }
@@ -109,6 +156,7 @@ public class ViewServiceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 firebaseFirestore.collection("Services").document(serviceId).update("status", false);
                 firebaseFirestore.collection("Halls").document(hallId).update("status", false);
+                firebaseFirestore.collection("Dresses").document(hallId).update("status", false);
                 Toast.makeText(getApplicationContext(), getString(R.string.rejected), Toast.LENGTH_SHORT).show();
                 getServiceInfo();
             }
@@ -119,4 +167,77 @@ public class ViewServiceActivity extends AppCompatActivity {
     private void pushNotification() {
 
     }
+
+    private void updateInfoCompany() {
+        bottomSheetDialog = new BottomSheetDialog(this);
+        @SuppressLint("InflateParams") View view = LayoutInflater.from(this).inflate(R.layout.fragment_halls, null);
+        hallName = view.findViewById(R.id.editText_hall_name);
+        OwnerName = view.findViewById(R.id.editText_owner_name);
+        PhoneNumber = view.findViewById(R.id.editText_phone);
+        Location = view.findViewById(R.id.editText_location);
+        Details = view.findViewById(R.id.editText_detail);
+        Button btn_update = view.findViewById(R.id.button_create);
+        spinner_city = view.findViewById(R.id.spinner_city);
+        imageView_update = view.findViewById(R.id.imageView_hall);
+        firebaseFirestore.collection("Services").document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                Service service = task.getResult().toObject(Service.class);
+                hallName.setText(service.getName());
+                OwnerName.setText(service.getOwnerName());
+                PhoneNumber.setText(service.getPhone());
+                Location.setText(service.getLocation());
+                Details.setText(service.getDetail());
+                btn_update.setText("Update Service");
+                Picasso.get().load(service.getImage()).into(imageView_update);
+                spinnerCreate(spinner_city,service.getCity());
+                city = service.getCity();
+                imageView_update.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+
+
+            }
+        });
+
+        btn_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                firebaseFirestore.collection("Services").document(serviceId).update("name", hallName.getText().toString(), "ownerName", OwnerName.getText().toString()
+                        , "phone", PhoneNumber.getText().toString(), "location", Location.getText().toString(),"detail",Details.getText().toString(),"city",city);
+
+                Toast.makeText(getApplicationContext(), "update Done", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
+            }
+        });
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
+
+    }
+
+    private void spinnerCreate(Spinner spinner, String selctedCirty) {
+        ArrayAdapter<CharSequence> adapterSpinner = ArrayAdapter.createFromResource(this, R.array.city, R.layout.support_simple_spinner_dropdown_item);
+        adapterSpinner.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        spinner.setAdapter(adapterSpinner);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                city = spinner.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                city  = selctedCirty;
+            }
+        });
+    }
+
+
+
+
 }
