@@ -17,11 +17,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.moomen.graduationproject.R;
+import com.moomen.graduationproject.ui.fragment.AccountFragment;
 import com.moomen.graduationproject.ui.fragment.admin.ChatAdminFragment;
 import com.moomen.graduationproject.ui.fragment.admin.ConsoleAdminFragment;
 import com.moomen.graduationproject.ui.fragment.admin.NotificationAdminFragment;
 import com.moomen.graduationproject.ui.fragment.admin.UsersAdminFragment;
-import com.moomen.graduationproject.ui.fragment.categories.AccountFragment;
+import com.moomen.graduationproject.utils.PreferenceUtils;
 
 public class MainActivityAdmin extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
@@ -105,7 +106,8 @@ public class MainActivityAdmin extends AppCompatActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                getAllNotification();
+                if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty())
+                    getAllNotification();
             }
         };
         handler.postDelayed(runnable, 500);

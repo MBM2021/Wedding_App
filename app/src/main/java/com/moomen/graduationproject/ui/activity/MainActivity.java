@@ -4,14 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.moomen.graduationproject.R;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.moomen.graduationproject.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,5 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void registerButtonOnClick(View view) {
         startActivity(new Intent(MainActivity.this, SignInActivity.class));
+        finish();
     }
 }
