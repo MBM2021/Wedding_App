@@ -263,7 +263,7 @@ public class HallsFragment extends Fragment {
     }
 
     private void createNotification() {
-        Notification notification = new Notification(userImage, userName, "Add new Hall Service", hallName, date, serviceId, hallUid, userId, "service", false, false);
+        Notification notification = new Notification(userImage, userName, "Add new Hall Service", hallName, date, serviceId, hallUid, userId, "service", false, false,false);
         firebaseFirestore.collection("Notifications").add(notification);
     }
 

@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_story"
+        android:id="@+id/navigation_notification_user"
         android:name="com.moomen.graduationproject.ui.fragment.user.StoryUserFragment"
         android:label="@string/story"
         tools:layout="@layout/fragment_story_user" />
@@ -32,4 +32,5 @@
         android:name="com.moomen.graduationproject.ui.fragment.AccountFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_account" />
+
 </navigation>

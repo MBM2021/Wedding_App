@@ -1,5 +1,6 @@
 package com.moomen.graduationproject.adapter;
 
+
 import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,57 +20,50 @@ import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.model.Notification;
 import com.squareup.picasso.Picasso;
 
-public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, NotificationAdapter.ViewHolder> {
+public class NotificationAdapterUser extends FirestoreRecyclerAdapter<Notification, NotificationAdapterUser.ViewHolder> {
 
-    private OnItemClickListener listener;
+
+    private NotificationAdapterUser.OnItemClickListener listener;
     private FirebaseFirestore firebaseFirestore;
     String notificationUid;
 
-    public NotificationAdapter(@NonNull FirestoreRecyclerOptions<Notification> options) {
+    /**
+     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
+     * FirestoreRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public NotificationAdapterUser(@NonNull FirestoreRecyclerOptions<Notification> options) {
         super(options);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    protected void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position, @NonNull Notification model) {
-        //Hi evryone
+    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Notification model) {
         Picasso.get().load(model.getUserImage()).into(holder.userImage);
         if (model.getNotificationType().equals("service"))
             holder.notificationTypeImage.setImageResource(R.drawable.ic_baseline_store_24);
         holder.title.setText(model.getTitle());
         holder.description.setText(model.getDescription());
         holder.date.setText(model.getDate());
-        if (model.isStatus())
-            holder.statusImage.setVisibility(View.GONE);
-        else
-            holder.statusImage.setVisibility(View.VISIBLE);
 
-        //انا
-        if (model.isSeen()){
+        if (model.isUser_seen()){
             holder.statusImage.setVisibility(View.GONE);
         }else {
             holder.statusImage.setVisibility(View.VISIBLE);
         }
-
         firebaseFirestore = FirebaseFirestore.getInstance();
         DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(position);
         notificationUid = documentSnapshot.getId();
-       /* if (!model.isSeen())
-            updateSeenValueNotification(notificationUid);*/
-    }
-
-    private void updateSeenValueNotification(String notificationUid) {
-        firebaseFirestore.collection("Notifications").document(notificationUid).update("seen", true);
     }
 
     @NonNull
     @Override
-    public NotificationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.notification_item, parent, false);
-        return new NotificationAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
-
     public void onItemSetOnClickListener(OnItemClickListener listener) {
         this.listener = listener;
 
@@ -82,7 +76,6 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         ImageView userImage;
         ImageView statusImage;
         ImageView notificationTypeImage;
@@ -90,7 +83,6 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
         TextView description;
         TextView date;
         ConstraintLayout constraintLayoutNotificationItem;
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             userImage = itemView.findViewById(R.id.imageView_user);
@@ -114,7 +106,7 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
             });
 
         }
-    }
 
+    }
 
 }
