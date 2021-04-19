@@ -33,7 +33,6 @@ public class UsersAdminFragment extends Fragment {
 
         return inflater.inflate(R.layout.fragment_users_admin, container, false);
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

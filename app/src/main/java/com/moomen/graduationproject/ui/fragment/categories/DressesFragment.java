@@ -77,7 +77,6 @@ public class DressesFragment extends Fragment {
     private Bitmap compressor;
     private String downloadUri;
 
-
     public static String random() {
         Random generator = new Random();
         StringBuilder randomStringBuilder = new StringBuilder();

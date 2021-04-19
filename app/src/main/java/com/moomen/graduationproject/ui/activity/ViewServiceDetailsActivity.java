@@ -21,6 +21,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
     private ActivityViewServiceDetailsBinding binding;
     private String serviceId;
     private String categoryType;
+
     private FirebaseFirestore firebaseFirestore;
 
     @Override
