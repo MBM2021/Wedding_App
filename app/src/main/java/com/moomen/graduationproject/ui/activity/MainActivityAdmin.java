@@ -85,7 +85,7 @@ public class MainActivityAdmin extends AppCompatActivity {
 
 
     private void getAllNotification() {
-        firebaseFirestore.collection("Notifications").whereEqualTo("status", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firebaseFirestore.collection("Notifications").whereEqualTo("seen", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 int size = task.getResult().size();
@@ -106,8 +106,7 @@ public class MainActivityAdmin extends AppCompatActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty())
-                    getAllNotification();
+                getAllNotification();
             }
         };
         handler.postDelayed(runnable, 500);
