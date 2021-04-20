@@ -1,5 +1,8 @@
 package com.moomen.graduationproject.ui.activity;
 
+import android.os.Bundle;
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -9,27 +12,16 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.MenuItem;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.internal.$Gson$Preconditions;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.NotifcationHelper;
-import com.moomen.graduationproject.model.Notification;
-import com.moomen.graduationproject.ui.fragment.HomeFragment;
-import com.moomen.graduationproject.ui.fragment.AccountFragment;
-import com.moomen.graduationproject.ui.fragment.company.ChatCompanyFragment;
-import com.moomen.graduationproject.ui.fragment.company.ConsoleCompanyFragment;
-import com.moomen.graduationproject.ui.fragment.company.NotificationCompanyFragment;
+import com.moomen.graduationproject.utils.PreferenceUtils;
 
 public class MainActivityCompany extends AppCompatActivity {
 
@@ -102,16 +94,17 @@ public class MainActivityCompany extends AppCompatActivity {
     }
 
     private void getAllNotification() {
-        firebaseFirestore.collection("Notifications").whereEqualTo("userUid",userID).whereEqualTo("status",true).whereEqualTo("seen", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                int size = task.getResult().size();
-                //textView.setText(size + "");
-                if (size > 0) {
-                    badgeNotification.setVisible(true);
-                    badgeNotification.setNumber(size);
+        if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
+            firebaseFirestore.collection("Notifications").whereEqualTo("userUid", userID).whereEqualTo("status", true).whereEqualTo("seen", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    int size = task.getResult().size();
+                    //textView.setText(size + "");
+                    if (size > 0) {
+                        badgeNotification.setVisible(true);
+                        badgeNotification.setNumber(size);
 
-                    runNotification(size);
+                        runNotification(size);
 
                 } else {
                     badgeNotification.setVisible(false);
@@ -122,12 +115,12 @@ public class MainActivityCompany extends AppCompatActivity {
                 }
 
 
+                    refreshNotification();
 
-                refreshNotification();
+                }
+            });
 
-            }
-        });
-
+        }
     }
 
     private void runNotification(int size){

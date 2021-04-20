@@ -5,6 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
@@ -12,16 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.moomen.graduationproject.R;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.moomen.graduationproject.R;
+import com.moomen.graduationproject.utils.PreferenceUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,28 +51,28 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void getAllNotification() {
-        firebaseFirestore.collection("Notifications").whereEqualTo("seen",true).whereEqualTo("user_seen", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                int size = task.getResult().size();
+        if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
+            firebaseFirestore.collection("Notifications").whereEqualTo("seen", true).whereEqualTo("user_seen", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    int size = task.getResult().size();
 
-                //textView.setText(size + "");
-                if (size > 0) {
-                    badgeNotification.setVisible(true);
-                    badgeNotification.setNumber(size);
+                    //textView.setText(size + "");
+                    if (size > 0) {
+                        badgeNotification.setVisible(true);
+                        badgeNotification.setNumber(size);
 
-                } else {
-                    badgeNotification.setVisible(false);
+                    } else {
+                        badgeNotification.setVisible(false);
+                    }
+
+
+                    refreshNotification();
+
                 }
+            });
 
-
-
-
-                refreshNotification();
-
-            }
-        });
-
+        }
     }
 
     private void refreshNotification() {
