@@ -85,6 +85,19 @@ public class MainActivityAdmin extends AppCompatActivity {
 
 
     private void getAllNotification() {
+        firebaseFirestore.collection("Notifications").whereEqualTo("seen", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                int size = task.getResult().size();
+                //textView.setText(size + "");
+                if (size > 0) {
+                    badgeNotification.setVisible(true);
+                    badgeNotification.setNumber(size);
+                } else
+                    badgeNotification.setVisible(false);
+                refreshNotification();
+            }
+        });
         if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
             firebaseFirestore.collection("Notifications").whereEqualTo("status", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -100,7 +113,6 @@ public class MainActivityAdmin extends AppCompatActivity {
                 }
             });
 
-        }
     }
 
     private void refreshNotification() {
@@ -108,6 +120,7 @@ public class MainActivityAdmin extends AppCompatActivity {
         final Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty())
                     getAllNotification();
             }
         };
