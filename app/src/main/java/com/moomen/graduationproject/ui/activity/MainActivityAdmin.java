@@ -113,6 +113,7 @@ public class MainActivityAdmin extends AppCompatActivity {
                 }
             });
 
+        }
     }
 
     private void refreshNotification() {

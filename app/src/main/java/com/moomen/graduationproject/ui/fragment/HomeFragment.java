@@ -43,6 +43,8 @@ import java.util.TimerTask;
 
 public class HomeFragment extends Fragment {
 
+    public static final String SERVICE_ID = "SERVICE_ID";
+    public static final String CATEGORY_TYPE = "CATEGORY_TYPE";
     private AdsPagerAdapter adsPagerAdapter;
     private ViewPager viewPager;
     private ArrayList<Ads> adsArrayList = new ArrayList<>();
