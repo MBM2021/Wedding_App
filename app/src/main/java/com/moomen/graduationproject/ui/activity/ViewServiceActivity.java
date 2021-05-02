@@ -125,6 +125,9 @@ public class ViewServiceActivity extends AppCompatActivity {
         });
     }
 
+    private String serviceStatus = "";
+    private Notification notification;
+
     private void bottomNavigationOnClickItem() {
         binding.linearLayoutContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,9 +138,10 @@ public class ViewServiceActivity extends AppCompatActivity {
         binding.linearLayoutAcceptService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                serviceStatus = getString(R.string.accepted);
                 firebaseFirestore.collection("Services").document(serviceId).update("status", true);
                 firebaseFirestore.collection(serviceCategory).document(hallId).update("status", true);
-                Toast.makeText(getApplicationContext(), getString(R.string.accepted), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), serviceStatus, Toast.LENGTH_SHORT).show();
                 pushNotification();
                 getServiceInfo();
             }
@@ -145,17 +149,25 @@ public class ViewServiceActivity extends AppCompatActivity {
         binding.linearLayoutCancelService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                serviceStatus = getString(R.string.rejected);
                 firebaseFirestore.collection("Services").document(serviceId).update("status", false);
                 firebaseFirestore.collection(serviceCategory).document(hallId).update("status", false);
-                Toast.makeText(getApplicationContext(), getString(R.string.rejected), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), serviceStatus, Toast.LENGTH_SHORT).show();
                 getServiceInfo();
+                pushNotification();
             }
         });
     }
 
     private void pushNotification() {
         date = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
-        Notification notification = new Notification("", "Your service" + getString(R.string.accepted), "Congratulations! Users can view your service ", "", date, serviceId, hallId, userId, "service", false, false, false);
+        if (serviceStatus.equals("Accepted")) {
+            notification = new Notification("", "Your service" + serviceStatus, "Congratulations! Users can view your service ", "", date, serviceId, hallId, userId, "service", false, false, false, "company");
+            Notification userNotification = new Notification("", "New service", "Users can view your service ", "New service has been added", date, serviceId, hallId, userId, "service", false, false, false, "user");
+            firebaseFirestore.collection("Notifications").add(userNotification);
+        } else {
+            notification = new Notification("", "Your service" + serviceStatus, "Sorry! Users can't view your service ", "", date, serviceId, hallId, userId, "service", false, false, false, "company");
+        }
         firebaseFirestore.collection("Notifications").add(notification);
     }
 
@@ -181,7 +193,7 @@ public class ViewServiceActivity extends AppCompatActivity {
                 Details.setText(service.getDetail());
                 btn_update.setText("Update Service");
                 Picasso.get().load(service.getImage()).into(imageView_update);
-                spinnerCreate(spinner_city,service.getCity());
+                spinnerCreate(spinner_city, service.getCity());
                 city = service.getCity();
                 imageView_update.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -199,7 +211,7 @@ public class ViewServiceActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 firebaseFirestore.collection("Services").document(serviceId).update("name", hallName.getText().toString(), "ownerName", OwnerName.getText().toString()
-                        , "phone", PhoneNumber.getText().toString(), "location", Location.getText().toString(),"detail",Details.getText().toString(),"city",city);
+                        , "phone", PhoneNumber.getText().toString(), "location", Location.getText().toString(), "detail", Details.getText().toString(), "city", city);
 
                 Toast.makeText(getApplicationContext(), "update Done", Toast.LENGTH_SHORT).show();
                 bottomSheetDialog.dismiss();
@@ -223,12 +235,10 @@ public class ViewServiceActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                city  = selctedCirty;
+                city = selctedCirty;
             }
         });
     }
-
-
 
 
 }

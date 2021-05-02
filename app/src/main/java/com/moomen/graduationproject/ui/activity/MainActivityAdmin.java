@@ -47,7 +47,7 @@ public class MainActivityAdmin extends AppCompatActivity {
 */
         fragment = new ConsoleAdminFragment();
         setFragment(fragment);
-        getAllNotification();
+        getNotSeenNumberNotification();
 
         badgeNotification = navView.getOrCreateBadge(R.id.navigation_notification_admin);
         badgeNotification.setBackgroundColor(getResources().getColor(R.color.purple_500));
@@ -83,9 +83,12 @@ public class MainActivityAdmin extends AppCompatActivity {
         });
     }
 
-    private void getAllNotification() {
+    private void getNotSeenNumberNotification() {
         if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
-            firebaseFirestore.collection("Notifications").whereEqualTo("seen", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            firebaseFirestore.collection("Notifications")
+                    .whereEqualTo("seen", false)
+                    .whereEqualTo("userTypeNotification", "admin")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     int size = task.getResult().size();
@@ -107,7 +110,7 @@ public class MainActivityAdmin extends AppCompatActivity {
             @Override
             public void run() {
                 if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty())
-                    getAllNotification();
+                    getNotSeenNumberNotification();
             }
         };
         handler.postDelayed(runnable, 500);

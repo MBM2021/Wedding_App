@@ -6,7 +6,7 @@
     app:startDestination="@+id/navigation_home">
 
 
-<fragment
+    <fragment
         android:id="@+id/navigation_home"
         android:name="com.moomen.graduationproject.ui.fragment.HomeFragment"
         android:label="@string/title_home"
@@ -14,9 +14,9 @@
 
     <fragment
         android:id="@+id/navigation_notification_user"
-        android:name="com.moomen.graduationproject.ui.fragment.user.StoryUserFragment"
+        android:name="com.moomen.graduationproject.ui.fragment.user.NotificationUserFragment"
         android:label="@string/story"
-        tools:layout="@layout/fragment_story_user" />
+        tools:layout="@layout/fragment_notification_user" />
 
     <fragment
         android:id="@+id/navigation_chat"

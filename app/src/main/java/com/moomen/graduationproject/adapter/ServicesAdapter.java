@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -53,28 +54,29 @@ public class ServicesAdapter extends FirestoreRecyclerAdapter<Service, ServicesA
 
 
     public interface OnItemClickListener {
-        void onItemClick(DocumentSnapshot documentSnapshot, int position, int id);
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView serviceImage;
         TextView serviceName;
+        ConstraintLayout constraintLayoutServiceItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             serviceImage = itemView.findViewById(R.id.imageView_product);
             serviceName = itemView.findViewById(R.id.textView_product_name);
-            /*categoryImage.setOnClickListener(new View.OnClickListener() {
+
+            constraintLayoutServiceItem = itemView.findViewById(R.id.constraintlayout_service_item_layout);
+            constraintLayoutServiceItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
                         DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
-                        listener.onItemClick(documentSnapshot, getAdapterPosition(), categoryImage.getId());
+                        listener.onItemClick(documentSnapshot, getAdapterPosition());
                     }
                 }
-            });*/
-
+            });
         }
     }
-
 }

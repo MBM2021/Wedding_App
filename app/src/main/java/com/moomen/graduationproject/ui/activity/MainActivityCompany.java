@@ -31,7 +31,7 @@ public class MainActivityCompany extends AppCompatActivity {
     private FragmentTransaction fragmentTransactionCompany;
     private NotifcationHelper notifcationHelper;
     private int number = 0;
-    private String userID ;
+    private String userID;
     int n = 0;
     int id = 1;
 
@@ -44,25 +44,15 @@ public class MainActivityCompany extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(navView, navController);
         firebaseFirestore = FirebaseFirestore.getInstance();
-
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
         notifcationHelper = new NotifcationHelper(this);
         /*fragmentCompany = new HomeFragment();
         setFragmentCompany(fragmentCompany);
-        */getAllNotification();
-
-
-
-
-
-
+        */
+        getNotSeenNumberNotification();
         badgeNotification = navView.getOrCreateBadge(R.id.navigation_notification_company);
         badgeNotification.setBackgroundColor(getResources().getColor(R.color.purple_500));
         badgeNotification.setBadgeTextColor(getResources().getColor(R.color.white));
-
-
        /* navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -93,75 +83,74 @@ public class MainActivityCompany extends AppCompatActivity {
 */
     }
 
-    private void getAllNotification() {
+    private void getNotSeenNumberNotification() {
         if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
-            firebaseFirestore.collection("Notifications").whereEqualTo("userUid", userID).whereEqualTo("status", true).whereEqualTo("seen", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            firebaseFirestore.collection("Notifications")
+                    .whereEqualTo("userUid", userID)
+                    .whereEqualTo("userTypeNotification", "company")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    int size = task.getResult().size();
+                    if (!task.getResult().isEmpty()) {
+                        int size = task.getResult().size();
+                        //textView.setText(size + "");
+                        if (size > 0) {
+                            badgeNotification.setVisible(true);
+                            badgeNotification.setNumber(size);
+                        } else
+                            badgeNotification.setVisible(false);
+                        refreshNotification();
+                    }
+                    //TODO: Mohammed Notification
+                    /*int size = task.getResult().size();
                     //textView.setText(size + "");
                     if (size > 0) {
                         badgeNotification.setVisible(true);
                         badgeNotification.setNumber(size);
-
                         runNotification(size);
-
-                } else {
-                    badgeNotification.setVisible(false);
-                }
-                if (size == 0){
-                    n = 0 ;
-                    id = 1;
-                }
-
-
-                    refreshNotification();
-
+                    } else {
+                        badgeNotification.setVisible(false);
+                    }
+                    if (size == 0) {
+                        n = 0;
+                        id = 1;
+                    }
+                    refreshNotification();*/
                 }
             });
 
         }
     }
 
-    private void runNotification(int size){
-        if (size > n){
-
-            n = size ;
-
-//            firebaseFirestore.collection("Notifications").document("MUK1FqueoG3n3jhxpTHN").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                    Notification notification = task.getResult().toObject(Notification.class);
-//                    Notification(notification.getTitle(), "new not");
-//
-//                }
-//            });
-
-            Notification("Mohammed"+id, "new not");
+    private void runNotification(int size) {
+        if (size > n) {
+            n = size;
+            Notification("Mohammed" + id, "new not");
             id++;
         }
-
     }
 
-        private void refreshNotification() {
+    private void refreshNotification() {
+        if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
             final Handler handler = new Handler();
             final Runnable runnable = new Runnable() {
                 @Override
                 public void run() {
-                    getAllNotification();
+                    getNotSeenNumberNotification();
                 }
             };
             handler.postDelayed(runnable, 500);
         }
+    }
 
     private void setFragmentCompany(Fragment fragmentCompany) {
         fragmentTransactionCompany = getSupportFragmentManager().beginTransaction();
         fragmentTransactionCompany.replace(R.id.nav_host_fragment, fragmentCompany).commit();
     }
 
-    private void Notification(String title , String message){
-       NotificationCompat.Builder m = notifcationHelper.getCannel1Notification(title,message);
-       notifcationHelper.getManager().notify(id,m.build());
+    private void Notification(String title, String message) {
+        NotificationCompat.Builder m = notifcationHelper.getCannel1Notification(title, message);
+        notifcationHelper.getManager().notify(id, m.build());
 
     }
 

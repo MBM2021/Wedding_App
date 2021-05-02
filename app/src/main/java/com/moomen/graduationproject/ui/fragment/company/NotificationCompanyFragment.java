@@ -61,7 +61,8 @@ public class NotificationCompanyFragment extends Fragment {
     private void getAllNotificationAccepted() {
         Query query = FirebaseFirestore.getInstance().collection("Notifications")
                 .whereEqualTo("userUid", userID)
-                .orderBy("date", Query.Direction.DESCENDING);
+                .whereEqualTo("userTypeNotification", "company");
+        //.orderBy("date", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Notification> options = new FirestoreRecyclerOptions.Builder<Notification>()
                 .setQuery(query, Notification.class)
                 .build();

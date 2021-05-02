@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        getAllNotification();
-
+        getNotSeenNumberNotification();
 
 
         badgeNotification = navView.getOrCreateBadge(R.id.navigation_notification_user);
@@ -46,46 +44,46 @@ public class MainActivity extends AppCompatActivity {
         badgeNotification.setBadgeTextColor(getResources().getColor(R.color.white));
 
 
-
     }
 
 
-    private void getAllNotification() {
+    private void getNotSeenNumberNotification() {
         if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
-            firebaseFirestore.collection("Notifications").whereEqualTo("seen", true).whereEqualTo("user_seen", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            firebaseFirestore.collection("Notifications")
+                    .whereEqualTo("seen", false)
+                    .whereEqualTo("userTypeNotification", "user")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    int size = task.getResult().size();
+                    if (!task.getResult().isEmpty()) {
+                        int size = task.getResult().size();
+                        //textView.setText(size + "");
+                        if (size > 0) {
+                            badgeNotification.setVisible(true);
+                            badgeNotification.setNumber(size);
+                        } else {
+                            badgeNotification.setVisible(false);
+                        }
 
-                    //textView.setText(size + "");
-                    if (size > 0) {
-                        badgeNotification.setVisible(true);
-                        badgeNotification.setNumber(size);
-
-                    } else {
-                        badgeNotification.setVisible(false);
+                        refreshNotification();
                     }
-
-
-                    refreshNotification();
-
                 }
             });
-
         }
     }
 
     private void refreshNotification() {
-        final Handler handler = new Handler();
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                getAllNotification();
-            }
-        };
-        handler.postDelayed(runnable, 500);
+        if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
+            final Handler handler = new Handler();
+            final Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    getNotSeenNumberNotification();
+                }
+            };
+            handler.postDelayed(runnable, 500);
+        }
     }
-
 
     public void registerButtonOnClick(View view) {
         startActivity(new Intent(MainActivity.this, SignInActivity.class));

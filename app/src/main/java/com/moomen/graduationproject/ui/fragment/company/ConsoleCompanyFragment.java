@@ -20,7 +20,7 @@ import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.CategoryAdapter;
 import com.moomen.graduationproject.model.Category;
 import com.moomen.graduationproject.ui.fragment.categories.HallsFragment;
-import com.moomen.graduationproject.ui.fragment.user.StoryUserFragment;
+import com.moomen.graduationproject.ui.fragment.user.NotificationUserFragment;
 
 public class ConsoleCompanyFragment extends Fragment {
     private RecyclerView categoryRecyclerView;
@@ -64,7 +64,7 @@ public class ConsoleCompanyFragment extends Fragment {
                             fragment = new HallsFragment();
                             break;
                         case "G":
-                            fragment = new StoryUserFragment();
+                            fragment = new NotificationUserFragment();
                             break;
                     }
                 fragmentTransaction.replace(R.id.container_category_fragment, fragment).addToBackStack(null).commit();

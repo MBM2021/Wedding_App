@@ -250,7 +250,7 @@ public class DressesFragment extends Fragment {
     }
 
     private void createNotification() {
-        Notification notification = new Notification(userImage, userName, "Add new Dresses Service", dressesStoreName, date, serviceId, dressUid, userId, "service", false, false);
+        Notification notification = new Notification(userImage, userName, "Add new Dresses Service", dressesStoreName, date, serviceId, dressUid, userId, "service", false, false, false, "admin");
         firebaseFirestore.collection("Notifications").add(notification);
     }
 

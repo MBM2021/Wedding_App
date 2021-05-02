@@ -29,14 +29,15 @@ public class Notification implements Serializable {
     boolean seen;
     @SerializedName("user_seen")
     boolean user_seen;
-
+    @SerializedName("userTypeNotification")
+    String userTypeNotification;
 
     public Notification() {
     }
 
     public Notification(String userImage, String title, String description, String shortDescription
             , String date, String serviceUid, String hallUid, String userUid, String notificationType
-            , boolean status, boolean seen , boolean user_seen ) {
+            , boolean status, boolean seen, boolean user_seen, String userTypeNotification) {
         this.userImage = userImage;
         this.title = title;
         this.description = description;
@@ -48,22 +49,8 @@ public class Notification implements Serializable {
         this.notificationType = notificationType;
         this.status = status;
         this.seen = seen;
-        this.user_seen = user_seen ;
-    }
-    public Notification(String userImage, String title, String description, String shortDescription
-            , String date, String serviceUid, String hallUid, String userUid, String notificationType
-            , boolean status, boolean seen ) {
-        this.userImage = userImage;
-        this.title = title;
-        this.description = description;
-        this.shortDescription = shortDescription;
-        this.date = date;
-        this.serviceUid = serviceUid;
-        this.hallUid = hallUid;
-        this.userUid = userUid;
-        this.notificationType = notificationType;
-        this.status = status;
-        this.seen = seen;
+        this.user_seen = user_seen;
+        this.userTypeNotification = userTypeNotification;
     }
 
     public String getHallUid() {
@@ -160,5 +147,13 @@ public class Notification implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getUserTypeNotification() {
+        return userTypeNotification;
+    }
+
+    public void setUserTypeNotification(String userTypeNotification) {
+        this.userTypeNotification = userTypeNotification;
     }
 }

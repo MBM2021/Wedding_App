@@ -53,12 +53,6 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
                 else
                     holder.statusImage.setVisibility(View.VISIBLE);
 
-                /*//انا
-                if (model.isSeen()) {
-                    holder.statusImage.setVisibility(View.GONE);
-                } else {
-                    holder.statusImage.setVisibility(View.VISIBLE);
-                }*/
                 DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(position);
                 notificationUid = documentSnapshot.getId();
                 if (!model.isSeen())

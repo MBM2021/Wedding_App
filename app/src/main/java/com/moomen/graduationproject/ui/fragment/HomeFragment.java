@@ -1,5 +1,6 @@
 package com.moomen.graduationproject.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -35,6 +36,7 @@ import com.moomen.graduationproject.adapter.ServicesAdapter;
 import com.moomen.graduationproject.model.Ads;
 import com.moomen.graduationproject.model.Category;
 import com.moomen.graduationproject.model.Service;
+import com.moomen.graduationproject.ui.activity.ViewServiceDetailsActivity;
 import com.moomen.graduationproject.viewModel.HomeViewModel;
 
 import java.util.ArrayList;
@@ -98,16 +100,16 @@ public class HomeFragment extends Fragment {
 
     private void fillServicesRecycleAdapter(FirestoreRecyclerOptions<Service> options) {
         ServicesAdapter servicesAdapter = new ServicesAdapter(options);
-
-       /* newsAdapter.onUserNameSetOnClickListener(new NewsAdapter.OnUserNameClickListener() {
+        servicesAdapter.onItemSetOnClickListener(new ServicesAdapter.OnItemClickListener() {
             @Override
-            public void onUserNameClick(String userID, int position) {
-                Intent intent = new Intent(getContext(), OpenUserProfile.class);
-                intent.putExtra(USER_ID, userID);
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                String serviceId = documentSnapshot.getId();
+                Intent intent = new Intent(getContext(), ViewServiceDetailsActivity.class);
+                intent.putExtra(SERVICE_ID, serviceId);
+                intent.putExtra(CATEGORY_TYPE, categoryType);
                 startActivity(intent);
             }
-        });*/
-
+        });
         servicesAdapter.setContext(getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         servicesRecyclerView.setLayoutManager(gridLayoutManager);

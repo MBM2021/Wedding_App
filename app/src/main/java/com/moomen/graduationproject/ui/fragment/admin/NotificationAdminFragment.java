@@ -52,7 +52,8 @@ public class NotificationAdminFragment extends Fragment {
 
     private void getAllNotification() {
         Query query = FirebaseFirestore.getInstance().collection("Notifications")
-                .orderBy("date", Query.Direction.DESCENDING);
+                .whereEqualTo("userTypeNotification", "admin");
+        //.orderBy("date", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Notification> options = new FirestoreRecyclerOptions.Builder<Notification>()
                 .setQuery(query, Notification.class)
                 .build();
