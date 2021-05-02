@@ -13,10 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.model.Notification;
+import com.moomen.graduationproject.model.User;
 import com.squareup.picasso.Picasso;
 
 public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, NotificationAdapter.ViewHolder> {
@@ -33,29 +36,35 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
     @Override
     protected void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position, @NonNull Notification model) {
         //Hi evryone
-        Picasso.get().load(model.getUserImage()).into(holder.userImage);
-        if (model.getNotificationType().equals("service"))
-            holder.notificationTypeImage.setImageResource(R.drawable.ic_baseline_store_24);
-        holder.title.setText(model.getTitle());
-        holder.description.setText(model.getDescription());
-        holder.date.setText(model.getDate());
-        if (model.isStatus())
-            holder.statusImage.setVisibility(View.GONE);
-        else
-            holder.statusImage.setVisibility(View.VISIBLE);
-
-        //انا
-        if (model.isSeen()){
-            holder.statusImage.setVisibility(View.GONE);
-        }else {
-            holder.statusImage.setVisibility(View.VISIBLE);
-        }
-
         firebaseFirestore = FirebaseFirestore.getInstance();
-        DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(position);
-        notificationUid = documentSnapshot.getId();
-       /* if (!model.isSeen())
-            updateSeenValueNotification(notificationUid);*/
+        firebaseFirestore.collection("Users").document(model.getUserUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                User user = task.getResult().toObject(User.class);
+                Picasso.get().load(user.getUserImage()).into(holder.userImage);
+                holder.title.setText(user.getName());
+                if (model.getNotificationType().equals("service")) {
+                    holder.notificationTypeImage.setImageResource(R.drawable.ic_baseline_store_24);
+                }
+                holder.description.setText(model.getDescription());
+                holder.date.setText(model.getDate());
+                if (model.isStatus())
+                    holder.statusImage.setVisibility(View.GONE);
+                else
+                    holder.statusImage.setVisibility(View.VISIBLE);
+
+                /*//انا
+                if (model.isSeen()) {
+                    holder.statusImage.setVisibility(View.GONE);
+                } else {
+                    holder.statusImage.setVisibility(View.VISIBLE);
+                }*/
+                DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(position);
+                notificationUid = documentSnapshot.getId();
+                if (!model.isSeen())
+                    updateSeenValueNotification(notificationUid);
+            }
+        });
     }
 
     private void updateSeenValueNotification(String notificationUid) {

@@ -2,6 +2,9 @@ package com.moomen.graduationproject.ui.fragment.company;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,20 +12,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.Source;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.NotificationAdapter;
 import com.moomen.graduationproject.model.Notification;
@@ -42,7 +38,6 @@ public class NotificationCompanyFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore;
 
 
-
     String userID;
 
     @Override
@@ -52,36 +47,28 @@ public class NotificationCompanyFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_notification_company, container, false);
     }
 
+    private String userId;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView_notification);
         firebaseFirestore = FirebaseFirestore.getInstance();
-
-         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
+        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         getAllNotificationAccepted();
-
-
-
-        
     }
 
     private void getAllNotificationAccepted() {
-        Query query = FirebaseFirestore.getInstance().collection("Notifications").whereEqualTo("userUid",userID).whereEqualTo("status",true)
+        Query query = FirebaseFirestore.getInstance().collection("Notifications")
+                .whereEqualTo("userUid", userID)
                 .orderBy("date", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Notification> options = new FirestoreRecyclerOptions.Builder<Notification>()
                 .setQuery(query, Notification.class)
                 .build();
-            fillNotificationRecycleAdapter(options);
-
+        fillNotificationRecycleAdapter(options);
     }
-
-    private  String userId;
     private String serviceId;
     private String hallId;
-
 
     private void fillNotificationRecycleAdapter(FirestoreRecyclerOptions<Notification> options) {
         NotificationAdapter notificationAdapter = new NotificationAdapter(options);
@@ -100,23 +87,23 @@ public class NotificationCompanyFragment extends Fragment {
             }
         });
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
-            recyclerView.setAdapter(notificationAdapter);
-            notificationAdapter.startListening();
+        recyclerView.setAdapter(notificationAdapter);
+        notificationAdapter.startListening();
 
 
     }
 
     private void updateStatusValueNotification(String notificationUid) {
-        firebaseFirestore.collection("Notifications").document(notificationUid).update("status", true,"seen",true).addOnCompleteListener(new OnCompleteListener<Void>() {
+        firebaseFirestore.collection("Notifications").document(notificationUid).update("status", true, "seen", true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Intent intent = new Intent(getContext(), ViewServiceActivity.class);
                 intent.putExtra(SERVICE_ID, serviceId);
                 intent.putExtra(HALL_ID, hallId);
                 intent.putExtra(USER_ID, userId);
-                intent.putExtra(USER_TYPE,"company");
+                intent.putExtra(USER_TYPE, "company");
                 startActivity(intent);
             }
         });

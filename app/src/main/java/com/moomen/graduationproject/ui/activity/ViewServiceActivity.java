@@ -24,10 +24,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.databinding.ActivityViewServiceBinding;
+import com.moomen.graduationproject.model.Notification;
 import com.moomen.graduationproject.model.Service;
 import com.moomen.graduationproject.model.User;
 import com.moomen.graduationproject.ui.fragment.admin.NotificationAdminFragment;
 import com.squareup.picasso.Picasso;
+
+import java.text.DateFormat;
+import java.util.Calendar;
 
 public class ViewServiceActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
@@ -37,12 +41,13 @@ public class ViewServiceActivity extends AppCompatActivity {
     private String hallId;
     private String userType;
     private String Notification_ID;
-    private String city ="";
+    private String city = "";
     private BottomSheetDialog bottomSheetDialog;
     private ActivityViewServiceBinding binding;
-    private EditText hallName, OwnerName, PhoneNumber, Location,Details;
+    private EditText hallName, OwnerName, PhoneNumber, Location, Details;
     private ImageView imageView_update;
-    Spinner spinner_city;
+    private Spinner spinner_city;
+    private String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +84,22 @@ public class ViewServiceActivity extends AppCompatActivity {
     }
 
     int select = 0;
+    private String serviceCategory = "";
+
+    private void getUserInfo() {
+        firebaseFirestore.collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                User user = task.getResult().toObject(User.class);
+                Picasso.get().load(user.getUserImage()).into(binding.imageViewUserId);
+                binding.textViewUserNameId.setText(user.getName());
+                binding.textViewUserEmailId.setText(user.getEmail());
+                binding.textViewUserPhoneId.setText(user.getPhone());
+
+
+            }
+        });
+    }
 
     private void getServiceInfo() {
         firebaseFirestore.collection("Services").document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -99,21 +120,7 @@ public class ViewServiceActivity extends AppCompatActivity {
                 else
                     binding.textViewServiceStatus.setText(getString(R.string.rejected));
                 binding.textViewServiceCreatedDate.setText(service.getDate());
-            }
-        });
-    }
-
-    private void getUserInfo() {
-        firebaseFirestore.collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                User user = task.getResult().toObject(User.class);
-                Picasso.get().load(user.getUserImage()).into(binding.imageViewUserId);
-                binding.textViewUserNameId.setText(user.getName());
-                binding.textViewUserEmailId.setText(user.getEmail());
-                binding.textViewUserPhoneId.setText(user.getPhone());
-
-
+                serviceCategory = service.getType();
             }
         });
     }
@@ -129,11 +136,9 @@ public class ViewServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 firebaseFirestore.collection("Services").document(serviceId).update("status", true);
-                firebaseFirestore.collection("Halls").document(hallId).update("status", true);
-                firebaseFirestore.collection("Dresses").document(hallId).update("status", true);
-                firebaseFirestore.collection("Notifications").document(Notification_ID).update("status", true);
-
+                firebaseFirestore.collection(serviceCategory).document(hallId).update("status", true);
                 Toast.makeText(getApplicationContext(), getString(R.string.accepted), Toast.LENGTH_SHORT).show();
+                pushNotification();
                 getServiceInfo();
             }
         });
@@ -141,17 +146,17 @@ public class ViewServiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 firebaseFirestore.collection("Services").document(serviceId).update("status", false);
-                firebaseFirestore.collection("Halls").document(hallId).update("status", false);
-                firebaseFirestore.collection("Dresses").document(hallId).update("status", false);
+                firebaseFirestore.collection(serviceCategory).document(hallId).update("status", false);
                 Toast.makeText(getApplicationContext(), getString(R.string.rejected), Toast.LENGTH_SHORT).show();
                 getServiceInfo();
             }
         });
-        pushNotification();
     }
 
     private void pushNotification() {
-
+        date = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
+        Notification notification = new Notification("", "Your service" + getString(R.string.accepted), "Congratulations! Users can view your service ", "", date, serviceId, hallId, userId, "service", false, false, false);
+        firebaseFirestore.collection("Notifications").add(notification);
     }
 
     private void updateInfoCompany() {

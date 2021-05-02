@@ -30,6 +30,7 @@ public class Notification implements Serializable {
     @SerializedName("user_seen")
     boolean user_seen;
 
+
     public Notification() {
     }
 
