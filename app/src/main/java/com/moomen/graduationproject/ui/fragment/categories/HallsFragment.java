@@ -80,6 +80,7 @@ public class HallsFragment extends Fragment {
     private String imageName;
     private Bitmap compressor;
     private String downloadUri;
+    private double servicePrice = 0;
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -219,12 +220,14 @@ public class HallsFragment extends Fragment {
         phone = binding.editTextPhone.getText().toString().trim();
         location = binding.editTextLocation.getText().toString().trim();
         details = binding.editTextDetail.getText().toString().trim();
+        servicePrice = Double.parseDouble(binding.editTextPrice.getText().toString().trim());
 
         checkEditText(hallName, binding.editTextHallName, "Hall name");
         checkEditText(ownerName, binding.editTextOwnerName, "Owner name");
         checkEditText(phone, binding.editTextPhone, "Phone number");
         checkEditText(location, binding.editTextLocation, "Location");
         checkEditText(details, binding.editTextDetail, "Detail");
+        checkEditText(servicePrice + "", binding.editTextPrice, "Price");
 
         if (!isEmpty) {
             postHallImageOnFireBase();
@@ -232,7 +235,7 @@ public class HallsFragment extends Fragment {
     }
 
     private void postHallOnFirebase() {
-        Service service = new Service(downloadUri, city, hallName, ownerName, phone, location, details, false, new ArrayList<>(), "Halls", date);
+        Service service = new Service(downloadUri, city, hallName, ownerName, phone, location, details, false, new ArrayList<>(), "Halls", date, servicePrice);
         firebaseFirestore.collection("Services").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {

@@ -142,11 +142,31 @@
                 app:layout_constraintTop_toBottomOf="@+id/editText_owner_name" />
 
             <EditText
-                android:id="@+id/editText_location"
+                android:id="@+id/editText_price"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_button_2"
+                android:drawableStart="@drawable/ic_baseline_monetization_on_24"
+                android:drawablePadding="8dp"
+                android:drawableTint="@color/purple_500"
+                android:ems="10"
+                android:hint="@string/price"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText_phone" />
+
+            <EditText
+                android:id="@+id/editText_location"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/bg_button_2"
                 android:drawableStart="@drawable/ic_baseline_location_on_24"
@@ -158,7 +178,7 @@
                 android:padding="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText_phone" />
+                app:layout_constraintTop_toBottomOf="@+id/editText_price" />
 
             <Spinner
                 android:id="@+id/spinner_city"

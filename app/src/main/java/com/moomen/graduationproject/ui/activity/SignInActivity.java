@@ -145,7 +145,10 @@ public class SignInActivity extends AppCompatActivity {
                                     PreferenceUtils.saveEmail(userEmail, getApplicationContext());
                                     PreferenceUtils.savePassword(userPassword, getApplicationContext());
                                     //Check type user
-                                    checkUserTypeToSignIn(authResult.getUser().getUid());
+                                    if (serviceId.isEmpty())
+                                        checkUserTypeToSignIn(authResult.getUser().getUid());
+                                    else
+                                        finish();
                                 } else {
                                     progressBar.setVisibility(View.GONE);
                                     firebaseUser.sendEmailVerification();
@@ -212,14 +215,10 @@ public class SignInActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), MainActivityCompany.class));
                     else if (userType.equals("admin"))
                         startActivity(new Intent(getApplicationContext(), MainActivityAdmin.class));
-                    if (!serviceId.isEmpty()) {
-                        Intent intent = new Intent(getApplicationContext(), ViewServiceDetailsActivity.class);
-                        intent.putExtra(SERVICE_ID, serviceId);
-                        startActivity(intent);
-                    }
+
+                }
                     finish();
                 }
-            }
         });
     }
 
@@ -249,10 +248,10 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startActivity(new Intent(SignInActivity.this, MainActivity.class));
-        finish();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+//        finish();
+//    }
 }

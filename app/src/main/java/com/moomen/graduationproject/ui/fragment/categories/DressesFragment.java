@@ -219,7 +219,7 @@ public class DressesFragment extends Fragment {
     }
 
     private void postDressOnFirebase() {
-        Service service = new Service(downloadUri, city, dressesStoreName, ownerName, phone, location, details, false, new ArrayList<>(), "Dresses", date);
+        Service service = new Service(downloadUri, city, dressesStoreName, ownerName, phone, location, details, false, new ArrayList<>(), "Dresses", date, 0);
         firebaseFirestore.collection("Services").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {

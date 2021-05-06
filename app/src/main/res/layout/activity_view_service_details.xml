@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/bg_button_2"
-            android:text="Button" />
+            android:text="@string/contact_us" />
 
         <Button
             android:id="@+id/button_book_service_details_activity"
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/bg_button_6"
-            android:text="Button" />
+            android:text="@string/book" />
     </LinearLayout>
 
     <LinearLayout

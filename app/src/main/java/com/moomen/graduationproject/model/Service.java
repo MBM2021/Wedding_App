@@ -28,13 +28,15 @@ public class Service implements Serializable {
     String type;
     @SerializedName("date")
     String date;
+    @SerializedName("price")
+    double price;
 
 
     public Service() {
     }
 
     public Service(String image, String city, String name, String ownerName, String phone
-            , String location, String detail, boolean status, ArrayList<Tags> tagsArrayList, String type, String date) {
+            , String location, String detail, boolean status, ArrayList<Tags> tagsArrayList, String type, String date, double price) {
         this.image = image;
         this.city = city;
         this.name = name;
@@ -46,6 +48,7 @@ public class Service implements Serializable {
         this.tagsArrayList = tagsArrayList;
         this.type = type;
         this.date = date;
+        this.price = price;
     }
 
     public String getDate() {
@@ -134,5 +137,13 @@ public class Service implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

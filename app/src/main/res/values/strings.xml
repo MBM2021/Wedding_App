@@ -72,6 +72,10 @@
     <string name="submit">Submit</string>
     <string name="edit_profile">Edit profile</string>
     <string name="date_of_birth">Da</string>
+    <string name="book">book</string>
+    <string name="cancel">cancel</string>
+    <string name="price">Price</string>
+    <string name="contact_us">Contact Us</string>
     <!--Spinner City-->
     <string-array name="city">
         <item>Gaza</item>

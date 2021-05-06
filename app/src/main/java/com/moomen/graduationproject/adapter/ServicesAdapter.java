@@ -34,6 +34,7 @@ public class ServicesAdapter extends FirestoreRecyclerAdapter<Service, ServicesA
                 .load(model.getImage())
                 .into(holder.serviceImage);
         holder.serviceName.setText(model.getName());
+        holder.servicePrice.setText(model.getPrice() + " $");
     }
 
     @NonNull
@@ -59,13 +60,14 @@ public class ServicesAdapter extends FirestoreRecyclerAdapter<Service, ServicesA
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView serviceImage;
-        TextView serviceName;
+        TextView serviceName, servicePrice;
         ConstraintLayout constraintLayoutServiceItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             serviceImage = itemView.findViewById(R.id.imageView_product);
             serviceName = itemView.findViewById(R.id.textView_product_name);
+            servicePrice = itemView.findViewById(R.id.textView_product_price);
 
             constraintLayoutServiceItem = itemView.findViewById(R.id.constraintlayout_service_item_layout);
             constraintLayoutServiceItem.setOnClickListener(new View.OnClickListener() {

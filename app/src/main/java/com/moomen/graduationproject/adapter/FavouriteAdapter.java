@@ -47,6 +47,7 @@ public class FavouriteAdapter extends FirestoreRecyclerAdapter<Favourite, Favour
                         .load(service.getImage())
                         .into(holder.serviceImage);
                 holder.serviceName.setText(service.getName());
+                holder.servicePrice.setText(service.getPrice() + " $");
                 holder.favouriteIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -82,7 +83,7 @@ public class FavouriteAdapter extends FirestoreRecyclerAdapter<Favourite, Favour
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView serviceImage;
-        TextView serviceName;
+        TextView serviceName, servicePrice;
         ImageView favouriteIcon;
         ConstraintLayout constraintLayoutFavouriteItem;
 
@@ -91,6 +92,7 @@ public class FavouriteAdapter extends FirestoreRecyclerAdapter<Favourite, Favour
             serviceImage = itemView.findViewById(R.id.imageView_product);
             serviceName = itemView.findViewById(R.id.textView_product_name);
             favouriteIcon = itemView.findViewById(R.id.imageViewFavourite);
+            servicePrice = itemView.findViewById(R.id.textView_product_price);
             constraintLayoutFavouriteItem = itemView.findViewById(R.id.constraintlayout_service_item_layout);
             constraintLayoutFavouriteItem.setOnClickListener(new View.OnClickListener() {
                 @Override

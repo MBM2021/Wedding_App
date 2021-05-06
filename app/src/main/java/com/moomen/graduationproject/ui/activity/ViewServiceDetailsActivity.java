@@ -54,6 +54,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
         }
         getServiceInfo();
         addToFavouriteOnClick();
+        bookService();
     }
 
     private void getServiceInfo() {
@@ -64,6 +65,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
                 Picasso.get().load(service.getImage()).into(binding.imageViewServiceImageDetailsActivity);
                 binding.textViewServiceNameDetailsActivity.setText(service.getName());
                 binding.textViewServiceDetailsDetailsActivity.setText(service.getDetail());
+                binding.textViewServicePriceDetailsActivity.setText(service.getPrice() + " $");
             }
         });
     }
@@ -107,5 +109,14 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
 
     private boolean isLogin() {
         return PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty();
+    }
+
+    private void bookService() {
+        binding.buttonBookServiceDetailsActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ViewServiceDetailsActivity.this, BookingServiceActivity.class));
+            }
+        });
     }
 }
