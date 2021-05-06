@@ -1,9 +1,7 @@
 package com.moomen.graduationproject.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,15 +33,11 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-
-        getNotSeenNumberNotification();
-
-
         badgeNotification = navView.getOrCreateBadge(R.id.navigation_notification_user);
         badgeNotification.setBackgroundColor(getResources().getColor(R.color.purple_500));
         badgeNotification.setBadgeTextColor(getResources().getColor(R.color.white));
-
-
+        badgeNotification.setVisible(false);
+        getNotSeenNumberNotification();
     }
 
 
@@ -83,10 +77,5 @@ public class MainActivity extends AppCompatActivity {
             };
             handler.postDelayed(runnable, 500);
         }
-    }
-
-    public void registerButtonOnClick(View view) {
-        startActivity(new Intent(MainActivity.this, SignInActivity.class));
-        finish();
     }
 }

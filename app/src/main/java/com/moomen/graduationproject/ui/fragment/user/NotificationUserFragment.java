@@ -22,7 +22,7 @@ import com.google.firebase.firestore.Query;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.NotificationAdapter;
 import com.moomen.graduationproject.model.Notification;
-import com.moomen.graduationproject.ui.activity.ViewServiceActivity;
+import com.moomen.graduationproject.ui.activity.ViewServiceDetailsActivity;
 import com.moomen.graduationproject.viewModel.DashboardViewModel;
 
 public class NotificationUserFragment extends Fragment {
@@ -104,11 +104,11 @@ public class NotificationUserFragment extends Fragment {
         firebaseFirestore.collection("Notifications").document(notificationUid).update("status", true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Intent intent = new Intent(getContext(), ViewServiceActivity.class);
+                Intent intent = new Intent(getContext(), ViewServiceDetailsActivity.class);
                 intent.putExtra(SERVICE_ID, serviceId);
-                intent.putExtra(HALL_ID, hallId);
-                intent.putExtra(USER_ID, userId);
-                intent.putExtra(USER_TYPE, "user");
+                //intent.putExtra(HALL_ID, hallId);
+                //intent.putExtra(USER_ID, userId);
+                //intent.putExtra(USER_TYPE, "user");
                 startActivity(intent);
             }
         });

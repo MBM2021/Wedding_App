@@ -40,7 +40,7 @@ public class ServicesAdapter extends FirestoreRecyclerAdapter<Service, ServicesA
     @Override
     public ServicesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.product_item, parent, false);
+        View view = layoutInflater.inflate(R.layout.service_item, parent, false);
         return new ServicesAdapter.ViewHolder(view);
     }
 

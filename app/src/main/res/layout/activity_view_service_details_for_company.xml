@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
+
     <ImageView
         android:id="@+id/imageView_favourite_icon_details_activity"
         android:layout_width="wrap_content"
@@ -41,17 +42,25 @@
             android:id="@+id/button_contact_service_details_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_button_2"
-            android:text="Button" />
+            android:drawableLeft="@drawable/ic_baseline_edit_24"
+            android:drawableTint="@color/white"
+            android:text="Edit"
+            android:textAlignment="viewStart" />
 
         <Button
             android:id="@+id/button_book_service_details_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_button_6"
-            android:text="Button" />
+            android:drawableLeft="@drawable/ic_baseline_delete_24"
+            android:drawableTint="@color/white"
+            android:text="Delete"
+            android:textAlignment="viewStart" />
     </LinearLayout>
 
     <LinearLayout
@@ -61,20 +70,7 @@
         android:background="@drawable/bg_button_2"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_baseline_store_24" />
-
-        <TextView
-            android:id="@+id/textView26"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/store" />
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <RatingBar
         android:id="@+id/ratingBar"
@@ -120,5 +116,15 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_service_price_details_activity" />
+
+    <ImageView
+        android:id="@+id/imageViewEditImageService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_edit_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

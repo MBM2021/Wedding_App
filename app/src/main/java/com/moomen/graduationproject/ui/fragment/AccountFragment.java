@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.model.User;
 import com.moomen.graduationproject.ui.activity.EditProfileActivity;
 import com.moomen.graduationproject.ui.activity.FavoriteActivity;
+import com.moomen.graduationproject.ui.activity.MainActivity;
 import com.moomen.graduationproject.ui.activity.SignInActivity;
 import com.moomen.graduationproject.utils.PreferenceUtils;
 import com.squareup.picasso.Picasso;
@@ -49,6 +51,7 @@ public class AccountFragment extends Fragment {
     private LinearLayout editProfileLinear;
     private LinearLayout favoriteLinear;
     private BottomSheetDialog bottomSheetDialog;
+    private Button signInButton;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class AccountFragment extends Fragment {
         LinearLayout shareLinear = view.findViewById(R.id.linear_share_app_id);
         editProfileLinear = view.findViewById(R.id.linear_edit_profile_id);
         userImage = view.findViewById(R.id.imageView_user_id);
+        signInButton = view.findViewById(R.id.button_sign_in);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
@@ -95,6 +99,7 @@ public class AccountFragment extends Fragment {
         }
         linearOnClick(aboutUsLinear, 0);
         linearOnClick(privacyLinear, 1);
+        registerButtonOnClick();
     }
 
     private void linearOnClick(LinearLayout linearLayout, int tag) {
@@ -171,7 +176,7 @@ public class AccountFragment extends Fragment {
                 PreferenceUtils.saveEmail("", getContext());
                 PreferenceUtils.savePassword("", getContext());
                 //redirect to login activity
-                startActivity(new Intent(getContext(), SignInActivity.class));
+                startActivity(new Intent(getContext(), MainActivity.class));
                 getActivity().finish();
             }
         });
@@ -205,5 +210,23 @@ public class AccountFragment extends Fragment {
             //You'll need to add proper error handling here
         }
         textView.setText(text.toString());
+    }
+
+    public void registerButtonOnClick() {
+        if (isLogin()) {
+            signInButton.setVisibility(View.GONE);
+        } else {
+            signInButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getContext(), SignInActivity.class));
+                    getActivity().finish();
+                }
+            });
+        }
+    }
+
+    private boolean isLogin() {
+        return PreferenceUtils.getEmail(getContext()) != null && !PreferenceUtils.getEmail(getContext()).isEmpty();
     }
 }

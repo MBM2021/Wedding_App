@@ -41,19 +41,16 @@ public class MainActivityAdmin extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
        /* FragmentManager fragmentManager = getSupportFragmentManager();
-
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.nav_host_fragment, fragment).addToBackStack(null).commit();
-*/
+        fragmentTransaction.add(R.id.nav_host_fragment, fragment).addToBackStack(null).commit();*/
         fragment = new ConsoleAdminFragment();
         setFragment(fragment);
-        getNotSeenNumberNotification();
 
         badgeNotification = navView.getOrCreateBadge(R.id.navigation_notification_admin);
         badgeNotification.setBackgroundColor(getResources().getColor(R.color.purple_500));
         badgeNotification.setBadgeTextColor(getResources().getColor(R.color.white));
-        //badgeNotification.setNumber(100000);
-        //badgeNotification.setVisible(true);
+        badgeNotification.setVisible(false);
+        getNotSeenNumberNotification();
 
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override

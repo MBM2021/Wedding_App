@@ -26,7 +26,7 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
 
     private OnItemClickListener listener;
     private FirebaseFirestore firebaseFirestore;
-    String notificationUid;
+    private String notificationUid;
 
     public NotificationAdapter(@NonNull FirestoreRecyclerOptions<Notification> options) {
         super(options);
@@ -42,7 +42,10 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 User user = task.getResult().toObject(User.class);
                 Picasso.get().load(user.getUserImage()).into(holder.userImage);
-                holder.title.setText(user.getName());
+                if (model.getTitle().isEmpty())
+                    holder.title.setText(user.getName());
+                else
+                    holder.title.setText(model.getTitle());
                 if (model.getNotificationType().equals("service")) {
                     holder.notificationTypeImage.setImageResource(R.drawable.ic_baseline_store_24);
                 }

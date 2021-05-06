@@ -11,8 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.moomen.graduationproject.R;
-import com.moomen.graduationproject.adapter.ServicesAdapter;
-import com.moomen.graduationproject.model.Service;
+import com.moomen.graduationproject.adapter.FavouriteAdapter;
+import com.moomen.graduationproject.model.Favourite;
 import com.moomen.graduationproject.utils.PreferenceUtils;
 
 public class FavoriteActivity extends AppCompatActivity {
@@ -29,29 +29,27 @@ public class FavoriteActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
             userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            getFavoriteNews();
+            getFavouriteService();
         }
     }
 
-    private void getFavoriteNews() {
+    private void getFavouriteService() {
         Query query = FirebaseFirestore.getInstance()
                 .collection("Users")
                 .document(userUid)
-                .collection("Favorite");
-        FirestoreRecyclerOptions<Service> options = new FirestoreRecyclerOptions.Builder<Service>()
-                .setQuery(query, Service.class)
+                .collection("Favourite");
+        FirestoreRecyclerOptions<Favourite> options = new FirestoreRecyclerOptions.Builder<Favourite>()
+                .setQuery(query, Favourite.class)
                 .build();
         fillRecycleAdapter(options);
     }
 
-    private void fillRecycleAdapter(FirestoreRecyclerOptions<Service> options) {
-        ServicesAdapter servicesAdapter = new ServicesAdapter(options);
-        servicesAdapter.setContext(getApplicationContext());
+    private void fillRecycleAdapter(FirestoreRecyclerOptions<Favourite> options) {
+        FavouriteAdapter favouriteAdapter = new FavouriteAdapter(options);
+        favouriteAdapter.setContext(getApplicationContext());
         RecyclerView recyclerView = findViewById(R.id.recycler_view_favorite_id);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        recyclerView.setAdapter(servicesAdapter);
-        servicesAdapter.startListening();
+        recyclerView.setAdapter(favouriteAdapter);
+        favouriteAdapter.startListening();
     }
-
-
 }

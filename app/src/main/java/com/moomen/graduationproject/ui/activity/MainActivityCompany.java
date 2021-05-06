@@ -47,12 +47,12 @@ public class MainActivityCompany extends AppCompatActivity {
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         notifcationHelper = new NotifcationHelper(this);
         /*fragmentCompany = new HomeFragment();
-        setFragmentCompany(fragmentCompany);
-        */
-        getNotSeenNumberNotification();
+        setFragmentCompany(fragmentCompany);*/
         badgeNotification = navView.getOrCreateBadge(R.id.navigation_notification_company);
         badgeNotification.setBackgroundColor(getResources().getColor(R.color.purple_500));
         badgeNotification.setBadgeTextColor(getResources().getColor(R.color.white));
+        badgeNotification.setVisible(false);
+        getNotSeenNumberNotification();
        /* navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -78,16 +78,15 @@ public class MainActivityCompany extends AppCompatActivity {
                 setFragmentCompany(fragmentCompany);
                 return true;
             }
-        });
-
-*/
+        });*/
     }
 
     private void getNotSeenNumberNotification() {
         if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
             firebaseFirestore.collection("Notifications")
-                    .whereEqualTo("userUid", userID)
+                    .whereEqualTo("seen", false)
                     .whereEqualTo("userTypeNotification", "company")
+                    .whereEqualTo("userUid", userID)
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {

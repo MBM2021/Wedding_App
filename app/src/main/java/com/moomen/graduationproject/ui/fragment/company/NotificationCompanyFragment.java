@@ -22,7 +22,7 @@ import com.google.firebase.firestore.Query;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.NotificationAdapter;
 import com.moomen.graduationproject.model.Notification;
-import com.moomen.graduationproject.ui.activity.ViewServiceActivity;
+import com.moomen.graduationproject.ui.activity.ViewServiceDetailsActivityCompany;
 
 public class NotificationCompanyFragment extends Fragment {
 
@@ -100,11 +100,11 @@ public class NotificationCompanyFragment extends Fragment {
         firebaseFirestore.collection("Notifications").document(notificationUid).update("status", true, "seen", true).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Intent intent = new Intent(getContext(), ViewServiceActivity.class);
+                Intent intent = new Intent(getContext(), ViewServiceDetailsActivityCompany.class);
                 intent.putExtra(SERVICE_ID, serviceId);
-                intent.putExtra(HALL_ID, hallId);
-                intent.putExtra(USER_ID, userId);
-                intent.putExtra(USER_TYPE, "company");
+                //intent.putExtra(HALL_ID, hallId);
+                //intent.putExtra(USER_ID, userId);
+                //intent.putExtra(USER_TYPE, "company");
                 startActivity(intent);
             }
         });

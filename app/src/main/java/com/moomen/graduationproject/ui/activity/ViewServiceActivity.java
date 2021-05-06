@@ -158,15 +158,15 @@ public class ViewServiceActivity extends AppCompatActivity {
             }
         });
     }
-
+    Notification userNotification;
     private void pushNotification() {
         date = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
         if (serviceStatus.equals("Accepted")) {
-            notification = new Notification("", "Your service" + serviceStatus, "Congratulations! Users can view your service ", "", date, serviceId, hallId, userId, "service", false, false, false, "company");
-            Notification userNotification = new Notification("", "New service", "Users can view your service ", "New service has been added", date, serviceId, hallId, userId, "service", false, false, false, "user");
+            notification = new Notification("", "Your service " + serviceStatus, "Congratulations! Users can view your service ", "", date, serviceId, hallId, userId, "service", false, false, false, "company");
+            userNotification = new Notification("", "", "added a new service!", "", date, serviceId, hallId, userId, "service", false, false, false, "user");
             firebaseFirestore.collection("Notifications").add(userNotification);
         } else {
-            notification = new Notification("", "Your service" + serviceStatus, "Sorry! Users can't view your service ", "", date, serviceId, hallId, userId, "service", false, false, false, "company");
+            notification = new Notification("", "Your service " + serviceStatus, "Sorry! Users can't view your service ", "", date, serviceId, hallId, userId, "service", false, false, false, "company");
         }
         firebaseFirestore.collection("Notifications").add(notification);
     }
