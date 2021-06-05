@@ -220,7 +220,8 @@ public class HallsFragment extends Fragment {
         phone = binding.editTextPhone.getText().toString().trim();
         location = binding.editTextLocation.getText().toString().trim();
         details = binding.editTextDetail.getText().toString().trim();
-        servicePrice = Double.parseDouble(binding.editTextPrice.getText().toString().trim());
+        if (!binding.editTextPrice.getText().toString().trim().isEmpty())
+            servicePrice = Double.parseDouble(binding.editTextPrice.getText().toString().trim());
 
         checkEditText(hallName, binding.editTextHallName, "Hall name");
         checkEditText(ownerName, binding.editTextOwnerName, "Owner name");

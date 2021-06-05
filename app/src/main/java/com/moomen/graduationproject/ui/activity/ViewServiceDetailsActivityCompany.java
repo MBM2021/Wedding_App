@@ -54,6 +54,7 @@ public class ViewServiceDetailsActivityCompany extends AppCompatActivity {
                 Picasso.get().load(service.getImage()).into(binding.imageViewServiceImageDetailsActivity);
                 binding.textViewServiceNameDetailsActivity.setText(service.getName());
                 binding.textViewServiceDetailsDetailsActivity.setText(service.getDetail());
+                binding.textViewServicePriceDetailsActivity.setText(service.getPrice() + " $");
             }
         });
     }
