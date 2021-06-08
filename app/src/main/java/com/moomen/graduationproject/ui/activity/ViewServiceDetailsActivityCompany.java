@@ -47,7 +47,7 @@ public class ViewServiceDetailsActivityCompany extends AppCompatActivity {
 
 
     private void getServiceInfo() {
-        firebaseFirestore.collection(categoryType).document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        firebaseFirestore.collection("Services").document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Service service = task.getResult().toObject(Service.class);

@@ -219,7 +219,7 @@ public class DressesFragment extends Fragment {
     }
 
     private void postDressOnFirebase() {
-        Service service = new Service(downloadUri, city, dressesStoreName, ownerName, phone, location, details, false, new ArrayList<>(), "Dresses", date, 0);
+        Service service = new Service(downloadUri, city, dressesStoreName, ownerName, phone, location, details, false, new ArrayList<>(), "Dresses", date, 0, "", "");
         firebaseFirestore.collection("Services").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -230,12 +230,17 @@ public class DressesFragment extends Fragment {
                         dressUid = task.getResult().getId();
                         Toast.makeText(getContext(), "Service created successfully!", Toast.LENGTH_LONG).show();
                         getCurrentUserInfo();
+                        // updateDataServiceInAllCollection();
                     }
                 });
             }
         });
     }
 
+    /*private void updateDataServiceInAllCollection() {
+        firebaseFirestore.collection("Dresses").document(dressUid).update("serviceId",serviceId,"serviceTypeId",dressUid);
+        firebaseFirestore.collection("Services").document(serviceId).update("serviceId",serviceId,"serviceTypeId",dressUid);
+    }*/
     private void getCurrentUserInfo() {
         userId = firebaseAuth.getCurrentUser().getUid();
         firebaseFirestore.collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

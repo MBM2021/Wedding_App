@@ -76,6 +76,9 @@
     <string name="cancel">cancel</string>
     <string name="price">Price</string>
     <string name="contact_us">Contact Us</string>
+    <string name="booking_date">Booking date</string>
+    <string name="date">Date</string>
+    <string name="price">Price</string>
     <!--Spinner City-->
     <string-array name="city">
         <item>Gaza</item>

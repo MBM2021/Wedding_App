@@ -30,13 +30,17 @@ public class Service implements Serializable {
     String date;
     @SerializedName("price")
     double price;
+    @SerializedName("serviceId")
+    String serviceId;
+    @SerializedName("serviceTypeId")
+    String serviceTypeId;
 
 
     public Service() {
     }
 
     public Service(String image, String city, String name, String ownerName, String phone
-            , String location, String detail, boolean status, ArrayList<Tags> tagsArrayList, String type, String date, double price) {
+            , String location, String detail, boolean status, ArrayList<Tags> tagsArrayList, String type, String date, double price, String serviceId, String serviceTypeId) {
         this.image = image;
         this.city = city;
         this.name = name;
@@ -49,6 +53,8 @@ public class Service implements Serializable {
         this.type = type;
         this.date = date;
         this.price = price;
+        this.serviceId = serviceId;
+        this.serviceTypeId = serviceTypeId;
     }
 
     public String getDate() {
@@ -145,5 +151,21 @@ public class Service implements Serializable {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public String getServiceTypeId() {
+        return serviceTypeId;
+    }
+
+    public void setServiceTypeId(String serviceTypeId) {
+        this.serviceTypeId = serviceTypeId;
     }
 }

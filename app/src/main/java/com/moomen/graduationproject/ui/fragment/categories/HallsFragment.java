@@ -236,7 +236,7 @@ public class HallsFragment extends Fragment {
     }
 
     private void postHallOnFirebase() {
-        Service service = new Service(downloadUri, city, hallName, ownerName, phone, location, details, false, new ArrayList<>(), "Halls", date, servicePrice);
+        Service service = new Service(downloadUri, city, hallName, ownerName, phone, location, details, false, new ArrayList<>(), "Halls", date, servicePrice, "", "");
         firebaseFirestore.collection("Services").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -247,10 +247,16 @@ public class HallsFragment extends Fragment {
                         hallUid = task.getResult().getId();
                         makeToast(getContext(), "Service created successfully!");
                         getCurrentUserInfo();
+                        updateDataServiceInAllCollection();
                     }
                 });
             }
         });
+    }
+
+    private void updateDataServiceInAllCollection() {
+        firebaseFirestore.collection("Halls").document(hallUid).update("serviceId", serviceId, "serviceTypeId", hallUid);
+        firebaseFirestore.collection("Services").document(serviceId).update("serviceId", serviceId, "serviceTypeId", hallUid);
     }
 
     private void getCurrentUserInfo() {

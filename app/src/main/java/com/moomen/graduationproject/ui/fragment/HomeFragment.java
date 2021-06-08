@@ -63,7 +63,7 @@ public class HomeFragment extends Fragment {
     private int current_position = 0;
     private int custum_position = 0;
     private TabLayout tabLayoutIndicator;
-    private String categoryType = "Services";
+    private String categoryType;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -88,10 +88,19 @@ public class HomeFragment extends Fragment {
         getAllServices();
     }
 
+    private boolean allService = true;
+    private Query query;
+
     private void getAllServices() {
-        Query query = FirebaseFirestore.getInstance()
-                .collection(categoryType)
-                .whereEqualTo("status", true);
+        if (allService)
+            query = FirebaseFirestore.getInstance()
+                    .collection("Services")
+                    .whereEqualTo("status", true);
+        else
+            query = FirebaseFirestore.getInstance()
+                    .collection("Services")
+                    .whereEqualTo("status", true)
+                    .whereEqualTo("type", categoryType);
         FirestoreRecyclerOptions<Service> options = new FirestoreRecyclerOptions.Builder<Service>()
                 .setQuery(query, Service.class)
                 .build();
@@ -158,8 +167,9 @@ public class HomeFragment extends Fragment {
             public void onItemClick(DocumentSnapshot documentSnapshot, int position, int id) {
                 Category category = documentSnapshot.toObject(Category.class);
                 categoryType = category.getName();
-                if (categoryType.equals("All"))
-                    categoryType = "Services";
+                /*if (categoryType.equals("All"))
+                    categoryType = "Services";*/
+                allService = false;
                 getAllServices();
             }
         });

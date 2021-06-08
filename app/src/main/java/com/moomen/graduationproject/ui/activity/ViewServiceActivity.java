@@ -140,7 +140,7 @@ public class ViewServiceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 serviceStatus = getString(R.string.accepted);
                 firebaseFirestore.collection("Services").document(serviceId).update("status", true);
-                firebaseFirestore.collection(serviceCategory).document(hallId).update("status", true);
+                //firebaseFirestore.collection(serviceCategory).document(hallId).update("status", true);
                 Toast.makeText(getApplicationContext(), serviceStatus, Toast.LENGTH_SHORT).show();
                 pushNotification();
                 getServiceInfo();
@@ -151,7 +151,7 @@ public class ViewServiceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 serviceStatus = getString(R.string.rejected);
                 firebaseFirestore.collection("Services").document(serviceId).update("status", false);
-                firebaseFirestore.collection(serviceCategory).document(hallId).update("status", false);
+                //firebaseFirestore.collection(serviceCategory).document(hallId).update("status", false);
                 Toast.makeText(getApplicationContext(), serviceStatus, Toast.LENGTH_SHORT).show();
                 getServiceInfo();
                 pushNotification();

@@ -27,8 +27,12 @@ import com.squareup.picasso.Picasso;
 public class ViewServiceDetailsActivity extends AppCompatActivity {
 
     public static final String SERVICE_ID = "SERVICE_ID";
+    public static final String SERVICE_TYPE_ID = "SERVICE_TYPE_ID";
+    public static final String CATEGORY_TYPE = "CATEGORY_TYPE";
+
     private ActivityViewServiceDetailsBinding binding;
     private String serviceId;
+    private String serviceTypeId;
     private String categoryType;
 
     private FirebaseFirestore firebaseFirestore;
@@ -58,7 +62,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
     }
 
     private void getServiceInfo() {
-        firebaseFirestore.collection(categoryType).document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        firebaseFirestore.collection("Services").document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Service service = task.getResult().toObject(Service.class);
@@ -66,6 +70,13 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
                 binding.textViewServiceNameDetailsActivity.setText(service.getName());
                 binding.textViewServiceDetailsDetailsActivity.setText(service.getDetail());
                 binding.textViewServicePriceDetailsActivity.setText(service.getPrice() + " $");
+
+               /* if (service.getServiceId().equals(serviceId))
+                    serviceTypeId = service.getServiceTypeId();
+                else {
+                    serviceTypeId = service.getServiceId();
+                    serviceId = service.getServiceTypeId();
+                }*/
             }
         });
     }
@@ -115,7 +126,11 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
         binding.buttonBookServiceDetailsActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ViewServiceDetailsActivity.this, BookingServiceActivity.class));
+                Intent intent = new Intent(getApplicationContext(), BookingServiceActivity.class);
+                intent.putExtra(SERVICE_ID, serviceId);
+                //intent.putExtra(SERVICE_TYPE_ID,serviceTypeId);
+                //intent.putExtra(CATEGORY_TYPE,categoryType);
+                startActivity(intent);
             }
         });
     }
