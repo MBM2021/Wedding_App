@@ -22,14 +22,16 @@ import com.google.firebase.firestore.Query;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.NotificationAdapter;
 import com.moomen.graduationproject.model.Notification;
+import com.moomen.graduationproject.ui.activity.ViewBookingDetailsActivity;
 import com.moomen.graduationproject.ui.activity.ViewServiceDetailsActivityCompany;
 
 public class NotificationCompanyFragment extends Fragment {
 
 
     public static final String SERVICE_ID = "SERVICE_ID";
+    public static final String BOOKING_ID = "BOOKING_ID";
+    public static final String USER_BOOKING_ID = "USER_BOOKING_ID";
     public static final String HALL_ID = "HALL_ID";
-    public static final String USER_ID = "USER_ID";
     public static final String USER_TYPE = "USER_TYPE";
     public static final String Notification_ID = "Notification_ID";
 
@@ -37,8 +39,13 @@ public class NotificationCompanyFragment extends Fragment {
     private RecyclerView recyclerView;
     private FirebaseFirestore firebaseFirestore;
 
+    private String serviceId;
+    private String bookingId;
+    private String userBookingId;
+    private String hallId;
+    private String notificationType = "Service";
 
-    String userID;
+    private String userID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,8 +75,6 @@ public class NotificationCompanyFragment extends Fragment {
                 .build();
         fillNotificationRecycleAdapter(options);
     }
-    private String serviceId;
-    private String hallId;
 
     private void fillNotificationRecycleAdapter(FirestoreRecyclerOptions<Notification> options) {
         NotificationAdapter notificationAdapter = new NotificationAdapter(options);
@@ -79,17 +84,15 @@ public class NotificationCompanyFragment extends Fragment {
                 Notification notification = documentSnapshot.toObject(Notification.class);
                 userId = notification.getUserUid();
                 serviceId = notification.getServiceUid();
-                hallId = notification.getHallUid();
-
+                //Hall id is booking id
+                bookingId = notification.getHallUid();
+                notificationType = notification.getNotificationType();
+                userBookingId = notification.getUserBookingUid();
                 String notificationUid = documentSnapshot.getId();
                 updateStatusValueNotification(notificationUid);
-
-
             }
         });
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-
         recyclerView.setAdapter(notificationAdapter);
         notificationAdapter.startListening();
 
@@ -101,10 +104,12 @@ public class NotificationCompanyFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Intent intent = new Intent(getContext(), ViewServiceDetailsActivityCompany.class);
+                if (notificationType.equals("Booking"))
+                    intent = new Intent(getContext(), ViewBookingDetailsActivity.class);
+                //Here the serviceId is service id or booking id
                 intent.putExtra(SERVICE_ID, serviceId);
-                //intent.putExtra(HALL_ID, hallId);
-                //intent.putExtra(USER_ID, userId);
-                //intent.putExtra(USER_TYPE, "company");
+                intent.putExtra(BOOKING_ID, bookingId);
+                intent.putExtra(USER_BOOKING_ID, userBookingId);
                 startActivity(intent);
             }
         });

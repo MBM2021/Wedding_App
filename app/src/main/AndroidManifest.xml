@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduationProject">
-        <activity android:name=".ui.activity.BookingListActivity"></activity>
+        <activity android:name=".ui.activity.ViewBookingDetailsActivity"></activity>
+        <activity android:name=".ui.activity.BookingListActivity" />
         <activity android:name=".ui.activity.BookingServiceActivity" />
         <activity android:name=".ui.activity.ViewServiceDetailsActivity" />
         <activity android:name=".ui.activity.ViewServiceDetailsActivityCompany" />

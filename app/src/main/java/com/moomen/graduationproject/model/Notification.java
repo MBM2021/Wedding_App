@@ -34,6 +34,7 @@ public class Notification implements Serializable {
     @SerializedName("userBookingUid")
     String userBookingUid;
 
+
     public Notification() {
     }
 

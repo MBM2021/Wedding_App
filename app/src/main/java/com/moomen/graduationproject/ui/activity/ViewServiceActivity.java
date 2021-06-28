@@ -36,7 +36,7 @@ import java.util.Calendar;
 public class ViewServiceActivity extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
-    private String userId;
+    private String userIdNotification;
     private String serviceId;
     private String hallId;
     private String userType;
@@ -48,6 +48,7 @@ public class ViewServiceActivity extends AppCompatActivity {
     private ImageView imageView_update;
     private Spinner spinner_city;
     private String date;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +58,12 @@ public class ViewServiceActivity extends AppCompatActivity {
         setContentView(view);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        userId = firebaseAuth.getCurrentUser().getUid();
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(NotificationAdminFragment.USER_ID)
                 && intent.hasExtra(NotificationAdminFragment.SERVICE_ID)
                 && intent.hasExtra(NotificationAdminFragment.HALL_ID)) {
-            userId = intent.getStringExtra(NotificationAdminFragment.USER_ID);
+            userIdNotification = intent.getStringExtra(NotificationAdminFragment.USER_ID);
             serviceId = intent.getStringExtra(NotificationAdminFragment.SERVICE_ID);
             hallId = intent.getStringExtra(NotificationAdminFragment.HALL_ID);
             userType = intent.getStringExtra(NotificationAdminFragment.USER_TYPE);
@@ -87,7 +89,7 @@ public class ViewServiceActivity extends AppCompatActivity {
     private String serviceCategory = "";
 
     private void getUserInfo() {
-        firebaseFirestore.collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        firebaseFirestore.collection("Users").document(userIdNotification).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 User user = task.getResult().toObject(User.class);
@@ -162,11 +164,11 @@ public class ViewServiceActivity extends AppCompatActivity {
     private void pushNotification() {
         date = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
         if (serviceStatus.equals("Accepted")) {
-            notification = new Notification("", "Your service " + serviceStatus, "Congratulations! Users can view your service ", "", date, serviceId, hallId, userId, "service", false, false, false, "company", "");
-            userNotification = new Notification("", "", "added a new service!", "", date, serviceId, hallId, userId, "service", false, false, false, "user", "");
+            notification = new Notification("", "Your service " + serviceStatus, "Congratulations! Users can view your service ", "", date, serviceId, hallId, userIdNotification, "service", false, false, false, "company", userId);
+            userNotification = new Notification("", "", "added a new service!", "", date, serviceId, hallId, userIdNotification, "service", false, false, false, "user", "");
             firebaseFirestore.collection("Notifications").add(userNotification);
         } else {
-            notification = new Notification("", "Your service " + serviceStatus, "Sorry! Users can't view your service ", "", date, serviceId, hallId, userId, "service", false, false, false, "company", "");
+            notification = new Notification("", "Your service " + serviceStatus, "Sorry! Users can't view your service ", "", date, serviceId, hallId, userIdNotification, "service", false, false, false, "company", userId);
         }
         firebaseFirestore.collection("Notifications").add(notification);
     }

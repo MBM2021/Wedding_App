@@ -28,6 +28,7 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
     private FirebaseFirestore firebaseFirestore;
     private String notificationUid;
 
+
     public NotificationAdapter(@NonNull FirestoreRecyclerOptions<Notification> options) {
         super(options);
     }
@@ -37,7 +38,10 @@ public class NotificationAdapter extends FirestoreRecyclerAdapter<Notification, 
     protected void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position, @NonNull Notification model) {
         //Hi evryone
         firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseFirestore.collection("Users").document(model.getUserUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        String userId = model.getUserUid();
+        if (!model.getUserBookingUid().isEmpty())
+            userId = model.getUserBookingUid();
+        firebaseFirestore.collection("Users").document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 User user = task.getResult().toObject(User.class);

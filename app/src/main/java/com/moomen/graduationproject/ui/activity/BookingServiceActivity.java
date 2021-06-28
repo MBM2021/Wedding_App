@@ -113,14 +113,28 @@ public class BookingServiceActivity extends AppCompatActivity {
         firebaseFirestore.collection("Services")
                 .document(serviceId)
                 .collection("Booking")
-                .whereEqualTo("bookingDate", bookingDate)
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("bookingDate", bookingDate).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (!task.getResult().isEmpty())
-                    Toast.makeText(getApplicationContext(), "Already booked, Select another date!", Toast.LENGTH_LONG).show();
-                else
-                    confirmBookingDialog();
+                    Toast.makeText(getApplicationContext(), "Please book new date", Toast.LENGTH_SHORT).show();
+                else {
+                    firebaseFirestore.collection("Services")
+                            .document(serviceId)
+                            .collection("Booking")
+                            .whereEqualTo("bookingDate", bookingDate)
+                            .whereEqualTo("status", true)
+                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (!task.getResult().isEmpty())
+                                Toast.makeText(getApplicationContext(), "Already booked, Select another date!", Toast.LENGTH_LONG).show();
+                            else
+                                confirmBookingDialog();
+                        }
+                    });
+                }
             }
         });
     }
@@ -144,15 +158,18 @@ public class BookingServiceActivity extends AppCompatActivity {
     }
 
     private void createBooking() {
-        Booking booking = new Booking(bookingDate, date, serviceId, userId, "2-days", false);
-        firebaseFirestore.collection("Services").document(serviceId).collection("Booking").add(booking).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                bookingId = task.getResult().getId();
-                sendNotificationToCompany();
-                Toast.makeText(getApplicationContext(), "Booking successfully", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (bookingDate.isEmpty())
+            Toast.makeText(getApplicationContext(), "You must select booking date", Toast.LENGTH_SHORT).show();
+        else {
+            Booking booking = new Booking(bookingDate, date, serviceId, userId, "2-days", false);
+            firebaseFirestore.collection("Services").document(serviceId).collection("Booking").add(booking).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentReference> task) {
+                    bookingId = task.getResult().getId();
+                    sendNotificationToCompany();
+                }
+            });
+        }
     }
 
     private void sendNotificationToCompany() {
@@ -161,8 +178,13 @@ public class BookingServiceActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Service service = task.getResult().toObject(Service.class);
                 String companyId = service.getCompanyId();
-                Notification notification = new Notification("", "", "This User need to booking your service", "Check the order", date, serviceId, "", companyId, "Booking", false, false, false, "company", userId);
-                firebaseFirestore.collection("Notifications").add(notification);
+                Notification notification = new Notification("", "", "This User need to booking your service", "Check the order", date, serviceId, bookingId, companyId, "Booking", false, false, false, "company", userId);
+                firebaseFirestore.collection("Notifications").add(notification).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        Toast.makeText(getApplicationContext(), "Your booking in process!", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

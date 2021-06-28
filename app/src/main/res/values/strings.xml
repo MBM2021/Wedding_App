@@ -81,6 +81,7 @@
     <string name="add_car_image">Add Car Image</string>
     <string name="cars_store_name">Cars Store Name</string>
     <string name="renting_price">Renting Price</string>
+    <string name="the_date_it_was_booked">The date it was booked</string>
     <!--Spinner City-->
     <string-array name="city">
         <item>Gaza</item>
