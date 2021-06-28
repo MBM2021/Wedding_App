@@ -78,7 +78,9 @@
     <string name="contact_us">Contact Us</string>
     <string name="booking_date">Booking date</string>
     <string name="date">Date</string>
-    <string name="price">Price</string>
+    <string name="add_car_image">Add Car Image</string>
+    <string name="cars_store_name">Cars Store Name</string>
+    <string name="renting_price">Renting Price</string>
     <!--Spinner City-->
     <string-array name="city">
         <item>Gaza</item>

@@ -199,6 +199,7 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/bg_button_3"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:text="@string/create_service"
                 android:theme="@style/FontTheme1"
                 app:layout_constraintBottom_toBottomOf="parent"

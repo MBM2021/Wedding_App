@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +59,8 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private RecyclerView categoryRecyclerView;
     private RecyclerView servicesRecyclerView;
+    private SearchView searchView;
+    private ServicesAdapter servicesAdapter;
     private Timer timer;
     private LinearLayout linearLayout_dot;
     private int current_position = 0;
@@ -76,11 +79,35 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         categoryRecyclerView = view.findViewById(R.id.recyclerView_category);
         servicesRecyclerView = view.findViewById(R.id.recyclerView_services);
+        searchView = view.findViewById(R.id.searchView);
         firebaseAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
         viewPager = view.findViewById(R.id.viewPager_ads);
         tabLayoutIndicator = view.findViewById(R.id.indicator_tab_slid_page_id);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                searchServices(s);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                searchServices(s);
+                return false;
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                allService = true;
+                getAllServices();
+                return false;
+            }
+        });
         getAllCategory();
         getAllAds();
         createSlideshow();
@@ -91,16 +118,31 @@ public class HomeFragment extends Fragment {
     private boolean allService = true;
     private Query query;
 
+    private void searchServices(String s) {
+        if (s.isEmpty()) {
+            allService = true;
+            getAllServices();
+        } else {
+            Query querySearch = firebaseFirestore.collection("Services").whereEqualTo("name", s);
+            FirestoreRecyclerOptions<Service> options = new FirestoreRecyclerOptions.Builder<Service>()
+                    .setQuery(querySearch, Service.class)
+                    .build();
+
+            fillServicesRecycleAdapter(options);
+        }
+    }
+
     private void getAllServices() {
         if (allService)
             query = FirebaseFirestore.getInstance()
                     .collection("Services")
                     .whereEqualTo("status", true);
-        else
+        else {
             query = FirebaseFirestore.getInstance()
                     .collection("Services")
                     .whereEqualTo("status", true)
                     .whereEqualTo("type", categoryType);
+        }
         FirestoreRecyclerOptions<Service> options = new FirestoreRecyclerOptions.Builder<Service>()
                 .setQuery(query, Service.class)
                 .build();
@@ -167,9 +209,11 @@ public class HomeFragment extends Fragment {
             public void onItemClick(DocumentSnapshot documentSnapshot, int position, int id) {
                 Category category = documentSnapshot.toObject(Category.class);
                 categoryType = category.getName();
-                /*if (categoryType.equals("All"))
-                    categoryType = "Services";*/
-                allService = false;
+
+                if (categoryType.equals("All"))
+                    allService = true;
+                else
+                    allService = false;
                 getAllServices();
             }
         });

@@ -54,7 +54,7 @@
 
                 <SearchView
                     android:id="@+id/searchView"
-                    android:layout_width="@dimen/_45sdp"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/_28sdp"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_button_4"

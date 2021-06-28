@@ -21,6 +21,7 @@ import com.moomen.graduationproject.adapter.CategoryAdapter;
 import com.moomen.graduationproject.model.Category;
 import com.moomen.graduationproject.ui.fragment.categories.DressesFragment;
 import com.moomen.graduationproject.ui.fragment.categories.HallsFragment;
+import com.moomen.graduationproject.ui.fragment.categories.RentingCarsFragment;
 
 public class ConsoleCompanyFragment extends Fragment {
     private RecyclerView categoryRecyclerView;
@@ -64,6 +65,9 @@ public class ConsoleCompanyFragment extends Fragment {
                             break;
                         case "Dresses":
                             fragment = new DressesFragment();
+                            break;
+                        case "Cars":
+                            fragment = new RentingCarsFragment();
                             break;
                     }
                 fragmentTransaction.replace(R.id.container_category_fragment, fragment).addToBackStack(null).commit();

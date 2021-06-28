@@ -36,7 +36,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.moomen.graduationproject.R;
-import com.moomen.graduationproject.databinding.FragmentDressesBinding;
+import com.moomen.graduationproject.databinding.FragmentRentingcarsBinding;
 import com.moomen.graduationproject.model.Notification;
 import com.moomen.graduationproject.model.Service;
 import com.moomen.graduationproject.model.User;
@@ -52,21 +52,21 @@ import java.util.Random;
 
 import id.zelory.compressor.Compressor;
 
-public class DressesFragment extends Fragment {
+public class RentingCarsFragment extends Fragment {
 
     private static final int MAX_LENGTH = 100;
-    private FragmentDressesBinding dressesBinding;
+    private FragmentRentingcarsBinding rentingCarsBinding;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private StorageReference storageReference;
     private boolean isEmpty = false;
-    private String dressesStoreName;
+    private String carStoreName;
     private String ownerName;
     private String phone;
     private String location;
     private String details;
     private String city = "";
-    private String dressUid;
+    private String carUid;
     private String userImage;
     private String userName;
     private String date;
@@ -97,24 +97,24 @@ public class DressesFragment extends Fragment {
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
         date = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
-        dressesBinding = FragmentDressesBinding.inflate(inflater, container, false);
-        return dressesBinding.getRoot();
+        rentingCarsBinding = FragmentRentingcarsBinding.inflate(inflater, container, false);
+        return rentingCarsBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        spinnerCreate(dressesBinding.spinnerCity);
-        dressesBinding.imageViewDresses.setOnClickListener(new View.OnClickListener() {
+        spinnerCreate(rentingCarsBinding.spinnerCity);
+        rentingCarsBinding.imageViewCars.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cropImage();
             }
         });
-        dressesBinding.buttonCreate.setOnClickListener(new View.OnClickListener() {
+        rentingCarsBinding.buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createDressesService();
+                createCarsService();
             }
         });
     }
@@ -129,7 +129,7 @@ public class DressesFragment extends Fragment {
                         .setGuidelines(CropImageView.Guidelines.ON)
                         //.setMinCropResultSize(512,512)
                         .setAspectRatio(4, 4)
-                        .start(getContext(), DressesFragment.this);
+                        .start(getContext(), RentingCarsFragment.this);
             }
         }
     }
@@ -142,24 +142,24 @@ public class DressesFragment extends Fragment {
         }
     }
 
-    private void createDressesService() {
+    private void createCarsService() {
         isEmpty = false;
-        dressesStoreName = dressesBinding.editTextDressesStoreName.getText().toString().trim();
-        ownerName = dressesBinding.editTextOwnerName.getText().toString().trim();
-        phone = dressesBinding.editTextPhone.getText().toString().trim();
-        location = dressesBinding.editTextLocation.getText().toString().trim();
-        details = dressesBinding.editTextDetail.getText().toString().trim();
-        if (!dressesBinding.editTextPrice.getText().toString().trim().isEmpty())
-            servicePrice = Double.parseDouble(dressesBinding.editTextPrice.getText().toString().trim());
+        carStoreName = rentingCarsBinding.editTextCarsStoreName.getText().toString().trim();
+        ownerName = rentingCarsBinding.editTextOwnerName.getText().toString().trim();
+        phone = rentingCarsBinding.editTextPhone.getText().toString().trim();
+        location = rentingCarsBinding.editTextLocation.getText().toString().trim();
+        details = rentingCarsBinding.editTextDetail.getText().toString().trim();
+        if (!rentingCarsBinding.editTextPrice.getText().toString().trim().isEmpty())
+            servicePrice = Double.parseDouble(rentingCarsBinding.editTextPrice.getText().toString().trim());
 
-        checkEditText(dressesStoreName, dressesBinding.editTextDressesStoreName, "Store name");
-        checkEditText(ownerName, dressesBinding.editTextOwnerName, "Owner name");
-        checkEditText(phone, dressesBinding.editTextPhone, "Phone number");
-        checkEditText(location, dressesBinding.editTextLocation, "Location");
-        checkEditText(details, dressesBinding.editTextDetail, "Detail");
-        checkEditText(servicePrice + "", dressesBinding.editTextPrice, "Price");
+        checkEditText(carStoreName, rentingCarsBinding.editTextCarsStoreName, "Store name");
+        checkEditText(ownerName, rentingCarsBinding.editTextOwnerName, "Owner name");
+        checkEditText(phone, rentingCarsBinding.editTextPhone, "Phone number");
+        checkEditText(location, rentingCarsBinding.editTextLocation, "Location");
+        checkEditText(details, rentingCarsBinding.editTextDetail, "Detail");
+        checkEditText(servicePrice + "", rentingCarsBinding.editTextPrice, "Price");
         if (!isEmpty) {
-            postDressesImageOnFireBase();
+            postCarImageOnFireBase();
         }
     }
 
@@ -178,13 +178,13 @@ public class DressesFragment extends Fragment {
 
     }
 
-    private void postDressesImageOnFireBase() {
+    private void postCarImageOnFireBase() {
         if (imageUri != null) {
             compressAndNameImage();
             ByteArrayOutputStream byteArrayInputStream = new ByteArrayOutputStream();
             compressor.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayInputStream);
             byte[] thumpData = byteArrayInputStream.toByteArray();
-            StorageReference filePath = storageReference.child("Dress_Image/").child(imageName);
+            StorageReference filePath = storageReference.child("Car_Image/").child(imageName);
             UploadTask uploadTask = filePath.putBytes(thumpData);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -216,20 +216,20 @@ public class DressesFragment extends Fragment {
                 }
             });
         } else {
-            Toast.makeText(getContext(), "The Dress image is required!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "The Car image is required!", Toast.LENGTH_LONG).show();
         }
     }
 
     private void postDressOnFirebase() {
-        Service service = new Service(downloadUri, city, dressesStoreName, ownerName, phone, location, details, false, new ArrayList<>(), "Dresses", date, servicePrice, "", "");
+        Service service = new Service(downloadUri, city, carStoreName, ownerName, phone, location, details, false, new ArrayList<>(), "Cars", date, servicePrice, "", "");
         firebaseFirestore.collection("Services").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 serviceId = task.getResult().getId();
-                firebaseFirestore.collection("Dresses").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                firebaseFirestore.collection("Cars").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
-                        dressUid = task.getResult().getId();
+                        carUid = task.getResult().getId();
                         Toast.makeText(getContext(), "Service created successfully!", Toast.LENGTH_LONG).show();
                         getCurrentUserInfo();
                         // updateDataServiceInAllCollection();
@@ -257,7 +257,7 @@ public class DressesFragment extends Fragment {
     }
 
     private void createNotification() {
-        Notification notification = new Notification(userImage, userName, "Add new Dresses Service", dressesStoreName, date, serviceId, dressUid, userId, "service", false, false, false, "admin");
+        Notification notification = new Notification(userImage, userName, "Add new Renting Cars Service", carStoreName, date, serviceId, carUid, userId, "service", false, false, false, "admin");
         firebaseFirestore.collection("Notifications").add(notification);
     }
 
@@ -285,7 +285,7 @@ public class DressesFragment extends Fragment {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == getActivity().RESULT_OK) {
                 imageUri = result.getUri();
-                dressesBinding.imageViewDresses.setImageURI(imageUri);
+                rentingCarsBinding.imageViewCars.setImageURI(imageUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }

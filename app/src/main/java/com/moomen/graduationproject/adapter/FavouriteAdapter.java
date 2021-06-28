@@ -47,6 +47,7 @@ public class FavouriteAdapter extends FirestoreRecyclerAdapter<Favourite, Favour
                         .load(service.getImage())
                         .into(holder.serviceImage);
                 holder.serviceName.setText(service.getName());
+                //TODO:Error caused by favourite list
                 holder.servicePrice.setText(service.getPrice() + " $");
                 holder.favouriteIcon.setOnClickListener(new View.OnClickListener() {
                     @Override
