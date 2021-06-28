@@ -31,13 +31,15 @@ public class Notification implements Serializable {
     boolean user_seen;
     @SerializedName("userTypeNotification")
     String userTypeNotification;
+    @SerializedName("userBookingUid")
+    String userBookingUid;
 
     public Notification() {
     }
 
     public Notification(String userImage, String title, String description, String shortDescription
             , String date, String serviceUid, String hallUid, String userUid, String notificationType
-            , boolean status, boolean seen, boolean user_seen, String userTypeNotification) {
+            , boolean status, boolean seen, boolean user_seen, String userTypeNotification, String userBookingUid) {
         this.userImage = userImage;
         this.title = title;
         this.description = description;
@@ -51,6 +53,8 @@ public class Notification implements Serializable {
         this.seen = seen;
         this.user_seen = user_seen;
         this.userTypeNotification = userTypeNotification;
+        this.userBookingUid = userBookingUid;
+
     }
 
     public String getHallUid() {
@@ -155,5 +159,13 @@ public class Notification implements Serializable {
 
     public void setUserTypeNotification(String userTypeNotification) {
         this.userTypeNotification = userTypeNotification;
+    }
+
+    public String getUserBookingUid() {
+        return userBookingUid;
+    }
+
+    public void setUserBookingUid(String userBookingUid) {
+        this.userBookingUid = userBookingUid;
     }
 }

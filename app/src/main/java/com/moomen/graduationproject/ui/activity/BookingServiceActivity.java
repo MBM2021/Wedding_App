@@ -16,19 +16,22 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.model.Booking;
+import com.moomen.graduationproject.model.Notification;
+import com.moomen.graduationproject.model.Service;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 
 public class BookingServiceActivity extends AppCompatActivity {
 
-    String bookingId;
+    private String bookingId;
     private CalendarView calendarView;
     private Button bookingButton;
     private Button cancelButton;
@@ -146,7 +149,20 @@ public class BookingServiceActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 bookingId = task.getResult().getId();
+                sendNotificationToCompany();
                 Toast.makeText(getApplicationContext(), "Booking successfully", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendNotificationToCompany() {
+        firebaseFirestore.collection("Services").document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                Service service = task.getResult().toObject(Service.class);
+                String companyId = service.getCompanyId();
+                Notification notification = new Notification("", "", "This User need to booking your service", "Check the order", date, serviceId, "", companyId, "Booking", false, false, false, "company", userId);
+                firebaseFirestore.collection("Notifications").add(notification);
             }
         });
     }

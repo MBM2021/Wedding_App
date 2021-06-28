@@ -46,7 +46,6 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -96,6 +95,7 @@ public class RentingCarsFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        userId = firebaseAuth.getCurrentUser().getUid();
         date = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
         rentingCarsBinding = FragmentRentingcarsBinding.inflate(inflater, container, false);
         return rentingCarsBinding.getRoot();
@@ -221,7 +221,7 @@ public class RentingCarsFragment extends Fragment {
     }
 
     private void postDressOnFirebase() {
-        Service service = new Service(downloadUri, city, carStoreName, ownerName, phone, location, details, false, new ArrayList<>(), "Cars", date, servicePrice, "", "");
+        Service service = new Service(downloadUri, city, carStoreName, ownerName, phone, location, details, false, "Cars", date, servicePrice, userId);
         firebaseFirestore.collection("Services").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -257,7 +257,7 @@ public class RentingCarsFragment extends Fragment {
     }
 
     private void createNotification() {
-        Notification notification = new Notification(userImage, userName, "Add new Renting Cars Service", carStoreName, date, serviceId, carUid, userId, "service", false, false, false, "admin");
+        Notification notification = new Notification(userImage, userName, "Add new Renting Cars Service", carStoreName, date, serviceId, carUid, userId, "service", false, false, false, "admin", "");
         firebaseFirestore.collection("Notifications").add(notification);
     }
 

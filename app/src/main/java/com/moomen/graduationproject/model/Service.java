@@ -3,7 +3,6 @@ package com.moomen.graduationproject.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Service implements Serializable {
     @SerializedName("image")
@@ -22,25 +21,21 @@ public class Service implements Serializable {
     String detail;
     @SerializedName("status")
     boolean status;
-    @SerializedName("tagsArrayList")
-    ArrayList<Tags> tagsArrayList;
     @SerializedName("type")
     String type;
     @SerializedName("date")
     String date;
     @SerializedName("price")
     double price;
-    @SerializedName("serviceId")
-    String serviceId;
-    @SerializedName("serviceTypeId")
-    String serviceTypeId;
+    @SerializedName("companyId")
+    String companyId;
 
 
     public Service() {
     }
 
     public Service(String image, String city, String name, String ownerName, String phone
-            , String location, String detail, boolean status, ArrayList<Tags> tagsArrayList, String type, String date, double price, String serviceId, String serviceTypeId) {
+            , String location, String detail, boolean status, String type, String date, double price, String companyId) {
         this.image = image;
         this.city = city;
         this.name = name;
@@ -49,12 +44,10 @@ public class Service implements Serializable {
         this.location = location;
         this.detail = detail;
         this.status = status;
-        this.tagsArrayList = tagsArrayList;
         this.type = type;
         this.date = date;
         this.price = price;
-        this.serviceId = serviceId;
-        this.serviceTypeId = serviceTypeId;
+        this.companyId = companyId;
     }
 
     public String getDate() {
@@ -129,14 +122,6 @@ public class Service implements Serializable {
         this.status = status;
     }
 
-    public ArrayList<Tags> getTagsArrayList() {
-        return tagsArrayList;
-    }
-
-    public void setTagsArrayList(ArrayList<Tags> tagsArrayList) {
-        this.tagsArrayList = tagsArrayList;
-    }
-
     public String getType() {
         return type;
     }
@@ -154,18 +139,18 @@ public class Service implements Serializable {
     }
 
     public String getServiceId() {
-        return serviceId;
+        return companyId;
     }
 
-    public void setServiceId(String serviceId) {
-        this.serviceId = serviceId;
+    public void setServiceId(String companyId) {
+        this.companyId = companyId;
     }
 
-    public String getServiceTypeId() {
-        return serviceTypeId;
+    public String getCompanyId() {
+        return companyId;
     }
 
-    public void setServiceTypeId(String serviceTypeId) {
-        this.serviceTypeId = serviceTypeId;
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
     }
 }

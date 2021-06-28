@@ -49,7 +49,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -90,6 +89,7 @@ public class HallsFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        userId = firebaseAuth.getCurrentUser().getUid();
         date = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
         return binding.getRoot();
     }
@@ -236,7 +236,7 @@ public class HallsFragment extends Fragment {
     }
 
     private void postHallOnFirebase() {
-        Service service = new Service(downloadUri, city, hallName, ownerName, phone, location, details, false, new ArrayList<>(), "Halls", date, servicePrice, "", "");
+        Service service = new Service(downloadUri, city, hallName, ownerName, phone, location, details, false, "Halls", date, servicePrice, userId);
         firebaseFirestore.collection("Services").add(service).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -247,7 +247,7 @@ public class HallsFragment extends Fragment {
                         hallUid = task.getResult().getId();
                         makeToast(getContext(), "Service created successfully!");
                         getCurrentUserInfo();
-                        updateDataServiceInAllCollection();
+                        //updateDataServiceInAllCollection();
                     }
                 });
             }
@@ -273,7 +273,8 @@ public class HallsFragment extends Fragment {
     }
 
     private void createNotification() {
-        Notification notification = new Notification(userImage, userName, "Add new Hall Service", hallName, date, serviceId, hallUid, userId, "service", false, false, false, "admin");
+
+        Notification notification = new Notification(userImage, userName, "Add new Hall Service", hallName, date, serviceId, hallUid, userId, "service", false, false, false, "admin", "");
         firebaseFirestore.collection("Notifications").add(notification);
     }
 

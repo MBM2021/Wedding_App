@@ -127,7 +127,6 @@ public class HomeFragment extends Fragment {
             FirestoreRecyclerOptions<Service> options = new FirestoreRecyclerOptions.Builder<Service>()
                     .setQuery(querySearch, Service.class)
                     .build();
-
             fillServicesRecycleAdapter(options);
         }
     }
