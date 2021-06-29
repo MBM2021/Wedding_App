@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.moomen.graduationproject.R;
@@ -62,19 +63,34 @@ public class ViewBookingDetailsActivity extends AppCompatActivity {
         binding.buttonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseFirestore.collection("Services").document(serviceId).collection("Booking").document(bookingId).update("status", true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                firebaseFirestore.collection("Services").document(serviceId)
+                        .collection("Booking").document(bookingId)
+                        .update("status", true, "inReview", false)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(getApplicationContext(), "Accepted", Toast.LENGTH_SHORT).show();
+                            }
+
+                        });
+                firebaseFirestore.collection("Users").document(userBookingId)
+                        .collection("Booking")
+                        .whereEqualTo("bookingServiceId", bookingId)
+                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getApplicationContext(), "Accepted", Toast.LENGTH_SHORT).show();
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
                     }
                 });
+
+
             }
         });
 
         binding.buttonReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseFirestore.collection("Services").document(serviceId).collection("Booking").document(bookingId).update("status", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+                firebaseFirestore.collection("Services").document(serviceId).collection("Booking").document(bookingId).update("status", false, "inReview", false).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(getApplicationContext(), "Rejected", Toast.LENGTH_SHORT).show();

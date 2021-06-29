@@ -161,11 +161,13 @@ public class BookingServiceActivity extends AppCompatActivity {
         if (bookingDate.isEmpty())
             Toast.makeText(getApplicationContext(), "You must select booking date", Toast.LENGTH_SHORT).show();
         else {
-            Booking booking = new Booking(bookingDate, date, serviceId, userId, "2-days", false);
+            Booking booking = new Booking(bookingDate, date, serviceId, userId, "2-days", false, true);
             firebaseFirestore.collection("Services").document(serviceId).collection("Booking").add(booking).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {
                     bookingId = task.getResult().getId();
+                    firebaseFirestore.collection("Users").document(userId).collection("Booking").add(booking);
+
                     sendNotificationToCompany();
                 }
             });
@@ -183,6 +185,8 @@ public class BookingServiceActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         Toast.makeText(getApplicationContext(), "Your booking in process!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), BookingListActivity.class);
+                        startActivity(intent);
                     }
                 });
             }
