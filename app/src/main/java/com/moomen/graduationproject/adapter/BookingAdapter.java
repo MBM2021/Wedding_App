@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -26,8 +27,8 @@ public class BookingAdapter extends FirestoreRecyclerAdapter<Booking, BookingAda
 
     private BookingAdapter.OnItemClickListener listener;
     private String userId;
-    private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
+    private FirebaseFirestore firebaseFirestore;
 
     public BookingAdapter(@NonNull FirestoreRecyclerOptions<Booking> options) {
         super(options);
@@ -44,21 +45,24 @@ public class BookingAdapter extends FirestoreRecyclerAdapter<Booking, BookingAda
     @Override
     protected void onBindViewHolder(@NonNull BookingAdapter.ViewHolder holder, int position, @NonNull Booking model) {
         String serviceId = model.getServiceId();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
-        FirebaseFirestore.getInstance().collection("Services")
+        firebaseFirestore.collection("Services")
                 .document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Service service = task.getResult().toObject(Service.class);
                 Picasso.get().load(service.getImage()).into(holder.serviceImage);
                 holder.serviceName.setText(service.getName());
-                if (model.isStatus())
-                    holder.service_status.setText("Accepted");
+                holder.bookingDate.setText(model.getBookingDate());
+                if (model.isInReview())
+                    holder.service_status.setText("In Review");
                 else {
-                    if (model.isInReview())
-                        holder.service_status.setText("Your Book In Review");
+                    if (model.isStatus())
+                        holder.service_status.setText("Accepted");
                     else
-                        holder.service_status.setText("Your Book Rejected");
+                        holder.service_status.setText("Rejected");
                 }
             }
         });
@@ -77,21 +81,25 @@ public class BookingAdapter extends FirestoreRecyclerAdapter<Booking, BookingAda
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView serviceImage;
-        TextView serviceName, service_status;
+        TextView serviceName, service_status, bookingDate;
+        ConstraintLayout bookingItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-
-            /*delete.setOnClickListener(new View.OnClickListener() {
+            serviceImage = itemView.findViewById(R.id.imageView_service_image_id);
+            serviceName = itemView.findViewById(R.id.textView_service_name);
+            service_status = itemView.findViewById(R.id.textView_service_status);
+            bookingDate = itemView.findViewById(R.id.textView_booking_date_id);
+            bookingItem = itemView.findViewById(R.id.constraintLayout_booking_item_id);
+            bookingItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
                         DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
-                        listener.onItemClick(documentSnapshot, getAdapterPosition(), delete.getId());
+                        listener.onItemClick(documentSnapshot, getAdapterPosition(), bookingItem.getId());
                     }
                 }
-            });*/
+            });
         }
     }
 }

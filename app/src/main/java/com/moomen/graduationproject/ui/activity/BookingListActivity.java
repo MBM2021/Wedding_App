@@ -37,19 +37,19 @@ public class BookingListActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
 
-
+        getAllBooking();
     }
 
-    private void getAllNotificationAccepted() {
+    private void getAllBooking() {
         Query query = FirebaseFirestore.getInstance().collection("Users")
                 .document(userId).collection("Booking");
         FirestoreRecyclerOptions<Booking> options = new FirestoreRecyclerOptions.Builder<Booking>()
                 .setQuery(query, Booking.class)
                 .build();
-        fillNotificationRecycleAdapter(options);
+        fillBookingRecycleAdapter(options);
     }
 
-    private void fillNotificationRecycleAdapter(FirestoreRecyclerOptions<Booking> options) {
+    private void fillBookingRecycleAdapter(FirestoreRecyclerOptions<Booking> options) {
         BookingAdapter bookingAdapter = new BookingAdapter(options);
         bookingAdapter.onItemSetOnClickListener(new BookingAdapter.OnItemClickListener() {
             @Override

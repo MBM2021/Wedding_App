@@ -31,6 +31,7 @@ public class NotificationCompanyFragment extends Fragment {
     public static final String SERVICE_ID = "SERVICE_ID";
     public static final String BOOKING_ID = "BOOKING_ID";
     public static final String USER_BOOKING_ID = "USER_BOOKING_ID";
+    public static final String BOOKING_SERVICE_ID = "BOOKING_SERVICE_ID";
     public static final String HALL_ID = "HALL_ID";
     public static final String USER_TYPE = "USER_TYPE";
     public static final String Notification_ID = "Notification_ID";
@@ -42,6 +43,7 @@ public class NotificationCompanyFragment extends Fragment {
     private String serviceId;
     private String bookingId;
     private String userBookingId;
+    private String bookingServiceId;
     private String hallId;
     private String notificationType = "Service";
 

@@ -13,7 +13,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.moomen.graduationproject.R;
@@ -28,6 +27,7 @@ public class ViewBookingDetailsActivity extends AppCompatActivity {
     private String serviceId;
     private String bookingId;
     private String userBookingId;
+    private String bookingServiceId;
     private String userId;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
@@ -73,17 +73,7 @@ public class ViewBookingDetailsActivity extends AppCompatActivity {
                             }
 
                         });
-                firebaseFirestore.collection("Users").document(userBookingId)
-                        .collection("Booking")
-                        .whereEqualTo("bookingServiceId", bookingId)
-                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                    }
-                });
-
-
+                updateUserBookingStatus(true);
             }
         });
 
@@ -96,8 +86,15 @@ public class ViewBookingDetailsActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Rejected", Toast.LENGTH_SHORT).show();
                     }
                 });
+                updateUserBookingStatus(false);
             }
         });
+    }
+
+    private void updateUserBookingStatus(boolean status) {
+        firebaseFirestore.collection("Users").document(userBookingId)
+                .collection("Booking")
+                .document(bookingServiceId).update("status", status, "inReview", false);
     }
 
     private void getBookingDetails() {
@@ -105,17 +102,14 @@ public class ViewBookingDetailsActivity extends AppCompatActivity {
         firebaseFirestore.collection("Services").document(serviceId).collection("Booking").document(bookingId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (!task.getResult().exists())
-                    Toast.makeText(getApplicationContext(), "Not exist", Toast.LENGTH_SHORT).show();
-                else {
-                    Booking booking = task.getResult().toObject(Booking.class);
-                    binding.textViewBookingDateId.setText(booking.getBookingDate());
-                    binding.textViewDateId.setText(booking.getDate());
-                    if (booking.isStatus())
-                        binding.textViewStatusId.setText("Accepted");
-                    else
-                        binding.textViewStatusId.setText("Rejected");
-                }
+                Booking booking = task.getResult().toObject(Booking.class);
+                bookingServiceId = booking.getBookingServiceId();
+                binding.textViewBookingDateId.setText(booking.getBookingDate());
+                binding.textViewDateId.setText(booking.getDate());
+                if (booking.isStatus())
+                    binding.textViewStatusId.setText("Accepted");
+                else
+                    binding.textViewStatusId.setText("Rejected");
             }
         });
     }
