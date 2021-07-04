@@ -33,8 +33,7 @@ public class Notification implements Serializable {
     String userTypeNotification;
     @SerializedName("userBookingUid")
     String userBookingUid;
-
-
+    //What
     public Notification() {
     }
 
