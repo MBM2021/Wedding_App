@@ -2,6 +2,7 @@ package com.moomen.graduationproject.ui.activity;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -53,14 +54,22 @@ public class BookingListActivity extends AppCompatActivity {
         BookingAdapter bookingAdapter = new BookingAdapter(options);
         bookingAdapter.onItemSetOnClickListener(new BookingAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position, int id) {
-
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Booking booking = documentSnapshot.toObject(Booking.class);
+                firebaseFirestore.collection("Services")
+                        .document(booking.getServiceId())
+                        .collection("Booking")
+                        .document(booking.getBookingServiceId()).update("cancelBooking", true);
+                firebaseFirestore.collection("Users")
+                        .document(userId)
+                        .collection("Booking")
+                        .document(documentSnapshot.getId()).update("cancelBooking", true);
+                Toast.makeText(getApplicationContext(), "Booking canceled Successfully!", Toast.LENGTH_LONG).show();
+                bookingAdapter.notifyDataSetChanged();
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(bookingAdapter);
         bookingAdapter.startListening();
-
-
     }
 }

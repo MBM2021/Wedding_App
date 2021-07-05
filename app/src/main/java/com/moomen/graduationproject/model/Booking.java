@@ -15,18 +15,20 @@ public class Booking implements Serializable {
     String userId;
     @SerializedName("delay")
     String delay;
+    @SerializedName("bookingServiceId")
+    String bookingServiceId;
     //The booking status is the service booking is accepted or not
     @SerializedName("status")
     boolean status;
     @SerializedName("inReview")
     boolean inReview;
-    @SerializedName("bookingServiceId")
-    String bookingServiceId;
+    @SerializedName("cancelBooking")
+    boolean cancelBooking;
 
     public Booking() {
     }
 
-    public Booking(String bookingDate, String date, String serviceId, String userId, String delay, String bookingServiceId, boolean status, boolean inReview) {
+    public Booking(String bookingDate, String date, String serviceId, String userId, String delay, String bookingServiceId, boolean status, boolean inReview, boolean cancelBooking) {
         this.bookingDate = bookingDate;
         this.date = date;
         this.serviceId = serviceId;
@@ -35,6 +37,15 @@ public class Booking implements Serializable {
         this.bookingServiceId = bookingServiceId;
         this.status = status;
         this.inReview = inReview;
+        this.cancelBooking = cancelBooking;
+    }
+
+    public boolean isCancelBooking() {
+        return cancelBooking;
+    }
+
+    public void setCancelBooking(boolean cancelBooking) {
+        this.cancelBooking = cancelBooking;
     }
 
     public String getBookingServiceId() {

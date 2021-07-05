@@ -34,6 +34,8 @@ public class ViewBookingDetailsActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private ActivityViewBookingDetailsBinding binding;
 
+    private boolean isCancelBooking;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,56 +62,73 @@ public class ViewBookingDetailsActivity extends AppCompatActivity {
     }
 
     private void acceptOrRejectBooking() {
-        binding.buttonAccept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseFirestore.collection("Services").document(serviceId)
-                        .collection("Booking").document(bookingId)
-                        .update("status", true, "inReview", false)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(getApplicationContext(), "Accepted", Toast.LENGTH_SHORT).show();
-                            }
+        Toast.makeText(getApplicationContext(), isCancelBooking + "", Toast.LENGTH_SHORT).show();
+        if (!isCancelBooking) {
+            binding.buttonAccept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    firebaseFirestore.collection("Services").document(serviceId)
+                            .collection("Booking").document(bookingId)
+                            .update("status", true, "inReview", false)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(getApplicationContext(), "Accepted", Toast.LENGTH_SHORT).show();
+                                }
 
-                        });
-                updateUserBookingStatus(true);
-            }
-        });
+                            });
+                    updateUserBookingStatus(true);
+                }
+            });
 
-        binding.buttonReject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseFirestore.collection("Services").document(serviceId).collection("Booking").document(bookingId).update("status", false, "inReview", false).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getApplicationContext(), "Rejected", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                updateUserBookingStatus(false);
-            }
-        });
+            binding.buttonReject.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    firebaseFirestore.collection("Services").document(serviceId).collection("Booking").document(bookingId).update("status", false, "inReview", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(getApplicationContext(), "Rejected", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    updateUserBookingStatus(false);
+                }
+            });
+        } else {
+            //Toast.makeText(getApplicationContext(), "This Booking was canceled from user", Toast.LENGTH_LONG).show();
+            binding.buttonAccept.setVisibility(View.GONE);
+            binding.buttonReject.setVisibility(View.GONE);
+            binding.textViewCancelBookingSatusId.setVisibility(View.VISIBLE);
+        }
     }
 
     private void updateUserBookingStatus(boolean status) {
         firebaseFirestore.collection("Users").document(userBookingId)
                 .collection("Booking")
-                .document(bookingServiceId).update("status", status, "inReview", false);
+                .document(bookingServiceId).update("status", status, "inReview", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                getBookingDetails();
+            }
+        });
     }
 
     private void getBookingDetails() {
-        Toast.makeText(getApplicationContext(), serviceId, Toast.LENGTH_SHORT).show();
         firebaseFirestore.collection("Services").document(serviceId).collection("Booking").document(bookingId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Booking booking = task.getResult().toObject(Booking.class);
                 bookingServiceId = booking.getBookingServiceId();
+                isCancelBooking = booking.isCancelBooking();
                 binding.textViewBookingDateId.setText(booking.getBookingDate());
                 binding.textViewDateId.setText(booking.getDate());
-                if (booking.isStatus())
-                    binding.textViewStatusId.setText("Accepted");
-                else
-                    binding.textViewStatusId.setText("Rejected");
+                if (booking.isInReview())
+                    binding.textViewStatusId.setText("In Review");
+                else {
+                    if (booking.isStatus())
+                        binding.textViewStatusId.setText("Accepted");
+                    else
+                        binding.textViewStatusId.setText("Rejected");
+                }
             }
         });
     }

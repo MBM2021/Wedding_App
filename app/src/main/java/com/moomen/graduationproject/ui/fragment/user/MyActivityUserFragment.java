@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,11 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.BookingAdapter;
 import com.moomen.graduationproject.model.Booking;
@@ -61,8 +65,26 @@ public class MyActivityUserFragment extends Fragment {
         BookingAdapter bookingAdapter = new BookingAdapter(options);
         bookingAdapter.onItemSetOnClickListener(new BookingAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position, int id) {
-
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Booking booking = documentSnapshot.toObject(Booking.class);
+                firebaseFirestore.collection("Services")
+                        .document(booking.getServiceId())
+                        .collection("Booking")
+                        .whereEqualTo("bookingServiceId", documentSnapshot.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        firebaseFirestore.collection("Services")
+                                .document(booking.getServiceId())
+                                .collection("Booking")
+                                .document(task.getResult().getDocuments().get(0).getId()).update("cancelBooking", true);
+                    }
+                });
+                firebaseFirestore.collection("Users")
+                        .document(userId)
+                        .collection("Booking")
+                        .document(documentSnapshot.getId()).update("cancelBooking", true);
+                Toast.makeText(getContext(), "Booking canceled Successfully!", Toast.LENGTH_LONG).show();
+                bookingAdapter.notifyDataSetChanged();
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));

@@ -1,20 +1,17 @@
-package com.moomen.graduationproject.ui.fragment.user;
+package com.moomen.graduationproject.ui.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,18 +30,15 @@ import com.moomen.graduationproject.model.Chat;
 import com.moomen.graduationproject.model.Message;
 import com.moomen.graduationproject.model.User;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ChatUserFragment extends Fragment {
+public class SupportChatActivity extends AppCompatActivity {
 
-    String docID;
-    private View view;
     private ImageView sendMessageButton;
     private EditText messageEditText;
+
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
@@ -56,6 +50,7 @@ public class ChatUserFragment extends Fragment {
     private RecyclerView recyclerView;
     private boolean senderExist = false;
     private MessagesAdapter messagesAdapter;
+    private String docID;
     private ArrayList<Message> messageArrayList;
 
     public static void hideKeyboard(Activity activity) {
@@ -69,23 +64,19 @@ public class ChatUserFragment extends Fragment {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_chat_user, container, false);
-        return root;
-    }
-
     @Override
-    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        sendMessageButton = view.findViewById(R.id.image_view_send_message_id);
-        messageEditText = view.findViewById(R.id.edit_text_message_id);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_support_chat);
+
+        sendMessageButton = findViewById(R.id.image_view_send_message_id);
+        messageEditText = findViewById(R.id.edit_text_message_id);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
-        recyclerView = view.findViewById(R.id.recycler_view_message_id);
+        recyclerView = findViewById(R.id.recycler_view_message_id);
         senderIsExist();
         createNewMessage();
     }
@@ -193,8 +184,8 @@ public class ChatUserFragment extends Fragment {
     }
 
     private void fillRecycleAdapter(ArrayList<Message> messageArrayList) {
-        messagesAdapter = new MessagesAdapter(getContext(), userID, messageArrayList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        messagesAdapter = new MessagesAdapter(this, userID, messageArrayList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(messagesAdapter);
         messagesAdapter.notifyDataSetChanged();
         recyclerView.setHasFixedSize(true);
@@ -214,7 +205,7 @@ public class ChatUserFragment extends Fragment {
                 documentReference.update("messageArrayList", messageArrayList).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        hideKeyboard(getActivity());
+                        hideKeyboard(SupportChatActivity.this);
                         messageEditText.setText("");
                         fillRecycleAdapter(messageArrayList);
                     }

@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduationProject">
-        <activity android:name=".ui.activity.ViewBookingDetailsActivity"></activity>
+        <activity android:name=".ui.activity.SupportChatActivity"></activity>
+        <activity android:name=".ui.activity.ViewBookingDetailsActivity" />
         <activity android:name=".ui.activity.BookingListActivity" />
         <activity android:name=".ui.activity.BookingServiceActivity" />
         <activity android:name=".ui.activity.ViewServiceDetailsActivity" />
@@ -27,6 +28,7 @@
         <activity android:name=".ui.activity.SignInActivity" />
         <activity android:name=".ui.activity.EditProfileActivity" />
         <activity android:name=".ui.activity.FavoriteActivity" />
+        <activity android:name=".ui.activity.ViewChat" />
         <activity android:name=".ui.activity.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

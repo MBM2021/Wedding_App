@@ -203,7 +203,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView5">
@@ -227,6 +226,7 @@
             android:layout_weight="1"
             android:drawableTint="@color/white"
             android:text="Reject" />
+
     </LinearLayout>
 
     <View
@@ -234,8 +234,22 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_cancel_booking_satus_id" />
+
+    <TextView
+        android:id="@+id/textView_cancel_booking_satus_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="This Booking was canceled from user"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />

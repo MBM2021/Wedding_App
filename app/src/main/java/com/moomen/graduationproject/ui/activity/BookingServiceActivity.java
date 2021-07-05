@@ -114,7 +114,8 @@ public class BookingServiceActivity extends AppCompatActivity {
                 .document(serviceId)
                 .collection("Booking")
                 .whereEqualTo("userId", userId)
-                .whereEqualTo("bookingDate", bookingDate).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .whereEqualTo("bookingDate", bookingDate)
+                .whereEqualTo("cancelBooking", false).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (!task.getResult().isEmpty())
@@ -161,7 +162,7 @@ public class BookingServiceActivity extends AppCompatActivity {
         if (bookingDate.isEmpty())
             Toast.makeText(getApplicationContext(), "You must select booking date", Toast.LENGTH_SHORT).show();
         else {
-            Booking booking = new Booking(bookingDate, date, serviceId, userId, "2-days", "", false, true);
+            Booking booking = new Booking(bookingDate, date, serviceId, userId, "2-days", "", false, true, false);
             firebaseFirestore.collection("Services").document(serviceId).collection("Booking").add(booking).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentReference> task) {

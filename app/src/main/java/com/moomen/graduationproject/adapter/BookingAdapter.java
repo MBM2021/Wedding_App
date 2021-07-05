@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,6 +46,10 @@ public class BookingAdapter extends FirestoreRecyclerAdapter<Booking, BookingAda
     @Override
     protected void onBindViewHolder(@NonNull BookingAdapter.ViewHolder holder, int position, @NonNull Booking model) {
         String serviceId = model.getServiceId();
+        if (model.isCancelBooking())
+            holder.cancelBooking.setVisibility(View.GONE);
+        else
+            holder.cancelBooking.setVisibility(View.VISIBLE);
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
@@ -56,13 +61,17 @@ public class BookingAdapter extends FirestoreRecyclerAdapter<Booking, BookingAda
                 Picasso.get().load(service.getImage()).into(holder.serviceImage);
                 holder.serviceName.setText(service.getName());
                 holder.bookingDate.setText(model.getBookingDate());
-                if (model.isInReview())
-                    holder.service_status.setText("In Review");
+                if (model.isCancelBooking())
+                    holder.service_status.setText("You was canceled this booking");
                 else {
-                    if (model.isStatus())
-                        holder.service_status.setText("Accepted");
-                    else
-                        holder.service_status.setText("Rejected");
+                    if (model.isInReview())
+                        holder.service_status.setText("In Review");
+                    else {
+                        if (model.isStatus())
+                            holder.service_status.setText("Accepted");
+                        else
+                            holder.service_status.setText("Rejected");
+                    }
                 }
             }
         });
@@ -76,13 +85,14 @@ public class BookingAdapter extends FirestoreRecyclerAdapter<Booking, BookingAda
     }
 
     public interface OnItemClickListener {
-        void onItemClick(DocumentSnapshot documentSnapshot, int position, int id);
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView serviceImage;
         TextView serviceName, service_status, bookingDate;
         ConstraintLayout bookingItem;
+        Button cancelBooking;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,12 +101,13 @@ public class BookingAdapter extends FirestoreRecyclerAdapter<Booking, BookingAda
             service_status = itemView.findViewById(R.id.textView_service_status);
             bookingDate = itemView.findViewById(R.id.textView_booking_date_id);
             bookingItem = itemView.findViewById(R.id.constraintLayout_booking_item_id);
-            bookingItem.setOnClickListener(new View.OnClickListener() {
+            cancelBooking = itemView.findViewById(R.id.button_cancel_id);
+            cancelBooking.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
                         DocumentSnapshot documentSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
-                        listener.onItemClick(documentSnapshot, getAdapterPosition(), bookingItem.getId());
+                        listener.onItemClick(documentSnapshot, getAdapterPosition());
                     }
                 }
             });

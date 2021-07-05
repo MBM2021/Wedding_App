@@ -82,6 +82,11 @@
     <string name="cars_store_name">Cars Store Name</string>
     <string name="renting_price">Renting Price</string>
     <string name="the_date_it_was_booked">The date it was booked</string>
+    <string name="cancel_order">Cancel order</string>
+    <string name="cancel_booking">Cancel Booking</string>
+    <string name="support_team">Support team</string>
+    <string name="write_message">Write message</string>
+    <string name="chat_room">Chat room</string>
     <!--Spinner City-->
     <string-array name="city">
         <item>Gaza</item>
