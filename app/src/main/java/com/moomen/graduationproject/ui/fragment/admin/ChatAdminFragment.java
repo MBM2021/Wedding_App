@@ -107,6 +107,7 @@ public class ChatAdminFragment extends Fragment {
 
     private void getAllChats() {
         Query query = FirebaseFirestore.getInstance().collection("Chat")
+                .whereEqualTo("support", true)
                 .orderBy("date", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Chat> options = new FirestoreRecyclerOptions.Builder<Chat>()
                 .setQuery(query, Chat.class)

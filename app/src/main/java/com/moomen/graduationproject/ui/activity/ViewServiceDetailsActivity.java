@@ -27,11 +27,13 @@ import com.squareup.picasso.Picasso;
 public class ViewServiceDetailsActivity extends AppCompatActivity {
 
     public static final String SERVICE_ID = "SERVICE_ID";
+    public static final String RECEIVER_ID = "RECEIVER_ID";
     public static final String SERVICE_TYPE_ID = "SERVICE_TYPE_ID";
     public static final String CATEGORY_TYPE = "CATEGORY_TYPE";
 
     private ActivityViewServiceDetailsBinding binding;
     private String serviceId;
+    private String receiverId;
     private String serviceTypeId;
     private String categoryType;
 
@@ -59,6 +61,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
         getServiceInfo();
         addToFavouriteOnClick();
         bookService();
+        chatCompany();
     }
 
     private void getServiceInfo() {
@@ -66,6 +69,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Service service = task.getResult().toObject(Service.class);
+                receiverId = service.getCompanyId();
                 Picasso.get().load(service.getImage()).into(binding.imageViewServiceImageDetailsActivity);
                 binding.textViewServiceNameDetailsActivity.setText(service.getName());
                 binding.textViewServiceDetailsDetailsActivity.setText(service.getDetail());
@@ -130,6 +134,22 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
                 intent.putExtra(SERVICE_ID, serviceId);
                 //intent.putExtra(SERVICE_TYPE_ID,serviceTypeId);
                 //intent.putExtra(CATEGORY_TYPE,categoryType);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void contactCompany() {
+
+    }
+
+    private void chatCompany() {
+        binding.buttonChatServiceDetailsActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                intent.putExtra(RECEIVER_ID, receiverId);
+                intent.putExtra(SERVICE_ID, serviceId);
                 startActivity(intent);
             }
         });

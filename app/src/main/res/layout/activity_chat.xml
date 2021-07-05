@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activity.SupportChatActivity">
+    tools:context=".ui.activity.ChatActivity">
 
     <ImageButton
         android:id="@+id/image_view_send_message_id"
@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/support_team"
+                android:text="@string/chat_room"
                 android:textColor="@color/black"
                 android:theme="@style/FontTheme4" />
 

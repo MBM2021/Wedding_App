@@ -21,19 +21,26 @@ public class Chat implements Serializable {
     private String senderImage;
     @SerializedName("date")
     private String date;
+    @SerializedName("serviceId")
+    private String serviceId;
+    @SerializedName("isSupport")
+    private boolean isSupport;
     @SerializedName("messageArrayList")
     private ArrayList<Message> messageArrayList;
 
     public Chat() {
     }
 
-    public Chat(String senderID, String receiverID, String senderName, String senderEmail, String senderImage, String date, ArrayList<Message> messageArrayList) {
+    public Chat(String senderID, String receiverID, String senderName, String senderEmail, String senderImage
+            , String date, String serviceId, boolean isSupport, ArrayList<Message> messageArrayList) {
         this.senderID = senderID;
         this.receiverID = receiverID;
         this.senderName = senderName;
         this.senderEmail = senderEmail;
         this.senderImage = senderImage;
         this.date = date;
+        this.serviceId = serviceId;
+        this.isSupport = isSupport;
         this.messageArrayList = messageArrayList;
     }
 
@@ -91,5 +98,21 @@ public class Chat implements Serializable {
 
     public void setMessageArrayList(ArrayList<Message> messageArrayList) {
         this.messageArrayList = messageArrayList;
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
+    }
+
+    public boolean isSupport() {
+        return isSupport;
+    }
+
+    public void setSupport(boolean support) {
+        isSupport = support;
     }
 }

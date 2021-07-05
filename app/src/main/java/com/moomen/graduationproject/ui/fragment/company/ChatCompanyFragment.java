@@ -28,7 +28,7 @@ import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.ChatAdapter;
 import com.moomen.graduationproject.model.Chat;
 import com.moomen.graduationproject.model.Message;
-import com.moomen.graduationproject.ui.activity.SupportChatActivity;
+import com.moomen.graduationproject.ui.activity.ChatActivity;
 import com.moomen.graduationproject.ui.activity.ViewChat;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +40,7 @@ import java.util.Calendar;
 public class ChatCompanyFragment extends Fragment {
 
     public static final String CHAT_ID = "CHAT_ID";
+    public static final String IS_SUPPORT = "IS_SUPPORT";
 
     private View view;
 
@@ -51,6 +52,7 @@ public class ChatCompanyFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore;
     private FirebaseUser firebaseUser;
     private RecyclerView recyclerView;
+    private String userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +71,7 @@ public class ChatCompanyFragment extends Fragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        userId = firebaseUser.getUid();
 
         autoMessage();
         getAllChats();
@@ -80,7 +83,8 @@ public class ChatCompanyFragment extends Fragment {
         supportChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SupportChatActivity.class);
+                Intent intent = new Intent(getContext(), ChatActivity.class);
+                intent.putExtra(IS_SUPPORT, "true");
                 startActivity(intent);
             }
         });
@@ -123,7 +127,9 @@ public class ChatCompanyFragment extends Fragment {
     }
 
     private void getAllChats() {
-        Query query = FirebaseFirestore.getInstance().collection("Chat")
+        Query query = FirebaseFirestore.getInstance()
+                .collection("Chat")
+                .whereEqualTo("receiverID", userId)
                 .orderBy("date", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Chat> options = new FirestoreRecyclerOptions.Builder<Chat>()
                 .setQuery(query, Chat.class)

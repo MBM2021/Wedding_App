@@ -46,6 +46,14 @@
             android:text="@string/contact_us" />
 
         <Button
+            android:id="@+id/button_chat_service_details_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_button_2"
+            android:text="@string/chat" />
+
+        <Button
             android:id="@+id/button_book_service_details_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

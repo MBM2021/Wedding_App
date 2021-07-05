@@ -1,6 +1,7 @@
 package com.moomen.graduationproject.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -29,12 +30,14 @@ import com.moomen.graduationproject.adapter.MessagesAdapter;
 import com.moomen.graduationproject.model.Chat;
 import com.moomen.graduationproject.model.Message;
 import com.moomen.graduationproject.model.User;
+import com.moomen.graduationproject.ui.fragment.company.ChatCompanyFragment;
+import com.moomen.graduationproject.ui.fragment.user.ChatUserFragment;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class SupportChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity {
 
     private ImageView sendMessageButton;
     private EditText messageEditText;
@@ -52,6 +55,9 @@ public class SupportChatActivity extends AppCompatActivity {
     private MessagesAdapter messagesAdapter;
     private String docID;
     private ArrayList<Message> messageArrayList;
+    private String receiverId = "";
+    private String serviceId = "";
+    private boolean isSupport = false;
 
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -67,17 +73,26 @@ public class SupportChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_support_chat);
+        setContentView(R.layout.activity_chat);
 
         sendMessageButton = findViewById(R.id.image_view_send_message_id);
         messageEditText = findViewById(R.id.edit_text_message_id);
-
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
         recyclerView = findViewById(R.id.recycler_view_message_id);
-        senderIsExist();
+        isSupport = false;
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(ViewServiceDetailsActivity.RECEIVER_ID) && intent.hasExtra(ViewServiceDetailsActivity.SERVICE_ID)) {
+            receiverId = intent.getStringExtra(ViewServiceDetailsActivity.RECEIVER_ID);
+            serviceId = intent.getStringExtra(ViewServiceDetailsActivity.SERVICE_ID);
+            senderIsExist();
+        } else if (intent != null && (intent.hasExtra(ChatCompanyFragment.IS_SUPPORT) || intent.hasExtra(ChatUserFragment.IS_SUPPORT))) {
+            if (intent.getStringExtra(ChatCompanyFragment.IS_SUPPORT).equals("true"))
+                isSupport = true;
+            senderIsExistIfSupport();
+        }
         createNewMessage();
     }
 
@@ -122,11 +137,11 @@ public class SupportChatActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 user = documentSnapshot.toObject(User.class);
-                // userName = user.getFirstName() + " " + user.getLastName();
+                userName = user.getName();
                 userImage = user.getUserImage();
                 userEmail = user.getEmail();
                 String dateRomeChat = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
-                Chat chat = new Chat(userID, "", userName, userEmail, userImage, dateRomeChat, new ArrayList<Message>());
+                Chat chat = new Chat(userID, receiverId, userName, userEmail, userImage, dateRomeChat, serviceId, isSupport, new ArrayList<Message>());
                 firebaseFirestore.collection("Chat").add(chat).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -140,34 +155,54 @@ public class SupportChatActivity extends AppCompatActivity {
                 });
             }
         });
+    }
 
+    private void senderIsExistIfSupport() {
+        messageArrayList = new ArrayList<>();
+        senderExist = false;
+        firebaseFirestore.collection("Chat")
+                .whereEqualTo("senderID", userID)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                checkUser(task);
+            }
+        });
     }
 
     private void senderIsExist() {
         messageArrayList = new ArrayList<>();
         senderExist = false;
-        firebaseFirestore.collection("Chat").whereEqualTo("senderID", userID).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        firebaseFirestore.collection("Chat")
+                .whereEqualTo("senderID", userID)
+                .whereEqualTo("receiverID", receiverId)
+                .whereEqualTo("serviceId", serviceId)
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (!task.getResult().isEmpty()) {
-                    senderExist = true;
-                    docID = task.getResult().getDocuments().get(0).getId();
-                    Chat chat = task.getResult().getDocuments().get(0).toObject(Chat.class);
-                    messageArrayList = chat.getMessageArrayList();
-                    if (messageArrayList.isEmpty()) {
-                        //get Auto message
-                        getAutoMessage();
-                    }
-                } else {
-                    //get Auto message
-                    getAutoMessage();
-                }
-                fillRecycleAdapter(messageArrayList);
-                if (!senderExist) {
-                    createRomeChat();
-                }
+                checkUser(task);
             }
         });
+    }
+
+    private void checkUser(Task<QuerySnapshot> task) {
+        if (!task.getResult().isEmpty()) {
+            senderExist = true;
+            docID = task.getResult().getDocuments().get(0).getId();
+            Chat chat = task.getResult().getDocuments().get(0).toObject(Chat.class);
+            messageArrayList = chat.getMessageArrayList();
+            if (messageArrayList.isEmpty()) {
+                //get Auto message
+                getAutoMessage();
+            }
+        } else {
+            //get Auto message
+            getAutoMessage();
+        }
+        fillRecycleAdapter(messageArrayList);
+        if (!senderExist) {
+            createRomeChat();
+        }
     }
 
     private void getAutoMessage() {
@@ -205,7 +240,7 @@ public class SupportChatActivity extends AppCompatActivity {
                 documentReference.update("messageArrayList", messageArrayList).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        hideKeyboard(SupportChatActivity.this);
+                        hideKeyboard(ChatActivity.this);
                         messageEditText.setText("");
                         fillRecycleAdapter(messageArrayList);
                     }
