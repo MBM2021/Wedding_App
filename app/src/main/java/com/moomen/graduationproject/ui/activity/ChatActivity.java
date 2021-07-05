@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,6 +59,7 @@ public class ChatActivity extends AppCompatActivity {
     private String receiverId = "";
     private String serviceId = "";
     private boolean isSupport = false;
+    private TextView titleActivity;
 
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -74,7 +76,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
+        titleActivity = findViewById(R.id.text_view_user_name_id);
         sendMessageButton = findViewById(R.id.image_view_send_message_id);
         messageEditText = findViewById(R.id.edit_text_message_id);
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -89,9 +91,11 @@ public class ChatActivity extends AppCompatActivity {
             serviceId = intent.getStringExtra(ViewServiceDetailsActivity.SERVICE_ID);
             senderIsExist();
         } else if (intent != null && (intent.hasExtra(ChatCompanyFragment.IS_SUPPORT) || intent.hasExtra(ChatUserFragment.IS_SUPPORT))) {
-            if (intent.getStringExtra(ChatCompanyFragment.IS_SUPPORT).equals("true"))
+            if (intent.getStringExtra(ChatCompanyFragment.IS_SUPPORT).equals("true")) {
                 isSupport = true;
-            senderIsExistIfSupport();
+                titleActivity.setText("Support team");
+                senderIsExistIfSupport();
+            }
         }
         createNewMessage();
     }
