@@ -77,13 +77,6 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
                 binding.textViewServiceNameDetailsActivity.setText(service.getName());
                 binding.textViewServiceDetailsDetailsActivity.setText(service.getDetail());
                 binding.textViewServicePriceDetailsActivity.setText(service.getPrice() + " $");
-
-               /* if (service.getServiceId().equals(serviceId))
-                    serviceTypeId = service.getServiceTypeId();
-                else {
-                    serviceTypeId = service.getServiceId();
-                    serviceId = service.getServiceTypeId();
-                }*/
             }
         });
     }

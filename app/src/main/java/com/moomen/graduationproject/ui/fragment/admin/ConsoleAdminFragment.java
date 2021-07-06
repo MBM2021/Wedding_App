@@ -46,8 +46,12 @@ import com.google.firebase.storage.UploadTask;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.AdsAdapter;
 import com.moomen.graduationproject.adapter.CategoryAdapter;
+import com.moomen.graduationproject.adapter.UsersAdapter;
 import com.moomen.graduationproject.model.Ads;
 import com.moomen.graduationproject.model.Category;
+import com.moomen.graduationproject.model.User;
+import com.moomen.graduationproject.ui.activity.CreateNewAdmin;
+import com.moomen.graduationproject.ui.activity.OpenUserProfile;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -62,6 +66,7 @@ public class ConsoleAdminFragment extends Fragment {
 
 
     private static final int MAX_LENGTH = 100;
+    public static final String USER_ID = "USER_ID";
     private Button buttonCreate;
     private String categoryName;
     private FirebaseAuth firebaseAuth;
@@ -73,19 +78,9 @@ public class ConsoleAdminFragment extends Fragment {
     private EditText editTextCategoryName;
     private LinearLayout linearLayoutAddCategory, linearLayoutAddAds;
     private String categoryImageUrl, AdsImageUrl;
-    private RecyclerView recyclerViewCategory, recyclerAds;
+    private RecyclerView recyclerViewCategory, recyclerAds, recyclerEmployers;
     private String imageName;
     private Bitmap compressor;
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_console_admin, container, false);
-
-    }
-
     private String downloadUri;
     private TextView textViewTitleBottomSheet;
 
@@ -95,9 +90,57 @@ public class ConsoleAdminFragment extends Fragment {
     private boolean isAdsEdit = false;
     private String adsId;
     private boolean isCategory = false;
+    private LinearLayout linearLayoutCreateEmployer;
 
-    private void createAdminBottomSheet() {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_console_admin, container, false);
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        firebaseAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
+        recyclerViewCategory = view.findViewById(R.id.recyclerView_category);
+        recyclerAds = view.findViewById(R.id.recyclerView_ads);
+        recyclerEmployers = view.findViewById(R.id.recycler_view_employer_id);
+        linearLayoutAddCategory = view.findViewById(R.id.linearLayout_add_category);
+        linearLayoutAddAds = view.findViewById(R.id.linearLayout_add_ads);
+        linearLayoutCreateEmployer = view.findViewById(R.id.linearLayout_add_employer);
+        linearLayoutCreateEmployer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createNewEmployerBottomSheet();
+            }
+        });
+        linearLayoutAddAds.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isCategory = false;
+                createAdsBottomSheet();
+            }
+        });
+        linearLayoutAddCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isCategory = true;
+                createCategoryBottomSheet();
+            }
+        });
+        getAllCategory();
+        getAllAds();
+        getAllEmployers();
+    }
+
+    private void createNewEmployerBottomSheet() {
+        startActivity(new Intent(getContext(), CreateNewAdmin.class));
+    }
+
 
     private Uri imageUri = null;
 
@@ -238,38 +281,6 @@ public class ConsoleAdminFragment extends Fragment {
         //}
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        storageReference = FirebaseStorage.getInstance().getReference();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-        recyclerViewCategory = view.findViewById(R.id.recyclerView_category);
-        recyclerAds = view.findViewById(R.id.recyclerView_ads);
-        linearLayoutAddCategory = view.findViewById(R.id.linearLayout_add_category);
-        linearLayoutAddAds = view.findViewById(R.id.linearLayout_add_ads);
-
-        linearLayoutAddAds.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                isCategory = false;
-                createAdsBottomSheet();
-            }
-        });
-        linearLayoutAddCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isCategory = true;
-                createCategoryBottomSheet();
-            }
-        });
-        getAllCategory();
-        getAllAds();
-    }
-
     private void createCategoryBottomSheet() {
         bottomSheetDialog = new BottomSheetDialog(getContext());
         @SuppressLint("InflateParams") View view = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_create_category, null);
@@ -336,6 +347,18 @@ public class ConsoleAdminFragment extends Fragment {
                             .start(getContext(), ConsoleAdminFragment.this);
             }
         }
+    }
+
+    private void getAllEmployers() {
+        Query query = FirebaseFirestore.getInstance().collection("Users")
+                .whereEqualTo("userType", "admin");
+        /*query.whereEqualTo("visibility", true)
+                .whereEqualTo("newsStatus", true)
+                .orderBy("date", Query.Direction.DESCENDING);*/
+        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
+                .setQuery(query, User.class)
+                .build();
+        fillEmployersRecycleAdapter(options);
     }
 
     private void getAllCategory() {
@@ -440,6 +463,22 @@ public class ConsoleAdminFragment extends Fragment {
                         isCategoryEdit = false;
                     }
                 });
+    }
+
+    private void fillEmployersRecycleAdapter(FirestoreRecyclerOptions<User> options) {
+        UsersAdapter usersAdapter = new UsersAdapter(options);
+        usersAdapter.onItemSetOnClickListener(new UsersAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                String userId = documentSnapshot.getId();
+                Intent intent = new Intent(getContext(), OpenUserProfile.class);
+                intent.putExtra(USER_ID, userId);
+                startActivity(intent);
+            }
+        });
+        recyclerEmployers.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerEmployers.setAdapter(usersAdapter);
+        usersAdapter.startListening();
     }
 
     private void fillCategoryRecycleAdapter(FirestoreRecyclerOptions<Category> options) {

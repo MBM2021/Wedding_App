@@ -1,4 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GraduationProject</string>
+    <string name="app_name" translatable="true">GraduationProject</string>
+    <string name="title_home" translatable="true">Home</string>
+    <string name="title_dashboard" translatable="true">Dashboard</string>
+    <string name="title_notifications" translatable="true">Notifications</string>
+    <string name="skip" translatable="true">Skip</string>
+    <string name="password" translatable="true">Password</string>
+    <string name="email" translatable="true">Email</string>
+    <string name="sign_in" translatable="true">Sign In</string>
+    <string name="forgot_password" translatable="true">Forgot Password</string>
+    <string name="register" translatable="true">Register</string>
+    <string name="no_account" translatable="true">No Account?</string>
+    <string name="forgot_passwordd" translatable="true">Forgot Password!</string>
+    <string name="have_account" translatable="true">Have account?</string>
+    <string name="register_as_company" translatable="true">Register as Company</string>
+    <string name="name" translatable="true">Name</string>
+    <string name="enter_your_email" translatable="true">Enter your Email</string>
+    <string name="reset" translatable="true">Reset</string>
+    <string name="reset_password" translatable="true">Reset Password</string>
+    <string name="this_account_has_been_blocked" translatable="true">This account has been blocked</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="true">Hello blank fragment</string>
+    <string name="story" translatable="true">Story</string>
+    <string name="my_activity" translatable="true">MyActivity</string>
+    <string name="profile" translatable="true">Profile</string>
+    <string name="console" translatable="true">Console</string>
+    <string name="create_admin" translatable="true">Create Admin</string>
+    <string name="update_ads" translatable="true">Update Ads</string>
+    <string name="create_ads" translatable="true">Create Ads</string>
+    <string name="create_category" translatable="true">Create Category</string>
+    <string name="create" translatable="true">Create</string>
+    <string name="category_name" translatable="true">Category name</string>
+    <string name="add_ads" translatable="true">Add Ads</string>
+    <string name="all_ads" translatable="true">All Ads</string>
+    <string name="add_category" translatable="true">Add Category</string>
+    <string name="add_your_hall" translatable="true">Add your Hall</string>
+    <string name="hall_name" translatable="true">Hall name</string>
+    <string name="owner_name" translatable="true">Owner name</string>
+    <string name="phone_number" translatable="true">Phone number</string>
+    <string name="details" translatable="true">Details</string>
+    <string name="location" translatable="true">Location</string>
+    <string name="add_image_hall" translatable="true">Add Image Hall</string>
+    <string name="add_service" translatable="true">Add Service</string>
+    <string name="create_service" translatable="true">Create Service</string>
+    <string name="service_type" translatable="true">Service type</string>
+    <string name="service_information" translatable="true">Service Information</string>
+    <string name="company_information" translatable="true">Company Information</string>
+    <string name="address" translatable="true">Address</string>
+    <string name="phone" translatable="true">Phone</string>
+    <string name="type" translatable="true">Type</string>
+    <string name="namee" translatable="true">Name</string>
+    <string name="city" translatable="true">City</string>
+    <string name="contact_phone" translatable="true">Contact Phone</string>
+    <string name="service_image" translatable="true">Service Image</string>
+    <string name="service_status" translatable="true">Service Status</string>
+
+    <string name="store" translatable="true">STORE</string>
+    <string name="users" translatable="true">Users</string>
+    <string name="add_dresses_image" translatable="true">Add Dresses Image</string>
+    <string name="dresses_store_name" translatable="true">Dresses Store Name</string>
+
+
+    <string name="status" translatable="true">Status</string>
+    <string name="created_date" translatable="true">Created date</string>
+    <string name="accepted" translatable="true">Accepted</string>
+    <string name="rejected" translatable="true">Rejected</string>
+    <string name="about_us" translatable="true">About us</string>
+    <string name="about_us_content" translatable="true">kk</string>
+    <string name="privacy" translatable="true">Privacy</string>
+    <string name="privacy_content" translatable="true">ll</string>
+    <string name="submit" translatable="true">Submit</string>
+    <string name="edit_profile" translatable="true">Edit profile</string>
+    <string name="date_of_birth" translatable="true">Da</string>
+    <string name="book" translatable="true">book</string>
+    <string name="cancel" translatable="true">cancel</string>
+    <string name="price" translatable="true">Price</string>
+    <string name="contact_us" translatable="true">Contact Us</string>
+    <string name="booking_date" translatable="true">Booking date</string>
+    <string name="date" translatable="true">Date</string>
+    <string name="add_car_image" translatable="true">Add Car Image</string>
+    <string name="cars_store_name" translatable="true">Cars Store Name</string>
+    <string name="renting_price" translatable="true">Renting Price</string>
+    <string name="the_date_it_was_booked" translatable="true">The date it was booked</string>
+    <string name="cancel_order" translatable="true">Cancel order</string>
+    <string name="cancel_booking" translatable="true">Cancel Booking</string>
+    <string name="support_team" translatable="true">Support team</string>
+    <string name="write_message" translatable="true">Write message</string>
+    <string name="chat_room" translatable="true">Chat room</string>
+    <string name="gender" translatable="true">Gender</string>
+    <string name="block" translatable="true">Block</string>
+    <string name="delete" translatable="true">Delete</string>
+    <string name="chat" translatable="true">Chat</string>
+    <!--Spinner City-->
+    <string-array name="city" translatable="true">
+        <item>Gaza</item>
+        <item>Kahanyounis</item>
+        <item>Rafah</item>
+        <item>Dair Al Balah</item>
+        <item>Bait Hanoun</item>
+        <item>Bait Lahya</item>
+        <item>Jabalia</item>
+        <item>Alnosirate</item>
+        <item>Almaghazi</item>
+        <item>Alboriage</item>
+    </string-array>
 </resources>

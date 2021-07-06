@@ -1,10 +1,15 @@
 package com.moomen.graduationproject.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,9 +31,13 @@ import com.moomen.graduationproject.model.User;
 import com.moomen.graduationproject.ui.fragment.admin.UsersAdminFragment;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public class OpenUserProfile extends AppCompatActivity {
     public final static String USER_ID = "USER_ID";
+    public static final String IS_COMPANY = "IS_COMPANY";
+    public static final String RECEIVER_ID = "RECEIVER_ID";
     private ImageView userImageView;
     private TextView nameTextView;
     private TextView emailTextView;
@@ -88,6 +97,84 @@ public class OpenUserProfile extends AppCompatActivity {
         }
         getUserInfo();
         getUserActivities();
+        userSettings();
+    }
+
+    private void userSettings() {
+        binding.imageViewMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+                if (status)
+                    popupMenu.inflate(R.menu.popup_menu);
+                else
+                    popupMenu.inflate(R.menu.popup_menu_tow);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.block_user_item:
+                                if (status) {
+                                    confirmDialog(item.getTitle().toString(), "Are you sure you want to block this user", "This user was blocked now");
+                                } else {
+                                    confirmDialog(item.getTitle().toString(), "Are you sure you want to unblock this user", "This user was unblocked now");
+                                }
+                                break;
+                            case R.id.delete_user_item:
+                                confirmDialog(item.getTitle().toString(), "Are you sure you want to remove this user", "This user was removed now");
+                                break;
+                            /*case R.id.chat_user_item:
+                                Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+                                intent.putExtra(RECEIVER_ID, userID);
+                                intent.putExtra(IS_COMPANY, "company");
+                                startActivity(intent);
+                                break;*/
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+    }
+
+    private void confirmDialog(String title, String message, String toast) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(OpenUserProfile.this);
+        dialogBuilder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(title, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (title.equals("Block")) {
+                            firebaseFirestore.collection("Users").document(userID).update("status", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                    Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } else if (title.equals("Unblock")) {
+                            firebaseFirestore.collection("Users").document(userID).update("status", true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                    Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } else if (title.equals("Delete")) {
+                            firebaseFirestore.collection("Users").document(userID).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                    Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
     private void getUserInfo() {
@@ -95,6 +182,7 @@ public class OpenUserProfile extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 User user = task.getResult().toObject(User.class);
+                status = user.isStatus();
                 userName = user.getName();
                 userImage = user.getUserImage();
                 userEmail = user.getEmail();

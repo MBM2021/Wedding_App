@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/block_user_item"
-        android:title="@string/block" />
+        android:title="@string/unblock" />
     <item
         android:id="@+id/delete_user_item"
         android:title="@string/delete" />

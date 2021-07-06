@@ -97,7 +97,7 @@ public class ChatActivity extends AppCompatActivity {
             titleActivity.setText("Support team");
             receiverId = userID;
             senderIsExistIfSupport();
-        } else if (intent != null && intent.hasExtra(ChatUserFragment.IS_SUPPORT)) {
+        } else if (intent != null && (intent.hasExtra(ChatUserFragment.IS_SUPPORT) || intent.hasExtra(OpenUserProfile.IS_COMPANY))) {
             type = "support";
             titleActivity.setText("Support team");
             senderIsExistIfSupport();
