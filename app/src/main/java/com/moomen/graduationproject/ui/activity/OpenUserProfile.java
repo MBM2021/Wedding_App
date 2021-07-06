@@ -81,11 +81,13 @@ public class OpenUserProfile extends AppCompatActivity {
         addressTextView = findViewById(R.id.text_view_user_location_id);
         aboutTextView = findViewById(R.id.textView_about_user_id);
         recyclerViewUserActivity = findViewById(R.id.recycler_view_activity_user_id);
-
+        binding.imageViewMenu.setVisibility(View.GONE);
         firebaseFirestore = FirebaseFirestore.getInstance();
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(UsersAdminFragment.USER_ID)) {
             userID = intent.getStringExtra(UsersAdminFragment.USER_ID);
+            binding.imageViewMenu.setVisibility(View.VISIBLE);
+            userSettings();
         } else if (intent != null && intent.hasExtra(ViewServiceDetailsActivity.COMPANY_ID)) {
             userID = intent.getStringExtra(ViewServiceDetailsActivity.COMPANY_ID);
             dateCreateTextView.setVisibility(View.GONE);
@@ -97,7 +99,6 @@ public class OpenUserProfile extends AppCompatActivity {
         }
         getUserInfo();
         getUserActivities();
-        userSettings();
     }
 
     private void userSettings() {

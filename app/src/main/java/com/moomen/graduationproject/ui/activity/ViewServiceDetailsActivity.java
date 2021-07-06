@@ -1,8 +1,12 @@
 package com.moomen.graduationproject.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,9 +24,12 @@ import com.moomen.graduationproject.databinding.ActivityViewServiceDetailsBindin
 import com.moomen.graduationproject.model.Favourite;
 import com.moomen.graduationproject.model.Service;
 import com.moomen.graduationproject.ui.fragment.HomeFragment;
+import com.moomen.graduationproject.ui.fragment.admin.UsersAdminFragment;
 import com.moomen.graduationproject.ui.fragment.user.NotificationUserFragment;
 import com.moomen.graduationproject.utils.PreferenceUtils;
 import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ViewServiceDetailsActivity extends AppCompatActivity {
 
@@ -37,6 +44,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
     private String serviceTypeId;
     private String categoryType;
     private String companyId;
+    private boolean status;
 
     private FirebaseFirestore firebaseFirestore;
 
@@ -46,17 +54,23 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
         binding = ActivityViewServiceDetailsBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        binding.imageViewMenu.setVisibility(View.GONE);
         firebaseFirestore = FirebaseFirestore.getInstance();
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(HomeFragment.SERVICE_ID)
                 && intent.hasExtra(HomeFragment.CATEGORY_TYPE)) {
             serviceId = intent.getStringExtra(HomeFragment.SERVICE_ID);
             categoryType = intent.getStringExtra(HomeFragment.CATEGORY_TYPE);
-        } else if (intent != null && intent.hasExtra(NotificationUserFragment.SERVICE_ID)) {
-            serviceId = intent.getStringExtra(HomeFragment.SERVICE_ID);
-            categoryType = "Services";
         } else if (intent != null && intent.hasExtra(SignInActivity.SERVICE_ID)) {
             serviceId = intent.getStringExtra(SignInActivity.SERVICE_ID);
+            categoryType = "Services";
+        } else if (intent != null && intent.hasExtra(UsersAdminFragment.SERVICE_UID)) {
+            serviceId = intent.getStringExtra(UsersAdminFragment.SERVICE_UID);
+            categoryType = "Services";
+            binding.imageViewMenu.setVisibility(View.VISIBLE);
+            serviceSettings();
+        } else if (intent != null && intent.hasExtra(NotificationUserFragment.SERVICE_ID)) {
+            serviceId = intent.getStringExtra(NotificationUserFragment.SERVICE_ID);
             categoryType = "Services";
         }
         getServiceInfo();
@@ -66,6 +80,84 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
         visitStore();
     }
 
+    private void serviceSettings() {
+        binding.imageViewMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+                if (status)
+                    popupMenu.inflate(R.menu.popup_menu);
+                else
+                    popupMenu.inflate(R.menu.popup_menu_tow);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.block_user_item:
+                                if (status) {
+                                    confirmDialog(item.getTitle().toString(), "Are you sure you want to block this Service", "This Service was blocked now");
+                                } else {
+                                    confirmDialog(item.getTitle().toString(), "Are you sure you want to unblock this Service", "This Service was unblocked now");
+                                }
+                                break;
+                            case R.id.delete_user_item:
+                                confirmDialog(item.getTitle().toString(), "Are you sure you want to remove this Service", "This Service was removed now");
+                                break;
+                            /*case R.id.chat_user_item:
+                                Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+                                intent.putExtra(RECEIVER_ID, userID);
+                                intent.putExtra(IS_COMPANY, "company");
+                                startActivity(intent);
+                                break;*/
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
+    }
+
+    private void confirmDialog(String title, String message, String toast) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ViewServiceDetailsActivity.this);
+        dialogBuilder.setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(title, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (title.equals("Block")) {
+                            firebaseFirestore.collection("Services").document(serviceId).update("status", false).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                    Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } else if (title.equals("Unblock")) {
+                            firebaseFirestore.collection("Services").document(serviceId).update("status", true).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                    Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        } else if (title.equals("Delete")) {
+                            firebaseFirestore.collection("Services").document(serviceId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull @NotNull Task<Void> task) {
+                                    Toast.makeText(getApplicationContext(), toast, Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+    }
+
+
     private void getServiceInfo() {
         firebaseFirestore.collection("Services").document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -73,6 +165,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
                 Service service = task.getResult().toObject(Service.class);
                 receiverId = service.getCompanyId();
                 companyId = service.getCompanyId();
+                status = service.isStatus();
                 Picasso.get().load(service.getImage()).into(binding.imageViewServiceImageDetailsActivity);
                 binding.textViewServiceNameDetailsActivity.setText(service.getName());
                 binding.textViewServiceDetailsDetailsActivity.setText(service.getDetail());

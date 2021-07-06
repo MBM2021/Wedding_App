@@ -22,6 +22,11 @@ import com.squareup.picasso.Picasso;
 public class ServicesAdapter extends FirestoreRecyclerAdapter<Service, ServicesAdapter.ViewHolder> {
 
     private OnItemClickListener listener;
+    private boolean isAdmin = false;
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 
     public ServicesAdapter(@NonNull FirestoreRecyclerOptions<Service> options) {
         super(options);
@@ -34,7 +39,13 @@ public class ServicesAdapter extends FirestoreRecyclerAdapter<Service, ServicesA
                 .load(model.getImage())
                 .into(holder.serviceImage);
         holder.serviceName.setText(model.getName());
-        holder.servicePrice.setText(model.getPrice() + " $");
+        if (isAdmin) {
+            if (model.isStatus())
+                holder.servicePrice.setText("Active");
+            else
+                holder.servicePrice.setText("Blocked");
+        } else
+            holder.servicePrice.setText(model.getPrice() + " $");
     }
 
     @NonNull
@@ -42,6 +53,8 @@ public class ServicesAdapter extends FirestoreRecyclerAdapter<Service, ServicesA
     public ServicesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.service_item, parent, false);
+        if (isAdmin)
+            view = layoutInflater.inflate(R.layout.service_item_manage, parent, false);
         return new ServicesAdapter.ViewHolder(view);
     }
 

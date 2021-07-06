@@ -93,6 +93,7 @@
     <string name="unblock">Unblock</string>
     <string name="removed">Removed</string>
     <string name="employers">Employers</string>
+    <string name="manage">Manage</string>
     <!--Spinner City-->
     <string-array name="city" translatable="true">
         <item>Gaza</item>
