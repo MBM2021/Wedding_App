@@ -22,6 +22,7 @@ import com.google.firebase.firestore.Query;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.NotificationAdapter;
 import com.moomen.graduationproject.model.Notification;
+import com.moomen.graduationproject.ui.activity.ViewBookingDetailsUserActivity;
 import com.moomen.graduationproject.ui.activity.ViewServiceDetailsActivity;
 import com.moomen.graduationproject.viewModel.DashboardViewModel;
 
@@ -30,40 +31,27 @@ public class NotificationUserFragment extends Fragment {
     private DashboardViewModel dashboardViewModel;
 
     public static final String SERVICE_ID = "SERVICE_ID";
-    public static final String HALL_ID = "HALL_ID";
-    public static final String USER_ID = "USER_ID";
-    public static final String USER_TYPE = "USER_TYPE";
+    public static final String BOOKING_ID = "BOOKING_ID";
 
     private RecyclerView recyclerView;
     private FirebaseFirestore firebaseFirestore;
-    String userID;
-
+    private String userID;
     private String userId;
+    private String bookingId;
+    private String typeNotification = "";
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView_notification);
         firebaseFirestore = FirebaseFirestore.getInstance();
-
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         getAllNotificationAccepted();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-/*
-        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-*/
         View root = inflater.inflate(R.layout.fragment_notification_user, container, false);
-       /* final TextView textView = root.findViewById(R.id.text_dashboard);
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
         return root;
     }
 
@@ -71,14 +59,13 @@ public class NotificationUserFragment extends Fragment {
         Query query = FirebaseFirestore.getInstance()
                 .collection("Notifications")
                 .whereEqualTo("userTypeNotification", "user");
-        //.orderBy("date", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Notification> options = new FirestoreRecyclerOptions.Builder<Notification>()
                 .setQuery(query, Notification.class)
                 .build();
         fillNotificationRecycleAdapter(options);
     }
+
     private String serviceId;
-    private String hallId;
 
     private void fillNotificationRecycleAdapter(FirestoreRecyclerOptions<Notification> options) {
         NotificationAdapter notificationAdapter = new NotificationAdapter(options);
@@ -88,8 +75,8 @@ public class NotificationUserFragment extends Fragment {
                 Notification notification = documentSnapshot.toObject(Notification.class);
                 userId = notification.getUserUid();
                 serviceId = notification.getServiceUid();
-                hallId = notification.getHallUid();
-
+                bookingId = notification.getHallUid();
+                typeNotification = notification.getNotificationType();
                 String notificationUid = documentSnapshot.getId();
                 updateStatusValueNotification(notificationUid);
             }
@@ -105,10 +92,10 @@ public class NotificationUserFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Intent intent = new Intent(getContext(), ViewServiceDetailsActivity.class);
+                if (typeNotification.equals("Booking"))
+                    intent = new Intent(getContext(), ViewBookingDetailsUserActivity.class);
                 intent.putExtra(SERVICE_ID, serviceId);
-                //intent.putExtra(HALL_ID, hallId);
-                //intent.putExtra(USER_ID, userId);
-                //intent.putExtra(USER_TYPE, "user");
+                intent.putExtra(BOOKING_ID, bookingId);
                 startActivity(intent);
             }
         });

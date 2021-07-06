@@ -13,26 +13,74 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.model.Chat;
+import com.moomen.graduationproject.model.User;
 import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 
 public class ChatAdapter extends FirestoreRecyclerAdapter<Chat, ChatAdapter.ViewHolder> {
 
     private OnItemClickListener listener;
-
+    private FirebaseUser firebaseUser;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseAuth firebaseAuth;
+    private String currentUserId;
+    private String userId;
+    private String fragmentType = "";
 
     public ChatAdapter(@NonNull FirestoreRecyclerOptions<Chat> options) {
         super(options);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
+        userId = firebaseUser.getUid();
+    }
+
+    public void setFragmentType(String fragmentType) {
+        this.fragmentType = fragmentType;
     }
 
     @SuppressLint("SetTextI18n")
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Chat model) {
-        Picasso.get().load(model.getSenderImage()).into(holder.senderImage);
-        holder.senderName.setText(model.getSenderName());
-        holder.senderEmail.setText(model.getSenderEmail());
+        if (fragmentType.equals("admin")) {
+            firebaseFirestore.collection("Users").document(model.getSenderID()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
+                    User user = task.getResult().toObject(User.class);
+                    Picasso.get().load(user.getUserImage()).into(holder.senderImage);
+                    holder.senderName.setText(user.getName());
+                    holder.senderEmail.setText(user.getEmail());
+                }
+            });
+        } else {
+            if (model.getType().equals("support")) {
+                Picasso.get().load(R.drawable.logo).into(holder.senderImage);
+                holder.senderName.setText("Afrah");
+                holder.senderEmail.setText("afrah@gmail.com");
+            } else {
+                currentUserId = model.getSenderID();
+                if (userId.equals(currentUserId))
+                    currentUserId = model.getReceiverID();
+                firebaseFirestore.collection("Users").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
+                        User user = task.getResult().toObject(User.class);
+                        Picasso.get().load(user.getUserImage()).into(holder.senderImage);
+                        holder.senderName.setText(user.getName());
+                        holder.senderEmail.setText(user.getEmail());
+                    }
+                });
+            }
+        }
     }
 
     @NonNull

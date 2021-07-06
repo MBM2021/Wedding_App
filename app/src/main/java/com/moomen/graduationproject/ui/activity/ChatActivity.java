@@ -58,7 +58,7 @@ public class ChatActivity extends AppCompatActivity {
     private ArrayList<Message> messageArrayList;
     private String receiverId = "";
     private String serviceId = "";
-    private boolean isSupport = false;
+    private String type = "";
     private TextView titleActivity;
 
     public static void hideKeyboard(Activity activity) {
@@ -84,18 +84,23 @@ public class ChatActivity extends AppCompatActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
         userID = firebaseUser.getUid();
         recyclerView = findViewById(R.id.recycler_view_message_id);
-        isSupport = false;
         Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(ViewServiceDetailsActivity.RECEIVER_ID) && intent.hasExtra(ViewServiceDetailsActivity.SERVICE_ID)) {
+        if (intent != null && intent.hasExtra(ViewServiceDetailsActivity.RECEIVER_ID)
+                && intent.hasExtra(ViewServiceDetailsActivity.SERVICE_ID)
+                && (intent.hasExtra(ViewServiceDetailsActivity.IS_COMPANY))) {
             receiverId = intent.getStringExtra(ViewServiceDetailsActivity.RECEIVER_ID);
             serviceId = intent.getStringExtra(ViewServiceDetailsActivity.SERVICE_ID);
+            type = "company";
             senderIsExist();
-        } else if (intent != null && (intent.hasExtra(ChatCompanyFragment.IS_SUPPORT) || intent.hasExtra(ChatUserFragment.IS_SUPPORT))) {
-            if (intent.getStringExtra(ChatCompanyFragment.IS_SUPPORT).equals("true")) {
-                isSupport = true;
-                titleActivity.setText("Support team");
-                senderIsExistIfSupport();
-            }
+        } else if (intent != null && intent.hasExtra(ChatCompanyFragment.IS_SUPPORT_COMPANY)) {
+            type = "support";
+            titleActivity.setText("Support team");
+            receiverId = userID;
+            senderIsExistIfSupport();
+        } else if (intent != null && intent.hasExtra(ChatUserFragment.IS_SUPPORT)) {
+            type = "support";
+            titleActivity.setText("Support team");
+            senderIsExistIfSupport();
         }
         createNewMessage();
     }
@@ -145,7 +150,7 @@ public class ChatActivity extends AppCompatActivity {
                 userImage = user.getUserImage();
                 userEmail = user.getEmail();
                 String dateRomeChat = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
-                Chat chat = new Chat(userID, receiverId, userName, userEmail, userImage, dateRomeChat, serviceId, isSupport, new ArrayList<Message>());
+                Chat chat = new Chat(userID, receiverId, userName, userEmail, userImage, dateRomeChat, serviceId, type, new ArrayList<Message>());
                 firebaseFirestore.collection("Chat").add(chat).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
@@ -166,6 +171,7 @@ public class ChatActivity extends AppCompatActivity {
         senderExist = false;
         firebaseFirestore.collection("Chat")
                 .whereEqualTo("senderID", userID)
+                .whereEqualTo("type", "support")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {

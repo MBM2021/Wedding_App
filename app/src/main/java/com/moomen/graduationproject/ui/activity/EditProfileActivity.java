@@ -50,7 +50,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView imageViewEditImage;
     private ImageView userImage;
     private EditText editTextName;
-    private EditText editTextLastName;
     private EditText editTextEmailName;
     private EditText editTextPhoneName;
     private EditText editTextDateOfBirth;
@@ -68,8 +67,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private String downloadUri = "";
     private String imageName;
     private Uri userImageUri = null;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String email;
     private String phone;
     private String dateOfBirth;
@@ -95,7 +93,6 @@ public class EditProfileActivity extends AppCompatActivity {
         imageViewEditImage = findViewById(R.id.imageView_edit_user_image_id);
         userImage = findViewById(R.id.imageView_user_image_id);
         editTextName = findViewById(R.id.edit_text_first_name_id);
-        editTextLastName = findViewById(R.id.edit_text_last_name_id);
         editTextEmailName = findViewById(R.id.edit_text_email_id);
         editTextPhoneName = findViewById(R.id.edit_text_phone_name_id);
         editTextDateOfBirth = findViewById(R.id.edit_text_date_id);
@@ -150,8 +147,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (userImageUri != null) {////If edit user Image
             progressBar.setVisibility(View.VISIBLE);
             imageName = random() + ".jpg";
-            firstName = editTextName.getText().toString().trim();
-            lastName = editTextLastName.getText().toString().trim();
+            name = editTextName.getText().toString().trim();
             email = editTextEmailName.getText().toString().trim();
             phone = editTextPhoneName.getText().toString().trim();
             dateOfBirth = editTextDateOfBirth.getText().toString().trim();
@@ -159,8 +155,7 @@ public class EditProfileActivity extends AppCompatActivity {
             storageImageAndEditProfile();
         } else if (!downloadUri.isEmpty()) {//If no edit user Image
             progressBar.setVisibility(View.VISIBLE);
-            firstName = editTextName.getText().toString().trim();
-            lastName = editTextLastName.getText().toString().trim();
+            name = editTextName.getText().toString().trim();
             email = editTextEmailName.getText().toString().trim();
             phone = editTextPhoneName.getText().toString().trim();
             dateOfBirth = editTextDateOfBirth.getText().toString().trim();
@@ -206,7 +201,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             downloadUri = task.getResult().toString();
                             //Edit user Info
                             documentReference = firebaseFirestore.collection("Users").document(userID);
-                            documentReference.update("firstName", firstName, "lastName", lastName, "phone", phone, "dateOfBirth", dateOfBirth, "address", location, "userImage", downloadUri);
+                            documentReference.update("name", name, "phone", phone, "dateOfBirth", dateOfBirth, "address", location, "userImage", downloadUri);
                             Toast.makeText(getApplicationContext(), "Modified", Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.GONE);
                         }
@@ -223,7 +218,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void editUserProfile() {
         documentReference = firebaseFirestore.collection("Users").document(userID);
-        documentReference.update("firstName", firstName, "lastName", lastName, "phone", phone, "dateOfBirth", dateOfBirth, "address", location);
+        documentReference.update("name", name, "phone", phone, "dateOfBirth", dateOfBirth, "address", location);
         Toast.makeText(getApplicationContext(), "Modified", Toast.LENGTH_SHORT).show();
         progressBar.setVisibility(View.GONE);
     }

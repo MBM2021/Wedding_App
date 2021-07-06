@@ -84,7 +84,7 @@ public class ChatUserFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ChatActivity.class);
-                intent.putExtra(IS_SUPPORT, "true");
+                intent.putExtra(IS_SUPPORT, "support");
                 startActivity(intent);
             }
         });
@@ -93,12 +93,12 @@ public class ChatUserFragment extends Fragment {
     private void getAllChats() {
         Query query = FirebaseFirestore.getInstance()
                 .collection("Chat")
-                .whereEqualTo("senderID", userId)
-                .orderBy("date", Query.Direction.DESCENDING);
+                .whereEqualTo("senderID", userId);
         FirestoreRecyclerOptions<Chat> options = new FirestoreRecyclerOptions.Builder<Chat>()
                 .setQuery(query, Chat.class)
                 .build();
         ChatAdapter chatAdapter = new ChatAdapter(options);
+        chatAdapter.setFragmentType("user");
         chatAdapter.onItemSetOnClickListener(new ChatAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {

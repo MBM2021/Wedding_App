@@ -107,12 +107,13 @@ public class ChatAdminFragment extends Fragment {
 
     private void getAllChats() {
         Query query = FirebaseFirestore.getInstance().collection("Chat")
-                .whereEqualTo("support", true)
+                .whereEqualTo("type", "support")
                 .orderBy("date", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Chat> options = new FirestoreRecyclerOptions.Builder<Chat>()
                 .setQuery(query, Chat.class)
                 .build();
         ChatAdapter chatAdapter = new ChatAdapter(options);
+        chatAdapter.setFragmentType("admin");
         chatAdapter.onItemSetOnClickListener(new ChatAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {

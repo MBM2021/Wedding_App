@@ -40,7 +40,7 @@ import java.util.Calendar;
 public class ChatCompanyFragment extends Fragment {
 
     public static final String CHAT_ID = "CHAT_ID";
-    public static final String IS_SUPPORT = "IS_SUPPORT";
+    public static final String IS_SUPPORT_COMPANY = "IS_SUPPORT_COMPANY";
 
     private View view;
 
@@ -84,7 +84,7 @@ public class ChatCompanyFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ChatActivity.class);
-                intent.putExtra(IS_SUPPORT, "true");
+                intent.putExtra(IS_SUPPORT_COMPANY, "support");
                 startActivity(intent);
             }
         });
