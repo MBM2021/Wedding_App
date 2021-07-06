@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="true">GraduationProject</string>
+    <string name="app_name" translatable="true">Afrah</string>
     <string name="title_home" translatable="true">Home</string>
     <string name="title_dashboard" translatable="true">Dashboard</string>
     <string name="title_notifications" translatable="true">Notifications</string>
