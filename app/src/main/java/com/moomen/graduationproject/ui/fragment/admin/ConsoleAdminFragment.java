@@ -268,33 +268,6 @@ public class ConsoleAdminFragment extends Fragment {
         });
         getAllCategory();
         getAllAds();
-        /*buttonCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
-                popupMenu.inflate(R.menu.popup_menu);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @SuppressLint("NonConstantResourceId")
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.create_category_item:
-                                createCategoryBottomSheet();
-                                break;
-                            case R.id.create_admin_item:
-                                createAdminBottomSheet();
-                                break;
-                            case R.id.create_ads_item:
-                                createAdsBottomSheet();
-                                break;
-
-                        }
-                        return true;
-                    }
-                });
-                popupMenu.show();
-            }
-        });*/
     }
 
     private void createCategoryBottomSheet() {

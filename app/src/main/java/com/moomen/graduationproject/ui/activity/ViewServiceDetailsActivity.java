@@ -30,12 +30,13 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
     public static final String RECEIVER_ID = "RECEIVER_ID";
     public static final String IS_COMPANY = "IS_COMPANY";
     public static final String CATEGORY_TYPE = "CATEGORY_TYPE";
-
+    public static final String COMPANY_ID = "COMPANY_ID";
     private ActivityViewServiceDetailsBinding binding;
     private String serviceId;
     private String receiverId;
     private String serviceTypeId;
     private String categoryType;
+    private String companyId;
 
     private FirebaseFirestore firebaseFirestore;
 
@@ -62,6 +63,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
         addToFavouriteOnClick();
         bookService();
         chatCompany();
+        visitStore();
     }
 
     private void getServiceInfo() {
@@ -70,6 +72,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Service service = task.getResult().toObject(Service.class);
                 receiverId = service.getCompanyId();
+                companyId = service.getCompanyId();
                 Picasso.get().load(service.getImage()).into(binding.imageViewServiceImageDetailsActivity);
                 binding.textViewServiceNameDetailsActivity.setText(service.getName());
                 binding.textViewServiceDetailsDetailsActivity.setText(service.getDetail());
@@ -151,6 +154,17 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
                 intent.putExtra(RECEIVER_ID, receiverId);
                 intent.putExtra(SERVICE_ID, serviceId);
                 intent.putExtra(IS_COMPANY, "company");
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void visitStore() {
+        binding.imageViewVisitStore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), OpenUserProfile.class);
+                intent.putExtra(COMPANY_ID, companyId);
                 startActivity(intent);
             }
         });

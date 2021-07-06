@@ -29,6 +29,7 @@
         <activity android:name=".ui.activity.EditProfileActivity" />
         <activity android:name=".ui.activity.FavoriteActivity" />
         <activity android:name=".ui.activity.ViewChat" />
+        <activity android:name=".ui.activity.OpenUserProfile" />
         <activity android:name=".ui.activity.ViewBookingDetailsUserActivity" />
         <activity android:name=".ui.activity.Splash">
             <intent-filter>

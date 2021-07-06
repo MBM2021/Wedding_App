@@ -23,6 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.model.User;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText editTextName;
@@ -35,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     private String userEmail;
     private String userPassword;
     private String userType = "user";
-
+    private String dateOfCreate;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseUser firebaseUser;
@@ -51,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
         checkBoxType = findViewById(R.id.checkBox_type);
-
+        dateOfCreate = DateFormat.getDateInstance().format(Calendar.getInstance().getTime());
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
@@ -106,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void addNewUserOnDbFirebase() {
         firebaseUser = firebaseAuth.getCurrentUser();
-        User user = new User(userName, userEmail, "", "", "", "", userType, "", "https://i.ibb.co/W0hVGcJ/accont.png", true, "");
+        User user = new User(userName, userEmail, "", "", "", "", userType, dateOfCreate, "https://i.ibb.co/W0hVGcJ/accont.png", true, "");
         // save on cloudFireStore
         DocumentReference documentReference = firebaseFirestore.collection("Users")
                 .document(firebaseUser.getUid());

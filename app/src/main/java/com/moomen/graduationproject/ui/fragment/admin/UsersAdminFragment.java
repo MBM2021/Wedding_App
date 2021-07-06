@@ -1,5 +1,6 @@
 package com.moomen.graduationproject.ui.fragment.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,11 @@ import com.google.firebase.firestore.Query;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.UsersAdapter;
 import com.moomen.graduationproject.model.User;
+import com.moomen.graduationproject.ui.activity.OpenUserProfile;
 
 public class UsersAdminFragment extends Fragment {
 
+    public static final String USER_ID = "USER_ID";
     private TabLayout tabLayout;
     private RecyclerView usersRecyclerView;
     private String userType = "admin";
@@ -88,7 +91,10 @@ public class UsersAdminFragment extends Fragment {
         usersAdapter.onItemSetOnClickListener(new UsersAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-
+                String userId = documentSnapshot.getId();
+                Intent intent = new Intent(getContext(), OpenUserProfile.class);
+                intent.putExtra(USER_ID, userId);
+                startActivity(intent);
             }
         });
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
