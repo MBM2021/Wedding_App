@@ -27,14 +27,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_create"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_button_3"
+                android:background="@drawable/bg_button_9"
+                android:textColor="@color/white"
                 android:text="@string/create"
-                android:theme="@style/FontTheme1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -4,31 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_gridet_1"
     tools:context=".ui.activity.ActivityIntro">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager_id"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:keepScreenOn="true"
+    <Button
+        android:id="@+id/button_skip"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:onClick="skipOnClick"
+        android:text="@string/start"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_skip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.viewpager.widget.ViewPager>
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager_id"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:keepScreenOn="true" />
+    </androidx.cardview.widget.CardView>
 
-    <Button
-        android:id="@+id/button_skip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/skip"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
-        android:onClick="skipOnClick" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -39,7 +39,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/editTextText_user_name"
                     app:srcCompat="@drawable/ic_baseline_account_circle_24"
-                    app:tint="@color/purple_500" />
+                    app:tint="@color/purple_700" />
 
                 <EditText
                     android:id="@+id/editTextText_user_name"
@@ -83,7 +83,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/editText_user_email"
                     app:srcCompat="@drawable/ic_baseline_email_24"
-                    app:tint="@color/purple_500" />
+                    app:tint="@color/purple_700" />
 
                 <EditText
                     android:id="@+id/editText_user_email"
@@ -144,17 +144,18 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/editText_user_password"
                     app:srcCompat="@drawable/ic_baseline_lock_24"
-                    app:tint="@color/purple_500" />
+                    app:tint="@color/purple_700" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_register"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
-                android:background="@drawable/bg_button_1"
+                android:background="@drawable/bg_button_7"
                 android:text="@string/register"
+                android:textColor="@color/white"
                 android:onClick="registerButtonOnClick"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -249,7 +250,7 @@
                     android:layout_height="wrap_content"
                     android:onClick="signInButtonOnClick"
                     android:text="@string/sign_in"
-                    android:textColor="@color/teal_700"
+                    android:textColor="@color/purple_700"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -261,6 +262,7 @@
                 android:layout_marginTop="8dp"
                 android:onClick="checkBoxTypeOnClick"
                 android:text="@string/register_as_company"
+                android:textColor="@color/purple_700"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 

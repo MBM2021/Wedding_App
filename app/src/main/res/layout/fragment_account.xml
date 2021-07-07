@@ -418,11 +418,13 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="8dp"
+                android:background="@drawable/bg_button_7"
+                android:textColor="@color/white"
                 android:text="Sign in" />
         </LinearLayout>
     </ScrollView>

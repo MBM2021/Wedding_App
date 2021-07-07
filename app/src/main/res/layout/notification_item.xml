@@ -84,13 +84,13 @@
 
             <ImageView
                 android:id="@+id/imageView_status"
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="@dimen/_10sdp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/bg_circle_button_red" />
+                app:srcCompat="@drawable/bg_circle_button_orange" />
 
             <ImageView
                 android:id="@+id/imageView_notification_type"
@@ -99,7 +99,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/imageView_user"
                 app:layout_constraintEnd_toEndOf="@+id/imageView_user"
                 app:srcCompat="@drawable/ic_baseline_chat_24"
-                app:tint="@color/purple_500" />
+                app:tint="@color/purple_700" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

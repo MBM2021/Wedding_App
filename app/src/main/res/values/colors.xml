@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="purple_200">#F8C175</color>
-    <color name="purple_500">#E52F20</color>
+    <color name="purple_500">#F79917</color>
     <color name="purple_700">#F79917</color>
     <color name="teal_200">#F79917</color>
     <color name="teal_700">#2F74C8</color>
@@ -14,8 +14,15 @@
     <color name="gone">#002E2E2E</color>
 
 
-    <color name="active_dots">#2F74C8</color>
+    <color name="blue1">#2F74C8</color>
     <color name="inactive_dots">#03070b</color>
     <color name="transport">#00000000</color>
     <color name="bink">#BA68C8</color>
+    <color name="blue">#2546E8</color>
+    <color name="green">#00AC7B</color>
+    <color name="green2">#00AC53</color>
+    <color name="yellow">#FFFB00</color>
+    <color name="bink2">#6200FF</color>
+    <color name="bink3">#F50057</color>
+    <color name="tree">#A53A00</color>
 </resources>

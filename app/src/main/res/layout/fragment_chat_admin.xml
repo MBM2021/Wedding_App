@@ -11,6 +11,11 @@
         android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/purple_700"
+        app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -27,7 +32,8 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="8dp"
                 android:padding="4dp"
-                android:src="@drawable/ic_baseline_info_24" />
+                android:src="@drawable/ic_baseline_info_24"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/text_view_user_name_id"
@@ -35,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Chat room"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:theme="@style/FontTheme4" />
 
         </LinearLayout>
@@ -45,18 +51,19 @@
         android:id="@+id/button_save_auto_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:background="@color/transport"
         android:text="Save"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/editText_automatic_message"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText_automatic_message" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <EditText
         android:id="@+id/editText_automatic_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_button_3"
         android:ems="10"
         android:inputType="textMultiLine"
         android:padding="16dp"
@@ -68,6 +75,7 @@
         android:id="@+id/recycler_view_chat_id"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/editText_automatic_message"
         app:layout_constraintEnd_toEndOf="parent"

@@ -94,6 +94,13 @@
     <string name="removed">Removed</string>
     <string name="employers">Employers</string>
     <string name="manage">Manage</string>
+    <string name="favorite">Favorite</string>
+    <string name="start">Start</string>
+    <string name="service_details">Service details</string>
+    <string name="visit_store">Visit store</string>
+    <string name="categories">Categories</string>
+    <string name="ads">Ads</string>
+    <string name="employees">Employees</string>
     <!--Spinner City-->
     <string-array name="city" translatable="true">
         <item>Gaza</item>

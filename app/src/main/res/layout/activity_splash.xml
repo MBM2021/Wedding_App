@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Afrah"
-            android:textColor="@color/black"
+            android:textColor="@color/purple_700"
             android:textSize="74sp"
             android:textStyle="bold" />
 
@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Wedding Services App"
+            android:textColor="@color/purple_200"
             android:textSize="18sp" />
 
         <ProgressBar

@@ -10,6 +10,11 @@
         android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/purple_700"
+        app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -25,8 +30,9 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start|center"
                 android:layout_marginStart="8dp"
-                android:padding="4dp"
-                android:src="@drawable/ic_baseline_chat_24" />
+                android:padding="6dp"
+                android:src="@drawable/ic_baseline_chat_24"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/text_view_user_name_id"
@@ -35,8 +41,9 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/chat_room"
-                android:textColor="@color/black"
-                android:theme="@style/FontTheme4" />
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <View
                 android:layout_width="0dp"
@@ -50,7 +57,8 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="8dp"
                 android:padding="4dp"
-                android:src="@drawable/ic_baseline_info_24" />
+                android:src="@drawable/ic_baseline_support_agent_24"
+                app:tint="@color/white" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -58,6 +66,7 @@
         android:id="@+id/recycler_view_chat_id"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

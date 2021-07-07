@@ -3,14 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".ui.activity.ViewBookingDetailsActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/teal_200"
+        app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -31,169 +36,180 @@
 
             <TextView
                 android:id="@+id/text_view_user_name_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="TextView"
-                app:layout_constraintStart_toEndOf="@+id/imageView_user_id"
-                app:layout_constraintTop_toTopOf="@+id/imageView_user_id" />
-
-            <TextView
-                android:id="@+id/text_view_user_email_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView_user_id"
-                app:layout_constraintStart_toEndOf="@+id/imageView_user_id"
-                app:layout_constraintTop_toBottomOf="@+id/text_view_user_name_id" />
-
-            <TextView
-                android:id="@+id/textView28"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Booking details"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:text="TextView"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView_user_id"
+                app:layout_constraintTop_toTopOf="@+id/imageView_user_id" />
+
+            <TextView
+                android:id="@+id/text_view_user_email_id"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="TextView"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView_user_id"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView_user_id"
+                app:layout_constraintTop_toBottomOf="@+id/text_view_user_name_id" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="2dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView28">
+                app:layout_constraintTop_toBottomOf="@+id/imageView_user_id">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp">
+
+                    <TextView
+                        android:id="@+id/textView28"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Booking details"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <com.makeramen.roundedimageview.RoundedImageView
                         android:id="@+id/imageView_service_image_id"
-                        android:layout_width="@dimen/_50sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_marginStart="8dp"
+                        android:layout_width="@dimen/_70sdp"
+                        android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
                         android:scaleType="centerCrop"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView28"
                         app:riv_corner_radius="@dimen/_12sdp"
                         tools:src="@tools:sample/avatars" />
 
                     <TextView
                         android:id="@+id/textView_service_name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="8dp"
                         android:text="TextView"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/imageView_service_image_id"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@+id/imageView_service_image_id" />
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView_service_image_id">
+
+                        <TextView
+                            android:id="@+id/textView32"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/status"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView_status_id"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="TextView"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textView32"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView40"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/the_date_it_was_booked"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView38" />
+
+                        <TextView
+                            android:id="@+id/textView_booking_date_id"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:text="TextView"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textView38"
+                            app:layout_constraintTop_toBottomOf="@+id/textView_status_id" />
+
+                        <TextView
+                            android:id="@+id/textView38"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/booking_date"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+                        <TextView
+                            android:id="@+id/textView_date_id"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:text="TextView"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textView40"
+                            app:layout_constraintTop_toBottomOf="@+id/textView_booking_date_id" />
+
+                        <TextView
+                            android:id="@+id/textView_service_price_id"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textView46"
+                            tools:text="TextView" />
+
+                        <TextView
+                            android:id="@+id/textView46"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="@string/price"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/textView40" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/textView32"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/status"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardView4" />
-
-            <TextView
-                android:id="@+id/textView_status_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                app:layout_constraintStart_toEndOf="@+id/textView32"
-                app:layout_constraintTop_toBottomOf="@+id/cardView4" />
-
-            <TextView
-                android:id="@+id/textView40"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/the_date_it_was_booked"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView38" />
-
-            <TextView
-                android:id="@+id/textView_booking_date_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                app:layout_constraintStart_toEndOf="@+id/textView38"
-                app:layout_constraintTop_toBottomOf="@+id/textView_status_id" />
-
-            <TextView
-                android:id="@+id/textView38"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/booking_date"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView32" />
-
-            <TextView
-                android:id="@+id/textView_date_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                app:layout_constraintStart_toEndOf="@+id/textView40"
-                app:layout_constraintTop_toBottomOf="@+id/textView_booking_date_id" />
-
-            <TextView
-                android:id="@+id/textView_service_price_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textView46" />
-
-            <TextView
-                android:id="@+id/textView46"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/price"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView40" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView_user_id" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
@@ -202,30 +218,35 @@
         android:id="@+id/linearLayout5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView5">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_accept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
+            android:background="@drawable/bg_button_7"
             android:drawableTint="@color/white"
-            android:text="Accept" />
+            android:text="Accept"
+            android:textColor="@color/white" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_reject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_weight="1"
+            android:background="@drawable/bg_button_7"
             android:drawableTint="@color/white"
-            android:text="Reject" />
+            android:text="Reject"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

@@ -23,7 +23,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/bg_button_3"
+        android:background="@drawable/bg_button_stoker_3"
         android:ems="10"
         android:gravity="left|center"
         android:hint="@string/write_message"
@@ -36,8 +36,12 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:layout_height="?actionBarSize"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/purple_700"
+        app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -53,6 +57,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="start|center"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/bg_circle_button_white"
                 android:src="@drawable/ic_baseline_account_circle_black_24" />
 
             <TextView
@@ -62,7 +67,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:text="Moomen"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:theme="@style/FontTheme1" />
 
         </LinearLayout>

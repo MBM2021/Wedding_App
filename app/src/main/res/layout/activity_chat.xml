@@ -6,38 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.ChatActivity">
 
-    <ImageButton
-        android:id="@+id/image_view_send_message_id"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="16dp"
-        android:background="@color/gone"
-        android:src="@drawable/ic_baseline_send_24"
-        app:layout_constraintBottom_toBottomOf="@+id/edit_text_message_id"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/edit_text_message_id" />
-
-    <EditText
-        android:id="@+id/edit_text_message_id"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/bg_button_3"
-        android:ems="10"
-        android:gravity="left|center"
-        android:hint="@string/write_message"
-        android:inputType="textFilter|textMultiLine"
-        android:padding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/image_view_send_message_id"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?actionBarSize"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/purple_700"
+        app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -54,7 +31,8 @@
                 android:layout_gravity="start|center"
                 android:layout_marginStart="8dp"
                 android:padding="4dp"
-                android:src="@drawable/ic_baseline_info_24" />
+                android:src="@drawable/ic_baseline_info_24"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/text_view_user_name_id"
@@ -62,20 +40,51 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/chat_room"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:theme="@style/FontTheme4" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+    <ImageButton
+        android:id="@+id/image_view_send_message_id"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/gone"
+        android:src="@drawable/ic_baseline_send_24"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_message_id"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edit_text_message_id" />
+
+    <EditText
+        android:id="@+id/edit_text_message_id"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_button_stoker_3"
+        android:ems="10"
+        android:gravity="left|center"
+        android:hint="@string/write_message"
+        android:inputType="textFilter|textMultiLine"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/image_view_send_message_id"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_message_id"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:padding="8dp"
         app:layout_constraintBottom_toTopOf="@+id/edit_text_message_id"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

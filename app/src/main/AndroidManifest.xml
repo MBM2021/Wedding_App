@@ -15,13 +15,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GraduationProject">
-        <activity android:name=".ui.activity.ChatActivity"></activity>
+        <activity android:name=".ui.activity.ChatActivity" />
         <activity android:name=".ui.activity.ViewBookingDetailsActivity" />
         <activity android:name=".ui.activity.BookingListActivity" />
-        <activity android:name=".ui.activity.BookingServiceActivity" />
-        <activity android:name=".ui.activity.ViewServiceDetailsActivity" />
+        <activity
+            android:name=".ui.activity.BookingServiceActivity"
+            android:theme="@style/Theme2" />
+        <activity
+            android:name=".ui.activity.ViewServiceDetailsActivity"
+            android:theme="@style/Theme3" />
         <activity android:name=".ui.activity.ViewServiceDetailsActivityCompany" />
-        <activity android:name=".ui.activity.ViewServiceActivity" />
+        <activity
+            android:name=".ui.activity.ViewServiceActivity"
+            android:theme="@style/Theme3" />
         <activity android:name=".ui.activity.MainActivityAdmin" />
         <activity android:name=".ui.activity.MainActivityCompany" />
         <activity android:name=".ui.activity.RegisterActivity" />
@@ -32,14 +38,18 @@
         <activity android:name=".ui.activity.OpenUserProfile" />
         <activity android:name=".ui.activity.ViewBookingDetailsUserActivity" />
         <activity android:name=".ui.activity.CreateNewAdmin" />
-        <activity android:name=".ui.activity.Splash">
+        <activity
+            android:name=".ui.activity.Splash"
+            android:theme="@style/Theme.GraduationProject">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.ActivityIntro" />
+        <activity
+            android:name=".ui.activity.ActivityIntro"
+            android:theme="@style/Theme4" />
         <activity android:name=".ui.activity.UserBlocked" />
         <activity
             android:name=".ui.activity.MainActivity"

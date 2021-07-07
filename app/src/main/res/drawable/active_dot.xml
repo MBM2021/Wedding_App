@@ -6,5 +6,5 @@
     android:dither="true"
     >
     <size android:height="@dimen/_8sdp" android:width="@dimen/_8sdp"/>
-    <solid android:color="@color/active_dots"/>
+    <solid android:color="@color/teal_700" />
 </shape>
