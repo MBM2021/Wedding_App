@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_700"
     tools:context=".ui.activity.BookingServiceActivity">
 
     <androidx.cardview.widget.CardView
@@ -72,7 +71,8 @@
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/purple_200" />
     </androidx.cardview.widget.CardView>
 
     <androidx.appcompat.widget.AppCompatButton
