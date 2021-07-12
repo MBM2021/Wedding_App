@@ -48,7 +48,7 @@ public class Splash extends AppCompatActivity {
                     checkUserTypeToSignIn(userID);
                     //startActivity(new Intent(getBaseContext(), MainActivity.class));
                 } else {
-                    startActivity(new Intent(getBaseContext(), ActivityIntro.class));
+                    startActivity(new Intent(getBaseContext(), MainActivity.class));
                     finish();
                 }
             }

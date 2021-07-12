@@ -63,7 +63,6 @@ public class OpenUserProfile extends AppCompatActivity {
     private ActivityOpenUserProfileBinding binding;
     private RecyclerView recyclerViewUserActivity;
     private ServicesAdapter servicesAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +98,16 @@ public class OpenUserProfile extends AppCompatActivity {
         }
         getUserInfo();
         getUserActivities();
+        backButton();
+    }
+
+    private void backButton() {
+        binding.imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void userSettings() {

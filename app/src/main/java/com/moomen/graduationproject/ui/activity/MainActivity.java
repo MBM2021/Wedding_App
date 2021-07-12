@@ -3,6 +3,7 @@ package com.moomen.graduationproject.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     private BadgeDrawable badgeNotification;
     private FirebaseFirestore firebaseFirestore;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,11 @@ public class MainActivity extends AppCompatActivity {
         badgeNotification.setBackgroundColor(getResources().getColor(R.color.purple_500));
         badgeNotification.setBadgeTextColor(getResources().getColor(R.color.white));
         badgeNotification.setVisible(false);
-        getNotSeenNumberNotification();
+
+        if (isLogin()) {
+            getNotSeenNumberNotification();
+        } else
+            showSnackBar();
     }
 
 
@@ -122,5 +127,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         checkUserTypeToSignIn();
+    }
+
+    private void showSnackBar() {
+        View parentLayout = findViewById(android.R.id.content);
+        Snackbar snackbar = Snackbar.make(parentLayout, "You must sign in!", Snackbar.LENGTH_LONG);
+        snackbar.setAction("Sign in", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                startActivity(intent);
+                snackbar.dismiss();
+            }
+        }).setActionTextColor(getResources().getColor(R.color.purple_700)).show();
+    }
+
+    private boolean isLogin() {
+        return PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty();
     }
 }

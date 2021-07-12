@@ -13,13 +13,14 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -27,7 +28,9 @@ import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.ChatAdapter;
 import com.moomen.graduationproject.model.Chat;
 import com.moomen.graduationproject.ui.activity.ChatActivity;
+import com.moomen.graduationproject.ui.activity.SignInActivity;
 import com.moomen.graduationproject.ui.activity.ViewChat;
+import com.moomen.graduationproject.utils.PreferenceUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -43,13 +46,13 @@ public class ChatUserFragment extends Fragment {
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
-    private FirebaseUser firebaseUser;
     private RecyclerView recyclerView;
     private String userId;
 
+    private View root;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_chat_user, container, false);
+        root = inflater.inflate(R.layout.fragment_chat_user, container, false);
         return root;
     }
 
@@ -72,11 +75,12 @@ public class ChatUserFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view_chat_id);
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-        userId = firebaseUser.getUid();
-
-        getAllChats();
-        openSupportChatRoom();
+        if (isLogin()) {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            getAllChats();
+            openSupportChatRoom();
+        } else
+            showSnackBar();
     }
 
     private void openSupportChatRoom() {
@@ -112,6 +116,23 @@ public class ChatUserFragment extends Fragment {
         recyclerView.setAdapter(chatAdapter);
         recyclerView.setHasFixedSize(true);
         chatAdapter.startListening();
+    }
+
+    private void showSnackBar() {
+        ConstraintLayout parentLayout = root.findViewById(R.id.fragment_constraint);
+        Snackbar snackbar = Snackbar.make(parentLayout, "You must sign in!", Snackbar.LENGTH_LONG);
+        snackbar.setAction("Sign in", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), SignInActivity.class);
+                startActivity(intent);
+                snackbar.dismiss();
+            }
+        }).setActionTextColor(getResources().getColor(R.color.purple_700)).show();
+    }
+
+    private boolean isLogin() {
+        return PreferenceUtils.getEmail(getContext()) != null && !PreferenceUtils.getEmail(getContext()).isEmpty();
     }
 
 }

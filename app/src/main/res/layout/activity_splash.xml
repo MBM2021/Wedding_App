@@ -24,7 +24,7 @@
             android:layout_height="250dp"
             android:paddingEnd="32dp"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/logo" />
+            app:srcCompat="@drawable/app_logo" />
 
         <TextView
             android:id="@+id/textView"

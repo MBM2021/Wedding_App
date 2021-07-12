@@ -29,7 +29,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/back_btn_merchant"
+                android:id="@+id/imageView_back"
                 android:layout_width="46dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
@@ -50,7 +50,7 @@
                 android:textColor="@color/white"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/back_btn_merchant"
+                app:layout_constraintStart_toEndOf="@+id/imageView_back"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

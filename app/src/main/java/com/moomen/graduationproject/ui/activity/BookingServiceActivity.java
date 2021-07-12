@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,14 +36,14 @@ public class BookingServiceActivity extends AppCompatActivity {
     private CalendarView calendarView;
     private Button bookingButton;
     private Button cancelButton;
-    private String bookingDate;
+    private String bookingDate = "";
     private String date;
     private String serviceId;
     private String userId;
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
     private StorageReference storageReference;
-
+    private ImageView backImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +51,7 @@ public class BookingServiceActivity extends AppCompatActivity {
         calendarView = findViewById(R.id.calendarView);
         bookingButton = findViewById(R.id.book_button);
         cancelButton = findViewById(R.id.cancel_button);
-
+        backImage = findViewById(R.id.imageView_back);
         firebaseAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -74,7 +75,10 @@ public class BookingServiceActivity extends AppCompatActivity {
         bookingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkCurrentDateIfBooking();
+                if (bookingDate.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "You must select booking date!", Toast.LENGTH_LONG).show();
+                } else
+                    checkCurrentDateIfBooking();
             }
         });
 
@@ -85,6 +89,15 @@ public class BookingServiceActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void backButton() {
+        backImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void cancelBooking() {

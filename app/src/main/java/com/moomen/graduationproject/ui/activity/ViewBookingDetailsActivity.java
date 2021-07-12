@@ -63,6 +63,16 @@ public class ViewBookingDetailsActivity extends AppCompatActivity {
             getUserDetails();
         }
         acceptOrRejectBooking();
+        backButton();
+    }
+
+    private void backButton() {
+        binding.imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void acceptOrRejectBooking() {

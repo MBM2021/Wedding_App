@@ -72,7 +72,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private String phone;
     private String dateOfBirth;
     private String location;
-
+    private ImageView backImage;
     public static String random() {
         Random generator = new Random();
         StringBuilder randomStringBuilder = new StringBuilder();
@@ -97,6 +97,7 @@ public class EditProfileActivity extends AppCompatActivity {
         editTextPhoneName = findViewById(R.id.edit_text_phone_name_id);
         editTextDateOfBirth = findViewById(R.id.edit_text_date_id);
         editTextLocationName = findViewById(R.id.edit_text_location_id);
+        backImage = findViewById(R.id.imageView_back);
         submitEdit = findViewById(R.id.button_submit_edit_profile_id);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
@@ -108,7 +109,17 @@ public class EditProfileActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
 
         getUserInformation(userID);
+        backButton();
 
+    }
+
+    private void backButton() {
+        backImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void getUserInformation(String userID) {

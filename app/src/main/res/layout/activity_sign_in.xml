@@ -134,12 +134,13 @@
                 android:layout_width="180dp"
                 android:layout_height="150dp"
                 android:adjustViewBounds="true"
+                android:layout_marginTop="@dimen/_16sdp"
                 android:paddingEnd="16dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/logo" />
+                app:srcCompat="@drawable/app_logo" />
 
             <Button
                 android:id="@+id/button_forgot_password"

@@ -101,6 +101,7 @@
     <string name="categories">Categories</string>
     <string name="ads">Ads</string>
     <string name="employees">Employees</string>
+    <string name="booking_details">Booking Details</string>
     <!--Spinner City-->
     <string-array name="city" translatable="true">
         <item>Gaza</item>

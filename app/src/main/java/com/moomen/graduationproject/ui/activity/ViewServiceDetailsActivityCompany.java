@@ -43,8 +43,17 @@ public class ViewServiceDetailsActivityCompany extends AppCompatActivity {
             categoryType = "Services";
         }
         getServiceInfo();
+        backButton();
     }
 
+    private void backButton() {
+        binding.imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
 
     private void getServiceInfo() {
         firebaseFirestore.collection("Services").document(serviceId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

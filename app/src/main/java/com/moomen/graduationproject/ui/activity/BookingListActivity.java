@@ -1,6 +1,7 @@
 package com.moomen.graduationproject.ui.activity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -21,24 +22,34 @@ import com.moomen.graduationproject.model.Booking;
 public class BookingListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private ImageView bachImage;
     private FirebaseUser firebaseUser;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
     private String userId;
 
+    private ImageView backImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_list);
 
         recyclerView = findViewById(R.id.recyclerView_booking_list_id);
-        bachImage = findViewById(R.id.imageView_back);
+        backImage = findViewById(R.id.imageView_back);
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
         userId = firebaseAuth.getCurrentUser().getUid();
 
         getAllBooking();
+        backButton();
+    }
+
+    private void backButton() {
+        backImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void getAllBooking() {

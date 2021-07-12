@@ -1,5 +1,6 @@
 package com.moomen.graduationproject.ui.fragment.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,6 +28,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.adapter.BookingAdapter;
 import com.moomen.graduationproject.model.Booking;
+import com.moomen.graduationproject.ui.activity.SignInActivity;
+import com.moomen.graduationproject.utils.PreferenceUtils;
 
 public class MyActivityUserFragment extends Fragment {
     private RecyclerView recyclerView;
@@ -34,9 +39,10 @@ public class MyActivityUserFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private String userId;
 
+    private View root;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_my_activity_user, container, false);
+        root = inflater.inflate(R.layout.fragment_my_activity_user, container, false);
 
         return root;
     }
@@ -48,8 +54,12 @@ public class MyActivityUserFragment extends Fragment {
         bachImage = view.findViewById(R.id.imageView_back);
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-        userId = firebaseAuth.getCurrentUser().getUid();
-        getAllBooking();
+        if (isLogin()) {
+            userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            getAllBooking();
+        } else
+            showSnackBar();
+
     }
 
     private void getAllBooking() {
@@ -92,5 +102,22 @@ public class MyActivityUserFragment extends Fragment {
         bookingAdapter.startListening();
 
 
+    }
+
+    private void showSnackBar() {
+        ConstraintLayout parentLayout = root.findViewById(R.id.fragment_constraint);
+        Snackbar snackbar = Snackbar.make(parentLayout, "You must sign in!", Snackbar.LENGTH_LONG);
+        snackbar.setAction("Sign in", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), SignInActivity.class);
+                startActivity(intent);
+                snackbar.dismiss();
+            }
+        }).setActionTextColor(getResources().getColor(R.color.purple_700)).show();
+    }
+
+    private boolean isLogin() {
+        return PreferenceUtils.getEmail(getContext()) != null && !PreferenceUtils.getEmail(getContext()).isEmpty();
     }
 }

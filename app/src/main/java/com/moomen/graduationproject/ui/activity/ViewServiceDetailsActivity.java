@@ -78,6 +78,16 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
         bookService();
         chatCompany();
         visitStore();
+        backButton();
+    }
+
+    private void backButton() {
+        binding.imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void serviceSettings() {
@@ -208,7 +218,7 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
                 startActivity(intent);
                 snackbar.dismiss();
             }
-        }).setActionTextColor(getResources().getColor(android.R.color.holo_red_light)).show();
+        }).setActionTextColor(getResources().getColor(R.color.purple_700)).show();
     }
 
     private boolean isLogin() {
@@ -219,11 +229,14 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
         binding.buttonBookServiceDetailsActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), BookingServiceActivity.class);
-                intent.putExtra(SERVICE_ID, serviceId);
-                //intent.putExtra(SERVICE_TYPE_ID,serviceTypeId);
-                //intent.putExtra(CATEGORY_TYPE,categoryType);
-                startActivity(intent);
+                if (isLogin()) {
+                    Intent intent = new Intent(getApplicationContext(), BookingServiceActivity.class);
+                    intent.putExtra(SERVICE_ID, serviceId);
+                    //intent.putExtra(SERVICE_TYPE_ID,serviceTypeId);
+                    //intent.putExtra(CATEGORY_TYPE,categoryType);
+                    startActivity(intent);
+                } else
+                    showSnackBar();
             }
         });
     }
@@ -236,11 +249,14 @@ public class ViewServiceDetailsActivity extends AppCompatActivity {
         binding.buttonChatServiceDetailsActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                intent.putExtra(RECEIVER_ID, receiverId);
-                intent.putExtra(SERVICE_ID, serviceId);
-                intent.putExtra(IS_COMPANY, "company");
-                startActivity(intent);
+                if (isLogin()) {
+                    Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                    intent.putExtra(RECEIVER_ID, receiverId);
+                    intent.putExtra(SERVICE_ID, serviceId);
+                    intent.putExtra(IS_COMPANY, "company");
+                    startActivity(intent);
+                } else
+                    showSnackBar();
             }
         });
     }

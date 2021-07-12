@@ -76,6 +76,7 @@ public class ViewServiceActivity extends AppCompatActivity {
         getServiceInfo();
         getUserInfo();
         bottomNavigationOnClickItem();
+        backButton();
         binding.imageViewEditCompany.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +84,15 @@ public class ViewServiceActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void backButton() {
+        binding.imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     int select = 0;

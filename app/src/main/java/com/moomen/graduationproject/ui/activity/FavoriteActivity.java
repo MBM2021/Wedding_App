@@ -1,6 +1,8 @@
 package com.moomen.graduationproject.ui.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,16 +23,28 @@ public class FavoriteActivity extends AppCompatActivity {
     public static final String USER_ID = "USER_ID";
     private String userUid;
     private FirebaseFirestore firebaseFirestore;
+    private ImageView backImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
+        backImage = findViewById(R.id.imageView_back);
         firebaseFirestore = FirebaseFirestore.getInstance();
         if (PreferenceUtils.getEmail(getApplicationContext()) != null && !PreferenceUtils.getEmail(getApplicationContext()).isEmpty()) {
             userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             getFavouriteService();
+            backButton();
         }
+    }
+
+    private void backButton() {
+        backImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void getFavouriteService() {

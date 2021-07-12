@@ -63,6 +63,16 @@ public class ViewBookingDetailsUserActivity extends AppCompatActivity {
         }
         getServiceInfo();
         addToFavouriteOnClick();
+        backButton();
+    }
+
+    private void backButton() {
+        binding.imageViewBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void getServiceInfo() {
@@ -127,7 +137,7 @@ public class ViewBookingDetailsUserActivity extends AppCompatActivity {
                 startActivity(intent);
                 snackbar.dismiss();
             }
-        }).setActionTextColor(getResources().getColor(android.R.color.holo_red_light)).show();
+        }).setActionTextColor(getResources().getColor(R.color.purple_700)).show();
     }
 
     private boolean isLogin() {
