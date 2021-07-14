@@ -3,9 +3,7 @@ package com.moomen.graduationproject.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -20,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.moomen.graduationproject.R;
 import com.moomen.graduationproject.utils.PreferenceUtils;
 
-public class Splash extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
@@ -33,13 +31,13 @@ public class Splash extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
-        View decorViewFull = getWindow().getDecorView();
+        /*View decorViewFull = getWindow().getDecorView();
         decorViewFull.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        );
+        );*/
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -63,13 +61,13 @@ public class Splash extends AppCompatActivity {
                 if (userType != null || !userType.isEmpty()) {
                     switch (userType) {
                         case "user":
-                            startActivity(new Intent(Splash.this, MainActivity.class));
+                            startActivity(new Intent(SplashActivity.this, MainActivity.class));
                             break;
                         case "company":
-                            startActivity(new Intent(Splash.this, MainActivityCompany.class));
+                            startActivity(new Intent(SplashActivity.this, MainActivityCompany.class));
                             break;
                         case "admin":
-                            startActivity(new Intent(Splash.this, MainActivityAdmin.class));
+                            startActivity(new Intent(SplashActivity.this, MainActivityAdmin.class));
                             break;
                     }
                     finish();
