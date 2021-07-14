@@ -79,7 +79,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/back_btn"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/app_logo" />
+                app:srcCompat="@drawable/ic_app_logo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

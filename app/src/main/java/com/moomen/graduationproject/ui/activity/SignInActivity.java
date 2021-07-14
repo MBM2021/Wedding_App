@@ -51,6 +51,24 @@ public class SignInActivity extends AppCompatActivity {
     public static final String SERVICE_ID = "SERVICE_ID";
     private String serviceId = "";
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign_in);
+
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
+        editTextEmail = findViewById(R.id.editText_user_email);
+        editTextPassword = findViewById(R.id.editText_user_password);
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(ViewServiceDetailsActivity.SERVICE_ID))
+            serviceId = intent.getStringExtra(ViewServiceDetailsActivity.SERVICE_ID);
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
+    }
+
     private void bottomSheetResetPassword() {
         bottomSheetDialog = new BottomSheetDialog(SignInActivity.this);
         @SuppressLint("InflateParams") View view = LayoutInflater.from(SignInActivity.this).inflate(R.layout.bottom_sheet_forgot_password, null);
@@ -184,24 +202,6 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
-
-        progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.GONE);
-        editTextEmail = findViewById(R.id.editText_user_email);
-        editTextPassword = findViewById(R.id.editText_user_password);
-
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra(ViewServiceDetailsActivity.SERVICE_ID))
-            serviceId = intent.getStringExtra(ViewServiceDetailsActivity.SERVICE_ID);
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-    }
-
     private void checkUserTypeToSignIn(String uid) {
         DocumentReference df = firebaseFirestore.collection("Users").document(uid);
         df.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -248,10 +248,4 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        startActivity(new Intent(SignInActivity.this, MainActivity.class));
-//        finish();
-//    }
 }
