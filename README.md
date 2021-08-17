@@ -1,4 +1,4 @@
-# Afrah Application
+# Wedding Services Management Application
 A mobile application for managing and booking wedding services built in Java with the firebase database and contains three types of user:
 - Regular user: can browse wedding services (wedding halls, car decoration, wedding dresses .. etc.) and can book any service after creating an account within the application
 - Service provider: after creating an account as a company, he can uplods his service in the appropriate classification through a control panel within the application and also receives booking notifications for his service to approve or cancel the reservation.
